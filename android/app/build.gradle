@@ -21,6 +21,29 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        release {
+            /*storeFile file("my-release-key.jks")
+            storePassword "password"
+            keyAlias "my-alias"
+            keyPassword "password"*/
+        }
+    }
+
+    flavorDimensions "env"
+    productFlavors {
+        dev {
+            dimension "env"
+            applicationId applicationId + ".dev"
+        }
+        prod {
+            dimension "env"
+            applicationId applicationId + ".prod"
+            signingConfig signingConfigs.release
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -42,5 +65,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
 }
