@@ -5,8 +5,11 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 30
 
+    ext.application_id = "com.afaneca.myfin"
+
+
     defaultConfig {
-        applicationId "com.afaneca.myfin"
+        applicationId "$application_id"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -22,6 +25,11 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
+
     signingConfigs {
         release {
             /*storeFile file("my-release-key.jks")
@@ -35,11 +43,11 @@ android {
     productFlavors {
         dev {
             dimension "env"
-            applicationId applicationId + ".dev"
+            applicationId application_id + ".dev"
         }
         prod {
             dimension "env"
-            applicationId applicationId + ".prod"
+            applicationId application_id
             signingConfig signingConfigs.release
         }
     }
@@ -62,6 +70,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -69,4 +79,12 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
+    //LifeCycle
+    implementation 'androidx.lifecycle:lifecycle-common:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
+    implementation 'android.arch.lifecycle:extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+
+    //Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
 }

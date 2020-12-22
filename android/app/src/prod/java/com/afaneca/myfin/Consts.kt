@@ -14,5 +14,5 @@ object Consts {
     val APP_ENVIRONMENT = Environments.PROD
 
     /* NETWORKING */
-    val BASE_URL: String = "myfin.afaneca.com/api/";
+    val BASE_URL: String = "https://api.myfin.afaneca.com/";
 }
