@@ -20,12 +20,12 @@ class UserDataStore(
         dataStore = applicationContext.createDataStore(name = DATA_STORE_NAME)
     }
 
-    val sessionKey: Flow<String?>
+    val sessionKey: Flow<String>
         get() = dataStore.data.map { preferences ->
             {
                 preferences[KEY_SESSIONKEY]
             }
-        } as Flow<String?>
+        } as Flow<String>
 
 
     suspend fun saveSessionKey(sessionKey: String) {

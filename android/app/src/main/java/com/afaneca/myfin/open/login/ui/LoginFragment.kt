@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.afaneca.myfin.base.BaseFragment
+import com.afaneca.myfin.closed.PrivateActivity
 import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.databinding.FragmentLoginBinding
 import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
+import com.afaneca.myfin.utils.enable
+import com.afaneca.myfin.utils.startNewActivity
+import com.afaneca.myfin.utils.visible
 import kotlinx.coroutines.launch
 
 
@@ -28,25 +33,18 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
     }
 
     private fun bindObservers() {
-        viewModel.isLoginButtonEnabled.observe(viewLifecycleOwner, Observer {
-            binding.loginBtn.isEnabled = it
+        viewModel.shouldLoginButtonBeEnabled.observe(viewLifecycleOwner, Observer {
+            binding.loginBtn.enable(it)
         })
-        binding.loginBtn.isEnabled = viewModel.isLoginButtonEnabled.value!!
+        /*binding.loginBtn.enable(viewModel.shouldLoginButtonBeEnabled.value!!)*/
 
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
-            binding.loadingPb.visibility = if (it is Resource.Loading) View.VISIBLE else View.GONE
+            //binding.loadingPb.visibility = if (it is Resource.Loading) View.VISIBLE else View.GONE
+            binding.loadingPb.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Success -> {
-                    Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_LONG).show()
-                    lifecycleScope.launch {
-                        userData.saveSessionKey(it.data.sessionkey!!)
-                        Toast.makeText(
-                            requireContext(),
-                            "Token: " + userData.sessionKey,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
+                    viewModel.saveSessionToken(it.data.sessionkey!!)
+                    requireActivity().startNewActivity(PrivateActivity::class.java)
                 }
 
                 is Resource.Failure -> {
@@ -64,6 +62,23 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             // TODO add validations
             viewModel.attemptLogin(username, password)
         }
+
+        binding.passwordEt.addTextChangedListener {
+            val username = binding.usernameEt.text.toString().trim()
+            val password = binding.passwordEt.text.toString().trim()
+            checkIfLoginButtonShouldBeEnabled(username, password)
+        }
+
+        binding.usernameEt.addTextChangedListener {
+            val username = binding.usernameEt.text.toString().trim()
+            val password = binding.passwordEt.text.toString().trim()
+            checkIfLoginButtonShouldBeEnabled(username, password)
+        }
+    }
+
+    private fun checkIfLoginButtonShouldBeEnabled(usernameInput: String, passwordInput: String) {
+        viewModel.shouldLoginButtonBeEnabled.value =
+            ((usernameInput.isNotEmpty() && passwordInput.isNotEmpty()))
     }
 
     override fun getViewModel() = LoginViewModel::class.java
@@ -74,5 +89,5 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
     ) = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() =
-        LoginRepository(remoteDataSource.buildApi(MyFinAPIServices::class.java))
+        LoginRepository(remoteDataSource.buildApi(MyFinAPIServices::class.java), userData)
 }
