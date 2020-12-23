@@ -1,7 +1,7 @@
 package com.afaneca.myfin.open.login.data
 
 import androidx.annotation.Keep
-import com.afaneca.myfin.network.BaseResponse
+import com.afaneca.myfin.data.network.BaseResponse
 
 /**
  * Created by me on 21/12/2020

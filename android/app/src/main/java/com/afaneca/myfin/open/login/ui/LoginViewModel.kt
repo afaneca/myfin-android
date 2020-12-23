@@ -1,7 +1,7 @@
 package com.afaneca.myfin.open.login.ui
 
 import androidx.lifecycle.*
-import com.afaneca.myfin.network.Resource
+import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
 import kotlinx.coroutines.launch

@@ -1,6 +1,5 @@
-package com.afaneca.myfin.network
+package com.afaneca.myfin.data.network
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

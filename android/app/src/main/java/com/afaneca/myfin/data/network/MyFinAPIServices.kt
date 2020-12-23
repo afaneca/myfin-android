@@ -1,4 +1,4 @@
-package com.afaneca.myfin.network
+package com.afaneca.myfin.data.network
 
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
 import retrofit2.http.Field

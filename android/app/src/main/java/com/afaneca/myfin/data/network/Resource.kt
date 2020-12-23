@@ -1,6 +1,4 @@
-package com.afaneca.myfin.network
-
-import okhttp3.ResponseBody
+package com.afaneca.myfin.data.network
 
 /**
  * Created by me on 22/12/2020

@@ -2,7 +2,7 @@ package com.afaneca.myfin.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.afaneca.myfin.network.BaseRepository
+import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.open.login.ui.LoginViewModel
 

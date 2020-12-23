@@ -1,4 +1,4 @@
-package com.afaneca.myfin.network
+package com.afaneca.myfin.data.network
 
 /**
  * Created by me on 21/12/2020

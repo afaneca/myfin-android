@@ -8,18 +8,22 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.afaneca.myfin.network.BaseRepository
-import com.afaneca.myfin.network.RetrofitClient
+import com.afaneca.myfin.data.UserDataStore
+import com.afaneca.myfin.data.network.BaseRepository
+import com.afaneca.myfin.data.network.RetrofitClient
 
 abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository> : Fragment() {
     protected lateinit var binding: B
     protected lateinit var viewModel: VM
+    protected lateinit var userData: UserDataStore
     protected val remoteDataSource = RetrofitClient()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        userData = UserDataStore(requireContext())
         binding = getFragmentBinding(inflater, container)
 
         val factory = BaseViewModelFactory(getFragmentRepository())
