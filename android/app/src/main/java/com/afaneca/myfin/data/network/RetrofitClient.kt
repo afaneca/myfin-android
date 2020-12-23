@@ -31,6 +31,7 @@ class RetrofitClient {
                             it.addHeader("X-App-Version", getAppVersion())
                             it.addHeader("X-Platform", "Android")
                             it.addHeader("authusername", getAuthUsername())
+                            it.addHeader("sessionkey", authToken ?: "")
                             it.addHeader("mobile", "true")
                         }.build())
                     }.also { client ->

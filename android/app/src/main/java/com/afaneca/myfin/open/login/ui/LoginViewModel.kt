@@ -20,9 +20,9 @@ class LoginViewModel(
     val passwordInput: LiveData<String>
         get() = _passwordInput
 
-    private var _isLoginButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isLoginButtonEnabled: LiveData<Boolean>
-        get() = _isLoginButtonEnabled
+    var shouldLoginButtonBeEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
+    /*val shouldLoginButtonBeEnabled: LiveData<Boolean>
+        get() = _shouldLoginButtonBeEnabled*/
 
 
     private val _loginResponse: MutableLiveData<Resource<AttemptLoginResponse>> = MutableLiveData()
@@ -34,7 +34,13 @@ class LoginViewModel(
         username: String,
         password: String
     ) = viewModelScope.launch {
+        shouldLoginButtonBeEnabled.value = false
         _loginResponse.value = Resource.Loading
         _loginResponse.value = repository.attemptLogin(username, password)
+        shouldLoginButtonBeEnabled.value = true
+    }
+
+    fun saveSessionToken(token: String) = viewModelScope.launch {
+        repository.saveSessionKeyToken(token)
     }
 }
