@@ -10,13 +10,16 @@ import com.afaneca.myfin.R
 import com.afaneca.myfin.closed.PrivateActivity
 import com.afaneca.myfin.data.UserDataStore
 import com.afaneca.myfin.utils.startNewActivity
+import org.koin.android.ext.android.inject
 
 class LoginActivity : AppCompatActivity() {
+    protected val userData: UserDataStore by inject()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
 
-        val userData = UserDataStore(this)
+        //val userData: UserDataStore = get()//UserDataStore(this)
 
         userData.sessionKey.asLiveData().observe(this, Observer {
             if (it !== null) {

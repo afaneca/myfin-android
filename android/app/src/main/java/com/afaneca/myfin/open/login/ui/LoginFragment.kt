@@ -17,6 +17,7 @@ import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.enable
 import com.afaneca.myfin.utils.startNewActivity
 import com.afaneca.myfin.utils.visible
+import org.koin.android.ext.android.inject
 
 
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRepository>() {
@@ -88,5 +89,8 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
     ) = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() =
-        LoginRepository(remoteDataSource.buildApi(MyFinAPIServices::class.java), userData)
+        LoginRepository(
+            remoteDataSource.create(MyFinAPIServices::class.java)/* .buildApi(MyFinAPIServices::class.java)*/,
+            userData
+        )
 }

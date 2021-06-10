@@ -70,10 +70,11 @@ class DashboardFragment :
     ) = FragmentDashboardBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() = DashboardRepository(
-        remoteDataSource.buildApi(
+        remoteDataSource.create(MyFinAPIServices::class.java)
+        /*remoteDataSource.buildApi(
             MyFinAPIServices::class.java,
             runBlocking { userData.sessionKey.first() }
-        ), userData
+        )*/, userData
     )
 
 }

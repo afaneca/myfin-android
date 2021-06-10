@@ -91,4 +91,9 @@ dependencies {
     //Jetpack DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
 
+    // DI - Koin
+    implementation "io.insert-koin:koin-android:$koin_version"
+    // Koin Android Scope features
+    implementation "io.insert-koin:koin-android-scope:$koin_version"
+    // Koin Android ViewModel features
 }
