@@ -34,6 +34,10 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         return binding.root
     }
 
+    protected fun setActionBarTitle(title: String) {
+        activity?.title = title
+    }
+
     abstract fun getViewModel(): Class<VM>
 
     abstract fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): B

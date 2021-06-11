@@ -15,9 +15,11 @@
         <activity android:name=".closed.PrivateActivity"></activity>
         <activity
             android:name=".base.BaseActivity"
-            android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".open.login.ui.LoginActivity">
+            android:label="@string/title_activity_base" />
+
+        <activity
+            android:name=".open.login.ui.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

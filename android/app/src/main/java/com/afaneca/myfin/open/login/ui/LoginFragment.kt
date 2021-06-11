@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -73,6 +74,16 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             val username = binding.usernameEt.text.toString().trim()
             val password = binding.passwordEt.text.toString().trim()
             checkIfLoginButtonShouldBeEnabled(username, password)
+        }
+
+        binding.floatingActionButton.setOnClickListener {
+            when (AppCompatDelegate.getDefaultNightMode()) {
+                AppCompatDelegate.MODE_NIGHT_YES -> AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO
+                )
+                else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LiveData
+import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
@@ -26,10 +27,16 @@ class DashboardFragment :
         savedInstanceState: Bundle?
     ): View? {
         val rootView = super.onCreateView(inflater, container, savedInstanceState)
+
         bindObservers()
         bindListeners()
         getMonthlyIncomeExpensesDistributionDataForCurrentMonth()
         return rootView;
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setActionBarTitle(getString(R.string.dashboard_label))
     }
 
     private fun getMonthlyIncomeExpensesDistributionDataForCurrentMonth() {
