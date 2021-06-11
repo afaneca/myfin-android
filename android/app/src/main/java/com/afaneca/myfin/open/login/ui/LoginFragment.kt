@@ -45,7 +45,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             when (it) {
                 is Resource.Success -> {
                     viewModel.saveSessionToken(it.data.sessionkey!!)
-                    requireActivity().startNewActivity(PrivateActivity::class.java)
+                    goToPrivateActivity()
                 }
 
                 is Resource.Failure -> {
@@ -53,6 +53,11 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
                 }
             }
         })
+    }
+
+    private fun goToPrivateActivity() {
+        requireActivity().startNewActivity(PrivateActivity::class.java)
+        activity?.finish()
     }
 
     private fun bindListeners() {

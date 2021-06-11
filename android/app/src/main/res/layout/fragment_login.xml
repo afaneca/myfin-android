@@ -24,6 +24,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="24dp"
+            app:endIconMode="clear_text"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

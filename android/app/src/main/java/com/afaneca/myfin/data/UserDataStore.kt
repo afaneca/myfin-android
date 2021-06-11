@@ -3,6 +3,7 @@ package com.afaneca.myfin.data
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.clear
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
@@ -28,6 +29,10 @@ class UserDataStore(
 
     suspend fun saveSessionKey(sessionKey: String) {
         dataStore.edit { preferences -> preferences[KEY_SESSIONKEY] = sessionKey }
+    }
+
+    suspend fun clearData() {
+        dataStore.edit { it.clear() }
     }
 
     companion object {
