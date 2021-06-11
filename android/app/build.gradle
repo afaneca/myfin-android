@@ -96,4 +96,8 @@ dependencies {
     // Koin Android Scope features
     implementation "io.insert-koin:koin-android-scope:$koin_version"
     // Koin Android ViewModel features
+
+    // Json serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+
 }

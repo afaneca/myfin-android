@@ -7,8 +7,12 @@ import androidx.datastore.preferences.core.clear
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
+import com.afaneca.myfin.utils.SecurityUtils
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 
 class UserDataStore(
@@ -16,6 +20,7 @@ class UserDataStore(
 ) {
     private val applicationContext = context.applicationContext
     private val dataStore: DataStore<Preferences>
+    private val bytesToStringSeparator = "|"
 
     init {
         dataStore = applicationContext.createDataStore(name = DATA_STORE_NAME)
@@ -27,8 +32,26 @@ class UserDataStore(
         }
 
 
+    /**
+     * Retrieves the session key from the UserDataStore and returns it after decryption
+     */
+    suspend fun getSessionKey(): String {
+
+        return SecurityUtils().decryptData(
+            KEY_SESSIONKEY.name,
+            sessionKey.first()?.split(bytesToStringSeparator)?.map { it.toByte() }!!.toByteArray()
+        )
+    }
+
+    /**
+     * Encrypts the received sessionKey and puts it in the UserDataStore
+     */
     suspend fun saveSessionKey(sessionKey: String) {
-        dataStore.edit { preferences -> preferences[KEY_SESSIONKEY] = sessionKey }
+        val encryptedSessionKey =
+            SecurityUtils().encryptData(KEY_SESSIONKEY.name, Json.encodeToString(sessionKey))
+        dataStore.edit { preferences ->
+            preferences[KEY_SESSIONKEY] = encryptedSessionKey.joinToString(bytesToStringSeparator)
+        }
     }
 
     suspend fun clearData() {
