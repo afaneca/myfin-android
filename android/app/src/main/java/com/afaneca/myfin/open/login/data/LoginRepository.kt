@@ -1,6 +1,6 @@
 package com.afaneca.myfin.open.login.data
 
-import com.afaneca.myfin.data.UserDataStore
+import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
 
@@ -9,14 +9,15 @@ import com.afaneca.myfin.data.network.MyFinAPIServices
  */
 class LoginRepository(
     private val api: MyFinAPIServices,
-    private val userData: UserDataStore
-    ) : BaseRepository() {
+    private val userData: UserDataManager
+) : BaseRepository() {
 
     suspend fun attemptLogin(username: String, password: String) = safeAPICall {
         api.attemptLogin(username, password)
     }
 
-    suspend fun saveSessionKeyToken(token: String){
-        userData.saveSessionKey(token)
+    suspend fun saveSessionKeyToken(token: String) {
+        UserDataManager().saveSessionKey(token)
+
     }
 }

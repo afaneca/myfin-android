@@ -2,10 +2,8 @@ package com.afaneca.myfin.di
 
 import com.afaneca.myfin.BuildConfig
 import com.afaneca.myfin.Consts
-import com.afaneca.myfin.data.UserDataStore
+import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.network.MyFinAPIServices
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -39,7 +37,7 @@ private fun <Api> buildApi(retrofit: Retrofit, api: Class<Api>): Api {
 
 private fun retrofit(
     baseUrl: String,
-    userDataStore: UserDataStore,
+    userDataManager: UserDataManager,
 ) =
     Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -51,7 +49,7 @@ private fun retrofit(
                         it.addHeader("X-App-Version", getAppVersion())
                         it.addHeader("X-Platform", "Android")
                         it.addHeader("authusername", getAuthUsername())
-                        it.addHeader("sessionkey", getAuthToken(userDataStore))
+                        it.addHeader("sessionkey", getAuthToken(userDataManager))
                         it.addHeader("mobile", "true")
                     }.build())
                 }.also { client ->
@@ -67,8 +65,8 @@ private fun retrofit(
         .build()
 
 
-private fun getAuthToken(userDataStore: UserDataStore): String {
-    return runBlocking { userDataStore.sessionKey.first() ?: "" }
+private fun getAuthToken(userDataManager: UserDataManager): String {
+    return userDataManager.getSessionKey() ?: ""
 }
 
 private fun getAuthUsername(): String = "tony"

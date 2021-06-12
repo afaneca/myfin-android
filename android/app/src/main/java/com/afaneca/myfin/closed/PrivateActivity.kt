@@ -10,13 +10,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.afaneca.myfin.R
-import com.afaneca.myfin.data.UserDataStore
+import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
@@ -90,9 +89,9 @@ class PrivateActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
     }
 
     private fun doLogout() {
-        val userDataStore: UserDataStore by inject()
+        val userDataManager: UserDataManager by inject()
         lifecycleScope.launch(Dispatchers.IO) {
-            userDataStore.clearData() // clear session data
+            userDataManager.clearUserData() // clear session data
             withContext(Dispatchers.IO) {
                 goToLoginActivity() // go back to login activity
             }

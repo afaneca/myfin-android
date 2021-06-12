@@ -2,11 +2,14 @@ package com.afaneca.myfin.utils
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties.*
+import android.util.Base64
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 /**
  * Created by me on 11/06/2021
@@ -33,12 +36,21 @@ constructor() {
     }
 
     fun encryptData(keyAlias: String, text: String): ByteArray {
-        cipher.init(Cipher.ENCRYPT_MODE, generateSecretKey(keyAlias))
+        val secretKey = generateSecretKey(keyAlias)
+        val iv = IvParameterSpec(
+            (keyAlias + text)
+                .substring(0, 16).toByteArray(Charsets.UTF_8)
+        )
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         return cipher.doFinal(text.toByteArray(charset))
     }
 
     fun decryptData(keyAlias: String, encryptedData: ByteArray): String {
-        cipher.init(Cipher.DECRYPT_MODE, getSecretKey(keyAlias), GCMParameterSpec(128, cipher.iv))
+        cipher.init(
+            Cipher.DECRYPT_MODE,
+            getSecretKey(keyAlias),
+            GCMParameterSpec(128, ByteArray(12))
+        )
         return cipher.doFinal(encryptedData).toString(charset)
     }
 
@@ -57,3 +69,49 @@ constructor() {
     private fun getSecretKey(keyAlias: String) =
         (keyStore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry).secretKey
 }
+
+/*
+object ChCrypto {
+    @JvmStatic
+    fun aesEncrypt(v: String, secretKey: String) = AES256.encrypt(v, secretKey)
+
+    @JvmStatic
+    fun aesDecrypt(v: String, secretKey: String) = AES256.decrypt(v, secretKey)
+}
+
+private object AES256 {
+    private val encoder = Base64.getEncoder()
+    private val decoder = Base64.getDecoder()
+
+    private fun cipher(opmode: Int, secretKey: SecretKey, iv: IvParameterSpec): Cipher {
+        */
+/*if (secretKey.length != 32) throw RuntimeException("SecretKey length is not 32 chars")*//*
+
+        val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        */
+/*val sk = SecretKeySpec(secretKey.toByteArray(Charsets.UTF_8), "AES")*//*
+
+        */
+/*val iv = IvParameterSpec(iv.substring(0, 16).toByteArray(Charsets.UTF_8))*//*
+
+        c.init(opmode, secretKey, iv)
+        return c
+    }
+
+    fun encrypt(str: String, secretKey: SecretKey): String {
+        val encrypted =
+            cipher(Cipher.ENCRYPT_MODE, secretKey).doFinal(str.toByteArray(Charsets.UTF_8))
+        return String(encoder.encode(encrypted))
+    }
+
+    fun decrypt(str: String, secretKey: SecretKey): String {
+        val byteStr = decoder.decode(str.toByteArray(Charsets.UTF_8))
+        val iv = IvParameterSpec(getIv().substring(0,16).toByteArray(Charsets.UTF_8))
+        return String(cipher(Cipher.DECRYPT_MODE, secretKey, getIv()).doFinal(byteStr))
+    }
+
+    private fun getIv(): String {
+
+    }
+}
+*/
