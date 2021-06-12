@@ -7,17 +7,24 @@ import com.afaneca.myfin.closed.dashboard.ui.DashboardViewModel
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.open.login.ui.LoginViewModel
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
 /**
  * Created by me on 22/12/2020
  */
+@KoinApiExtension
 class BaseViewModelFactory(
     private val repository: BaseRepository
-) : ViewModelProvider.NewInstanceFactory() {
+) : ViewModelProvider.NewInstanceFactory(), KoinComponent {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository as LoginRepository) as T
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(
+                repository as LoginRepository,
+                get()
+            ) as T
             modelClass.isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(
                 repository as DashboardRepository
             ) as T

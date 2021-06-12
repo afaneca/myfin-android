@@ -44,13 +44,20 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             binding.loadingPb.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Success -> {
-                    viewModel.saveSessionToken(it.data.sessionkey!!)
+                    // TODO -  This should be decided by the viewmodel!
                     goToPrivateActivity()
                 }
 
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 }
+            }
+        })
+
+        viewModel.usernameInput.observe(viewLifecycleOwner, {
+            if (!it.isNullOrBlank()) {
+                // set default username
+                binding.usernameEt.setText(it)
             }
         })
     }

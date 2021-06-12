@@ -16,8 +16,11 @@ class LoginRepository(
         api.attemptLogin(username, password)
     }
 
-    suspend fun saveSessionKeyToken(token: String) {
-        UserDataManager().saveSessionKey(token)
+    fun saveSessionKeyToken(token: String) {
+        userData.saveSessionKey(token)
+    }
 
+    fun saveUsername(username: String) {
+        userData.saveLastUser(username)
     }
 }

@@ -33,7 +33,7 @@ class UserDataManager : KoinComponent {
         }
     }
 
-    fun getLastUsername(): String = userSharedPrefs?.getString(KEY_LAST_USER, "") ?: ""
+    fun getLastUsername(): String = userSharedPrefs.getString(KEY_LAST_USER, "") ?: ""
 
     @SuppressLint("ApplySharedPref")
     fun clearUserData() {
@@ -42,6 +42,15 @@ class UserDataManager : KoinComponent {
 
     fun clearUserDataAsync() {
         userSharedPrefs.edit().clear().apply()
+    }
+
+    @SuppressLint("ApplySharedPref")
+    fun clearUserSessionData() {
+        userSharedPrefs.edit().remove(KEY_SESSION_KEY).commit()
+    }
+
+    fun clearUserSessionDataAsync() {
+        userSharedPrefs.edit().remove(KEY_SESSION_KEY).apply()
     }
 
     companion object {
