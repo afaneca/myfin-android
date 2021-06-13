@@ -1,15 +1,385 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
     android:background="@color/colorBackground"
     android:clickable="true"
     android:focusable="true"
+    android:layout_marginTop="36dp"
     android:foreground="?attr/selectableItemBackgroundBorderless"
-    android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/default_margin_half"
+    android:paddingVertical="24dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <TextView
+        android:id="@+id/patrimony_balance_label"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Património"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/patrimony_balance_amount" />
+
+    <TextView
+        android:id="@+id/patrimony_balance_amount"
+        style="@style/DrawerLayoutPatrimonyBalanceAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="0.00€"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/patrimony_balance_label" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/secondary_asset_patrimony_cardView"
+        style="@style/DrawerLayoutSecondaryAssetsWrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/secondary_asset_operating_funds_cardView"
+        app:layout_constraintEnd_toStartOf="@+id/secondary_asset_operating_funds_cardView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/gradient_blue_purple"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/secondary_asset_patrimony_amount"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0.00€"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/secondary_asset_patrimony_label"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Património"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/secondary_asset_operating_funds_cardView"
+        style="@style/DrawerLayoutSecondaryAssetsWrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintDimensionRatio="w,2:5"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/secondary_asset_patrimony_cardView"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/gradient_purple"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/secondary_asset_operating_funds_amount"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0.00€"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/secondary_asset_operating_funds_label"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="F. de Maneio"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/secondary_asset_investments_cardView"
+        style="@style/DrawerLayoutSecondaryAssetsWrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintDimensionRatio="w,2:5"
+        app:layout_constraintEnd_toStartOf="@+id/secondary_asset_debt_cardView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/secondary_asset_patrimony_cardView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/gradient_green"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/secondary_asset_investments_amount"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0.00€"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/secondary_asset_investments_label"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Investimento"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/secondary_asset_debt_cardView"
+        style="@style/DrawerLayoutSecondaryAssetsWrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/secondary_asset_investments_cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/secondary_asset_investments_cardView"
+        app:layout_constraintTop_toTopOf="@+id/secondary_asset_investments_cardView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/gradient_red_pink"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/secondary_asset_debt_amount"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0.00€"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/secondary_asset_debt_label"
+                style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Passivo"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/secondary_asset_investments_cardView" />
+
+    <!-- <TextView
+        android:id="@+id/textView2"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="F. Maneio"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintEnd_toStartOf="@+id/textView3"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Investimento"
+        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Passivo"
+        app:layout_constraintBottom_toTopOf="@+id/textView12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView5"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="-192,403.10€"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="-192,403.10€"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="-192,403.10€"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView8"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Património"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        style="@style/DrawerLayoutSecondaryPatrimonyBalanceAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="-188,699.15€"
+
+        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView12"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="F. de Maneio"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/textView14"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView13"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="3,607.29€"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toTopOf="@+id/textView12"
+        app:layout_constraintVertical_bias="0.454" />
+
+    <TextView
+        android:id="@+id/textView14"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Investimentos"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/textView16"
+        app:layout_constraintStart_toStartOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView15"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="96.66€"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView16"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Passivo"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView17"
+        style="@style/DrawerLayoutSecondaryAssetsBalanceAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="-192,403.10€"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/textView16"
+        app:layout_constraintStart_toEndOf="@+id/textView16"
+        app:layout_constraintTop_toTopOf="@+id/textView16" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

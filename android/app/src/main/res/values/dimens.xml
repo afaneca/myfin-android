@@ -4,9 +4,15 @@
     <dimen name="fragment_horizontal_margin">16dp</dimen>
     <dimen name="fragment_vertical_margin">16dp</dimen>
 
-    <!-- Magins -->
+    <!-- Margins -->
     <dimen name="default_margin">8dp</dimen>
     <dimen name="default_margin_double">16dp</dimen>
     <dimen name="default_margin_triple">24dp</dimen>
     <dimen name="default_margin_half">4dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="default_title_text_size">20sp</dimen>
+    <dimen name="default_paragraph_text_size">14sp</dimen>
+    <dimen name="default_paragraph_smaller_text_size">12sp</dimen>
+    <dimen name="default_subtitle_text_size">16sp</dimen>
 </resources>

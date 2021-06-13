@@ -5,7 +5,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/colorBackground<!--@android:color/transparent--></item>
+        <item name="android:statusBarColor">
+            @color/colorBackground<!--@android:color/transparent--></item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
@@ -22,6 +23,33 @@
     <style name="MainButton" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:background">@android:color/holo_red_dark</item>
         <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="DrawerLayoutPatrimonyBalanceAmount" parent="Widget.AppCompat.TextView">
+        <item name="android:textAlignment">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/default_title_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DrawerLayoutSecondaryAssetsBalanceAmount" parent="Widget.AppCompat.TextView">
+        <item name="android:textAlignment">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/default_subtitle_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DrawerLayoutSecondaryAssetsBalanceLabel" parent="Widget.AppCompat.TextView">
+        <item name="android:textAlignment">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/default_paragraph_text_size</item>
+    </style>
+
+    <style name="DrawerLayoutSecondaryAssetsWrapper" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">10dp</item>
     </style>
 
 </resources>
