@@ -12,9 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".closed.PrivateActivity"></activity>
+        <activity
+            android:name=".closed.PrivateActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".base.BaseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_base" />
 
         <activity
