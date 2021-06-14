@@ -113,7 +113,8 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
 
     override fun getFragmentRepository() =
         LoginRepository(
-            remoteDataSource.create(MyFinAPIServices::class.java)/* .buildApi(MyFinAPIServices::class.java)*/,
-            userData
+            remoteDataSource.create(MyFinAPIServices::class.java),
+            userData,
+            db
         )
 }

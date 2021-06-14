@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.afaneca.myfin.data.UserDataManager
+import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.data.network.BaseRepository
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
@@ -17,7 +18,8 @@ import retrofit2.Retrofit
 abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository> : Fragment() {
     protected lateinit var binding: B
     protected lateinit var viewModel: VM
-    protected lateinit var userData: UserDataManager
+    protected val userData: UserDataManager by inject()
+    protected val db: MyFinDatabase by inject()
     protected val remoteDataSource: Retrofit by inject() // = RetrofitClient()
 
 
@@ -25,7 +27,7 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        userData = get()
+        /*userData = get()*/
         binding = getFragmentBinding(inflater, container)
 
         val factory = BaseViewModelFactory(getFragmentRepository())

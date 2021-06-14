@@ -2,9 +2,11 @@ package com.afaneca.myfin.open.login.ui
 
 import androidx.lifecycle.*
 import com.afaneca.myfin.data.UserDataManager
+import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinApiExtension
 import org.koin.java.KoinJavaComponent.inject
@@ -53,14 +55,21 @@ class LoginViewModel(
                 .data.sessionkey ?: ""
             val username = (_loginResponse.value as Resource.Success<AttemptLoginResponse>)
                 .data.username ?: ""
+            val userAccounts = (_loginResponse.value as Resource.Success<AttemptLoginResponse>)
+                .data.accounts ?: listOf<UserAccountEntity>()
 
             saveSessionToken(sessionToken)
             saveUsername(username)
+            saveUserAccounts(userAccounts as List<UserAccountEntity>)
         } else {
             shouldLoginButtonBeEnabled.postValue(true)
         }
 
 
+    }
+
+    private fun saveUserAccounts(userAccounts: List<UserAccountEntity>) {
+        repository.saveUserAccounts(userAccounts)
     }
 
     private fun saveUsername(username: String) {

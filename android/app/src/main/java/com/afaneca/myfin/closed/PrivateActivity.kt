@@ -4,14 +4,18 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.afaneca.myfin.R
 import com.afaneca.myfin.data.UserDataManager
+import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,18 +24,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import org.koin.core.component.KoinApiExtension
 
 class PrivateActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
+    private lateinit var privateViewModel: PrivateViewModel
 
+    @KoinApiExtension
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_private)
 
+        privateViewModel = ViewModelProvider(this).get(PrivateViewModel::class.java)
         setupDrawerMenu(setupToolbar())
+        privateViewModel.getUserAccounts().observe(this, {
+            if (it.isNullOrEmpty()) return@observe
+            val accountsCnt = it.size
+            populateBalancesSummary(accountsCnt, accountsCnt, accountsCnt, accountsCnt)
+        })
 
+
+        // TODO - remove this!
         val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         fab.setOnClickListener {
             when (AppCompatDelegate.getDefaultNightMode()) {
@@ -42,6 +57,16 @@ class PrivateActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
             }
 
         }
+    }
+
+    private fun populateBalancesSummary(
+        patrimonySum: Int,
+        operatingFundsSum: Int,
+        InvestmentsSum: Int,
+        DebtSum: Int
+    ) {
+        val patrimonyBalanceTv = navigationView?.findViewById<TextView>(R.id.patrimony_balance_amount)
+        patrimonyBalanceTv?.text = "${patrimonySum}"
     }
 
     private fun setupToolbar(): Toolbar {

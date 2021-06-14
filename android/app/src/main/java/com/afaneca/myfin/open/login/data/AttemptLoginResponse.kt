@@ -1,6 +1,7 @@
 package com.afaneca.myfin.open.login.data
 
 import androidx.annotation.Keep
+import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.BaseResponse
 
 /**
@@ -10,5 +11,6 @@ import com.afaneca.myfin.data.network.BaseResponse
 data class AttemptLoginResponse(
     val sessionkey: String?,
     val username: String?,
-    val trustlimit: Int?
+    val trustlimit: Int?,
+    val accounts: List<UserAccountEntity>?
 ) : BaseResponse()

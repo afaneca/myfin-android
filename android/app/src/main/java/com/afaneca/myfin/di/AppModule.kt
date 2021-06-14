@@ -3,11 +3,11 @@ package com.afaneca.myfin.di
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import androidx.room.Room
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import androidx.security.crypto.MasterKey.DEFAULT_AES_GCM_MASTER_KEY_SIZE
-import androidx.security.crypto.MasterKeys
 import com.afaneca.myfin.data.UserDataManager
+import com.afaneca.myfin.data.db.MyFinDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -18,10 +18,21 @@ import org.koin.dsl.module
 val appModule = module {
     single { provideUserDataManager() }
     single { provideSecretUserData(androidContext()) }
+    single { provideMyFinDatabase(androidContext()) }
 }
 
 fun provideUserDataManager() = UserDataManager()
 
+fun provideMyFinDatabase(context: Context): MyFinDatabase {
+    // TODO - https://sonique6784.medium.com/protect-your-room-database-with-sqlcipher-on-android-78e0681be687
+    return Room.databaseBuilder(
+        context,
+        MyFinDatabase::class.java,
+        "myfin_db"
+    ).fallbackToDestructiveMigration()
+        //.openHelperFactory(SupportFactory(SQLiteDatabase.getBytes("PassPhrase".toCharArray())))
+        .build()
+}
 
 fun provideSecretUserData(context: Context): EncryptedSharedPreferences {
     val spec = KeyGenParameterSpec.Builder(
