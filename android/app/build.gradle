@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 
-
 android {
     compileSdkVersion 30
 
@@ -115,5 +114,7 @@ dependencies {
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
+    // SQLCipher - to encrypt room db
+    implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
 
 }

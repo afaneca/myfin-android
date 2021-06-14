@@ -53,8 +53,19 @@ class UserDataManager : KoinComponent {
         userSharedPrefs.edit().remove(KEY_SESSION_KEY).apply()
     }
 
+    /* DB PASSPHRASE */
+    fun saveDBPassphrase(pass: String) {
+        with(userSharedPrefs.edit()) {
+            putString(KEY_DB_PASS, pass)
+            apply()
+        }
+    }
+
+    fun getDBPassphrase(): String = userSharedPrefs?.getString(KEY_DB_PASS, "") ?: ""
+
     companion object {
         private const val KEY_SESSION_KEY = "KEY_SESSION_KEY"
         private const val KEY_LAST_USER = "KEY_LAST_USER"
+        private const val KEY_DB_PASS = "KEY_DB_PASS"
     }
 }
