@@ -24,7 +24,7 @@ data class UserAccountEntity(
 
     @ColumnInfo(name = "type")
     @SerializedName("type")
-    val lastName: String?,
+    val type: String?,
 
     @ColumnInfo(name = "description")
     @SerializedName("description")

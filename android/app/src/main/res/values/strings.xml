@@ -28,4 +28,8 @@
     <string name="generic_yes">Sim</string>
     <string name="generic_go_back">Voltar</string>
     <string name="confirmation_logout_message">Tem a certeza de que pretende sair?</string>
+    <string name="generic_patrimony">Património</string>
+    <string name="generic_investment">Investimento</string>
+    <string name="generic_passive">Passivo</string>
+    <string name="generic_operating_funds_shorten">F. de Maneio</string>
 </resources>

@@ -33,7 +33,6 @@ val appModule = module {
 fun provideUserDataManager() = UserDataManager()
 
 fun provideMyFinDatabase(context: Context, userDataManager: UserDataManager): MyFinDatabase {
-    // TODO - https://sonique6784.medium.com/protect-your-room-database-with-sqlcipher-on-android-78e0681be687
     return Room.databaseBuilder(
         context,
         MyFinDatabase::class.java,

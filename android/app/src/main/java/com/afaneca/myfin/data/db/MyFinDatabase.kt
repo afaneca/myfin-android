@@ -8,7 +8,7 @@ import com.afaneca.myfin.data.db.accounts.UserAccountsDao
 /**
  * Created by me on 14/06/2021
  */
-@Database(entities = arrayOf(UserAccountEntity::class), version = 1)
+@Database(entities = arrayOf(UserAccountEntity::class), version = 2)
 abstract class MyFinDatabase : RoomDatabase() {
     abstract fun userAccountsDao(): UserAccountsDao
 }

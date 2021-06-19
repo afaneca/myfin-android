@@ -9,7 +9,6 @@
     android:background="@color/colorBackground"
     android:clickable="true"
     android:focusable="true"
-    android:layout_marginTop="36dp"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:orientation="vertical"
     android:padding="@dimen/default_margin_half"
@@ -19,10 +18,11 @@
     <TextView
         android:id="@+id/patrimony_balance_label"
         style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
+        android:textColor="@color/colorOnPrimary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Património"
+        android:text="@string/generic_patrimony"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/patrimony_balance_amount" />
@@ -30,6 +30,7 @@
     <TextView
         android:id="@+id/patrimony_balance_amount"
         style="@style/DrawerLayoutPatrimonyBalanceAmount"
+        android:textColor="@color/colorOnPrimary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -86,7 +87,7 @@
                 style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Património"
+                android:text="@string/generic_patrimony"
                 android:textAlignment="center" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -127,7 +128,7 @@
                 style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="F. de Maneio"
+                android:text="@string/generic_operating_funds_shorten"
                 android:textAlignment="center" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -167,7 +168,7 @@
                 style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Investimento"
+                android:text="@string/generic_investment"
                 android:textAlignment="center" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -206,7 +207,7 @@
                 style="@style/DrawerLayoutSecondaryAssetsBalanceLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Passivo"
+                android:text="@string/generic_passive"
                 android:textAlignment="center" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

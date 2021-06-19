@@ -1,53 +1,77 @@
 package com.afaneca.myfin.closed
 
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.afaneca.myfin.R
+import com.afaneca.myfin.base.BaseActivity
 import com.afaneca.myfin.data.UserDataManager
-import com.afaneca.myfin.data.db.MyFinDatabase
+import com.afaneca.myfin.databinding.ActivityPrivateBinding
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinApiExtension
 
-class PrivateActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class PrivateActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var binding: ActivityPrivateBinding
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var navigationView: NavigationView
     private lateinit var privateViewModel: PrivateViewModel
 
     @KoinApiExtension
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_private)
-
+        binding = ActivityPrivateBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         privateViewModel = ViewModelProvider(this).get(PrivateViewModel::class.java)
         setupDrawerMenu(setupToolbar())
-        privateViewModel.getUserAccounts().observe(this, {
-            if (it.isNullOrEmpty()) return@observe
-            val accountsCnt = it.size
-            populateBalancesSummary(accountsCnt, accountsCnt, accountsCnt, accountsCnt)
-        })
 
+        /* Observers*/
+
+        privateViewModel.apply {
+            getUserAccounts().observe(this@PrivateActivity, {
+                if (it.isNullOrEmpty()) return@observe
+                privateViewModel.calculateAggregatedAccountBalances(it)
+            })
+
+            patrimonyBalance.observe(this@PrivateActivity, {
+                if (it.isNullOrEmpty()) return@observe
+                populateMainPatrimonyBalance(it)
+                populatePatrimonyBalance(it)
+            })
+
+            operatingFundsBalance.observe(this@PrivateActivity, {
+                if (it.isNullOrEmpty()) return@observe
+                populateOperatingFundsBalance(it)
+            })
+
+            investingBalance.observe(this@PrivateActivity, {
+                if (it.isNullOrEmpty()) return@observe
+                populateInvestmentsBalance(it)
+            })
+
+            debtBalance.observe(this@PrivateActivity, {
+                if (it.isNullOrEmpty()) return@observe
+                populateDebtBalance(it)
+            })
+        }
 
         // TODO - remove this!
-        val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        val fab = binding.floatingActionButton
         fab.setOnClickListener {
             when (AppCompatDelegate.getDefaultNightMode()) {
                 AppCompatDelegate.MODE_NIGHT_YES -> AppCompatDelegate.setDefaultNightMode(
@@ -55,30 +79,44 @@ class PrivateActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
                 )
                 else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
-
         }
     }
 
-    private fun populateBalancesSummary(
-        patrimonySum: Int,
-        operatingFundsSum: Int,
-        InvestmentsSum: Int,
-        DebtSum: Int
-    ) {
-        val patrimonyBalanceTv = navigationView?.findViewById<TextView>(R.id.patrimony_balance_amount)
-        patrimonyBalanceTv?.text = "${patrimonySum}"
+    private fun populateMainPatrimonyBalance(value: String) {
+        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.patrimony_balance_amount)?.text = value
+    }
+
+    private fun populatePatrimonyBalance(value: String) {
+        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_patrimony_amount)?.text = value
+    }
+
+    private fun populateOperatingFundsBalance(value: String) {
+        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_operating_funds_amount)?.text =
+            value
+    }
+
+    private fun populateInvestmentsBalance(value: String) {
+        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_investments_amount)?.text = value
+    }
+
+    private fun populateDebtBalance(value: String) {
+        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_debt_amount)?.text = value
+    }
+
+
+    private fun goToAccountsView() {
+        // TODO - navigate to accounts view
     }
 
     private fun setupToolbar(): Toolbar {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         return toolbar
     }
 
     private fun setupDrawerMenu(toolbar: Toolbar) {
-        drawer = findViewById(R.id.drawer_layout)
-        navigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
+        drawer = binding.drawerLayout
+        binding.navView.setNavigationItemSelectedListener(this)
         toggle = ActionBarDrawerToggle(
             this,
             drawer,
@@ -89,6 +127,8 @@ class PrivateActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         drawer.addDrawerListener(toggle)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
+
+        binding.navView.getHeaderView(0).setOnClickListener { goToAccountsView() }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

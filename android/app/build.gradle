@@ -10,6 +10,8 @@ android {
     ext.application_id = "com.afaneca.myfin"
 
 
+
+
     defaultConfig {
         applicationId "$application_id"
         minSdkVersion 23
@@ -116,5 +118,4 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     // SQLCipher - to encrypt room db
     implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
-
 }
