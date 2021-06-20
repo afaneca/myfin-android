@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="preferences_theme_options_labels_array">
+        <item>@string/preferences_theme_option_dark_theme</item>
+        <item>@string/preferences_theme_option_light_theme</item>
+        <item>@string/preferences_theme_option_system_default</item>
+    </string-array>
+    <string-array name="preferences_theme_options_array">
+        <item>@id/preferences_theme_option_dark</item>
+        <item>@id/preferences_theme_option_light</item>
+        <item>@id/preferences_theme_option_system</item>
+    </string-array>
+</resources>

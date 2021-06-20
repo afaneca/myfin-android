@@ -51,4 +51,11 @@
     <!-- Labels -->
     <string name="transactions_label">Transações</string>
     <string name="transaction_details_label">Detalhes de transação</string>
+
+    <!-- Preferences -->
+    <string name="preferences_theme_option_dark_theme">Tema Escuro</string>
+    <string name="preferences_theme_option_light_theme">Tema Claro</string>
+    <string name="preferences_theme_option_system_default">Automático (Sistema)</string>
+    <string name="generic_appearance">Aparência</string>
+    <string name="preferences_theme_summary">Escolha o tema da aplicação</string>
 </resources>

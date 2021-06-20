@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+        android:defaultValue="@id/preferences_theme_option_system"
+        android:dialogIcon="@drawable/ic_logout_black_24dp"
+        android:entries="@array/preferences_theme_options_labels_array"
+        android:entryValues="@array/preferences_theme_options_array"
+        android:icon="@drawable/ic_lightbulb_white_24dp"
+        android:key="@id/preferences_key_theme"
+        android:summary="@string/preferences_theme_summary"
+        android:title="@string/generic_appearance" />
+</androidx.preference.PreferenceScreen>
