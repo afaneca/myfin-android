@@ -109,4 +109,8 @@ class PrivateViewModel : ViewModel(), KoinComponent {
         accsList.forEach { acc -> sum += (acc.balance ?: "0").toFloat() }
         return sum.toDouble()
     }
+
+    fun clearUserSessionData() {
+        repository.clearUserSessionData()
+    }
 }

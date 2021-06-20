@@ -169,7 +169,7 @@ class PrivateActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedL
     private fun doLogout() {
         val userDataManager: UserDataManager by inject()
         lifecycleScope.launch(Dispatchers.IO) {
-            userDataManager.clearUserSessionData() // clear session data
+            privateViewModel.clearUserSessionData() // clear session data
             withContext(Dispatchers.IO) {
                 goToLoginActivity() // go back to login activity
             }

@@ -42,4 +42,8 @@ class PrivateRepository(
         db.userAccountsDao().delete(userAccountObj)
 
     fun deleteAllUserAccounts() = db.userAccountsDao().deleteAll()
+    fun clearUserSessionData() {
+        userData.clearUserSessionData()
+        db.clearAllTables()
+    }
 }
