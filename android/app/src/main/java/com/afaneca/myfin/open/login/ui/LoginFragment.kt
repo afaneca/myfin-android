@@ -9,15 +9,20 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.PrivateActivity
 import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.databinding.FragmentLoginBinding
 import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
+import com.afaneca.myfin.utils.BiometricsHelper
 import com.afaneca.myfin.utils.enable
 import com.afaneca.myfin.utils.startNewActivity
 import com.afaneca.myfin.utils.visible
+import com.google.android.material.snackbar.Snackbar
+import com.mikhaellopez.biometric.BiometricHelper
+import com.mikhaellopez.biometric.BiometricPromptInfo
 import org.koin.android.ext.android.inject
 
 
@@ -30,6 +35,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
         val rootView = super.onCreateView(inflater, container, savedInstanceState)
         bindObservers()
         bindListeners()
+        checkBiometrics()
         return rootView;
     }
 
@@ -45,7 +51,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             when (it) {
                 is Resource.Success -> {
                     // TODO -  This should be decided by the viewmodel!
-                    goToPrivateActivity()
+                    //goToPrivateActivity()
                 }
 
                 is Resource.Failure -> {
@@ -103,6 +109,22 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
         viewModel.shouldLoginButtonBeEnabled.value =
             ((usernameInput.isNotEmpty() && passwordInput.isNotEmpty()))
     }
+
+
+    // BIOMETRICS
+    fun checkBiometrics() {
+        val biometricsHelper = BiometricsHelper(this)
+        binding.biometricsFab.visibility =
+            if (biometricsHelper.areBiometricsAvailable()) View.VISIBLE else View.GONE
+
+        binding.biometricsFab.setOnClickListener {
+            biometricsHelper.showBiometricPrompt {
+                //  SUCCESS
+
+            }
+        }
+    }
+
 
     override fun getViewModel() = LoginViewModel::class.java
 

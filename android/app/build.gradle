@@ -118,4 +118,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     // SQLCipher - to encrypt room db
     implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
+
+    // Biometrics
+    implementation 'com.mikhaellopez:biometric:1.1.0'
 }
