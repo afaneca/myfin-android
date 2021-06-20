@@ -37,10 +37,7 @@ constructor() {
 
     fun encryptData(keyAlias: String, text: String): ByteArray {
         val secretKey = generateSecretKey(keyAlias)
-        val iv = IvParameterSpec(
-            (keyAlias + text)
-                .substring(0, 16).toByteArray(Charsets.UTF_8)
-        )
+
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         return cipher.doFinal(text.toByteArray(charset))
     }
@@ -70,48 +67,3 @@ constructor() {
         (keyStore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry).secretKey
 }
 
-/*
-object ChCrypto {
-    @JvmStatic
-    fun aesEncrypt(v: String, secretKey: String) = AES256.encrypt(v, secretKey)
-
-    @JvmStatic
-    fun aesDecrypt(v: String, secretKey: String) = AES256.decrypt(v, secretKey)
-}
-
-private object AES256 {
-    private val encoder = Base64.getEncoder()
-    private val decoder = Base64.getDecoder()
-
-    private fun cipher(opmode: Int, secretKey: SecretKey, iv: IvParameterSpec): Cipher {
-        */
-/*if (secretKey.length != 32) throw RuntimeException("SecretKey length is not 32 chars")*//*
-
-        val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
-        */
-/*val sk = SecretKeySpec(secretKey.toByteArray(Charsets.UTF_8), "AES")*//*
-
-        */
-/*val iv = IvParameterSpec(iv.substring(0, 16).toByteArray(Charsets.UTF_8))*//*
-
-        c.init(opmode, secretKey, iv)
-        return c
-    }
-
-    fun encrypt(str: String, secretKey: SecretKey): String {
-        val encrypted =
-            cipher(Cipher.ENCRYPT_MODE, secretKey).doFinal(str.toByteArray(Charsets.UTF_8))
-        return String(encoder.encode(encrypted))
-    }
-
-    fun decrypt(str: String, secretKey: SecretKey): String {
-        val byteStr = decoder.decode(str.toByteArray(Charsets.UTF_8))
-        val iv = IvParameterSpec(getIv().substring(0,16).toByteArray(Charsets.UTF_8))
-        return String(cipher(Cipher.DECRYPT_MODE, secretKey, getIv()).doFinal(byteStr))
-    }
-
-    private fun getIv(): String {
-
-    }
-}
-*/

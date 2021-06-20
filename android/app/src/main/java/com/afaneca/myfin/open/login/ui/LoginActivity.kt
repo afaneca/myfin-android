@@ -16,10 +16,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (!userData.getSessionKey().isBlank()) {
+        /*if (!userData.getSessionKey().isBlank()) {
             // TODO check validity of session key before logging in
             goToPrivateActivity()
-        }
+        }*/
     }
 
 

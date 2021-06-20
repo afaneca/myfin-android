@@ -35,6 +35,26 @@ class UserDataManager : KoinComponent {
 
     fun getLastUsername(): String = userSharedPrefs.getString(KEY_LAST_USER, "") ?: ""
 
+    /* KEEP SESSION */
+    fun saveIsToKeepSession(keepSession: Boolean) {
+        with(userSharedPrefs.edit()) {
+            putBoolean(KEY_KEEP_SESSION, keepSession)
+            apply()
+        }
+    }
+
+    fun getIsToKeepSession(): Boolean = userSharedPrefs.getBoolean(KEY_KEEP_SESSION, false)
+
+    /* ENCRYPTED PASSWORD */
+    fun saveEncryptedPassword(password: String) {
+        with(userSharedPrefs.edit()) {
+            putString(KEY_ENC_PW, password)
+            apply()
+        }
+    }
+
+    fun getEncryptedPassword(): String = userSharedPrefs.getString(KEY_ENC_PW, "") ?: ""
+
     @SuppressLint("ApplySharedPref")
     fun clearUserData() {
         userSharedPrefs.edit().clear().commit()
@@ -47,6 +67,7 @@ class UserDataManager : KoinComponent {
     @SuppressLint("ApplySharedPref")
     fun clearUserSessionData() {
         userSharedPrefs.edit().remove(KEY_SESSION_KEY).commit()
+        userSharedPrefs.edit().remove(KEY_KEEP_SESSION).commit()
     }
 
     fun clearUserSessionDataAsync() {
@@ -67,5 +88,7 @@ class UserDataManager : KoinComponent {
         private const val KEY_SESSION_KEY = "KEY_SESSION_KEY"
         private const val KEY_LAST_USER = "KEY_LAST_USER"
         private const val KEY_DB_PASS = "KEY_DB_PASS"
+        private const val KEY_KEEP_SESSION = "KEY_KEEP_SESSION"
+        private const val KEY_ENC_PW = "KEY_ENC_PW"
     }
 }

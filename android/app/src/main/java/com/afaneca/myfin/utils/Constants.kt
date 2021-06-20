@@ -5,8 +5,9 @@ package com.afaneca.myfin.utils
  */
 object Constants {
     const val DEFAULT_CURRENCY = "EUR"
+    const val PASSWORD_STORAGE_KEY = "PASSWORD_STORAGE_KEY"
 
-    enum class ACCOUNT_TYPE(val value: String){
+    enum class ACCOUNT_TYPE(val value: String) {
         CHECKING("CHEAC"),
         SAVINGS("SAVAC"),
         INVESTING("INVAC"),

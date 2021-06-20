@@ -70,15 +70,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_marginStart="48dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="48dp"
             android:layout_marginBottom="48dp"
             android:enabled="true"
             android:text="@string/action_sign_in"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/password_til"
+            app:layout_constraintTop_toBottomOf="@+id/password_til" />
+
+        <CheckBox
+            android:id="@+id/remember_me_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:checked="true"
+            android:text="Manter Sessão"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@+id/password_til"
             app:layout_constraintTop_toBottomOf="@+id/password_til" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,19 +108,6 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/biometrics_fab"
-        app:layout_constraintBottom_toBottomOf="@id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:src="@drawable/account_circle_black"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:focusable="true" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -123,4 +118,5 @@
         android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

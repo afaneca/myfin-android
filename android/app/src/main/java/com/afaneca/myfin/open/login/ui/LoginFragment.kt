@@ -27,6 +27,7 @@ import org.koin.android.ext.android.inject
 
 
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRepository>() {
+    private val biometricsHelper by lazy { BiometricsHelper(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +36,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
         val rootView = super.onCreateView(inflater, container, savedInstanceState)
         bindObservers()
         bindListeners()
-        checkBiometrics()
         return rootView;
     }
 
@@ -51,7 +51,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             when (it) {
                 is Resource.Success -> {
                     // TODO -  This should be decided by the viewmodel!
-                    //goToPrivateActivity()
+                    goToPrivateActivity()
                 }
 
                 is Resource.Failure -> {
@@ -66,6 +66,12 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
                 binding.usernameEt.setText(it)
             }
         })
+
+        viewModel.triggerBiometricAuth.observe(viewLifecycleOwner, {
+            if (it) {
+                checkBiometrics()
+            }
+        })
     }
 
     private fun goToPrivateActivity() {
@@ -77,9 +83,10 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
         binding.loginBtn.setOnClickListener {
             val username = binding.usernameEt.text.toString().trim()
             val password = binding.passwordEt.text.toString().trim()
+            val keepSession = binding.rememberMeCb.isChecked
 
-            // TODO add validations
-            viewModel.attemptLogin(username, password)
+            // TODO - add validations
+            viewModel.attemptLogin(username, password, keepSession, requireContext())
         }
 
         binding.passwordEt.addTextChangedListener {
@@ -112,16 +119,10 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
 
 
     // BIOMETRICS
-    fun checkBiometrics() {
-        val biometricsHelper = BiometricsHelper(this)
-        binding.biometricsFab.visibility =
-            if (biometricsHelper.areBiometricsAvailable()) View.VISIBLE else View.GONE
-
-        binding.biometricsFab.setOnClickListener {
-            biometricsHelper.showBiometricPrompt {
-                //  SUCCESS
-
-            }
+    private fun checkBiometrics() {
+        biometricsHelper.showBiometricPrompt {
+            //  SUCCESS
+            viewModel.attemptBiometricLogin(requireContext())
         }
     }
 
