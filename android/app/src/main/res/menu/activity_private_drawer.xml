@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
         <item
-            android:id="@+id/nav_item_dashboard"
+            android:id="@+id/dashboardFragment"
             android:icon="@drawable/ic_dashboard_white_24dp"
             android:iconTint="@color/colorAccent"
             android:title="@string/main_menu_dashboard" />
         <item
-            android:id="@+id/nav_item_transactions"
-            android:enabled="false"
+            android:id="@+id/transactionsFragment"
+            android:enabled="true"
             android:icon="@drawable/ic_list_alt_white_24dp"
             android:iconTint="@color/colorAccent"
             android:title="@string/main_menu_transactions" />

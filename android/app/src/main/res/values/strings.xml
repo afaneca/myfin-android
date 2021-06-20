@@ -47,4 +47,8 @@
     <string name="main_menu_investments">Investimentos</string>
     <string name="main_menu_stats">Estatísticas</string>
     <string name="main_menu_group_administration">Gestão</string>
+
+    <!-- Labels -->
+    <string name="transactions_label">Transações</string>
+    <string name="transaction_details_label">Detalhes de transação</string>
 </resources>

@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
 import com.afaneca.myfin.closed.dashboard.ui.DashboardViewModel
+import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
+import com.afaneca.myfin.closed.transactions.ui.TransactionsViewModel
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.open.login.ui.LoginViewModel
@@ -27,6 +29,9 @@ class BaseViewModelFactory(
             ) as T
             modelClass.isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(
                 repository as DashboardRepository
+            ) as T
+            modelClass.isAssignableFrom(TransactionsViewModel::class.java) -> TransactionsViewModel(
+                repository as TransactionsRepository
             ) as T
             // Add More ViewModels here
             else -> throw IllegalArgumentException("ViewModel class not found")

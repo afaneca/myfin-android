@@ -12,6 +12,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseActivity
 import com.afaneca.myfin.data.UserDataManager
@@ -19,6 +24,7 @@ import com.afaneca.myfin.databinding.ActivityPrivateBinding
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_private.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,11 +32,21 @@ import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinApiExtension
 
-class PrivateActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class PrivateActivity : BaseActivity() {
     private lateinit var binding: ActivityPrivateBinding
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var privateViewModel: PrivateViewModel
+    private val appBarConfiguration by lazy {
+        AppBarConfiguration(
+            // Tof level destinations - will show hamburger menu in toolbar
+            setOf(
+                R.id.dashboardFragment,
+                R.id.transactionsFragment
+            ),
+            binding.drawerLayout
+        )
+    }
 
     @KoinApiExtension
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +54,11 @@ class PrivateActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedL
         binding = ActivityPrivateBinding.inflate(layoutInflater)
         setContentView(binding.root)
         privateViewModel = ViewModelProvider(this).get(PrivateViewModel::class.java)
-        setupDrawerMenu(setupToolbar())
+
+        setupDrawerMenu(/*setupToolbar()*/)
+
 
         /* Observers*/
-
         privateViewModel.apply {
             getUserAccounts().observe(this@PrivateActivity, {
                 if (it.isNullOrEmpty()) return@observe
@@ -82,25 +99,52 @@ class PrivateActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedL
         }
     }
 
+    fun getNavController() : NavController {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
+        return navHostFragment.navController
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = getNavController()
+        return NavigationUI.navigateUp(
+            navController,
+            appBarConfiguration
+        )
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController = getNavController()
+
+        return item.onNavDestinationSelected(navController)
+                || super.onOptionsItemSelected(item)
+    }
+
+
     private fun populateMainPatrimonyBalance(value: String) {
-        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.patrimony_balance_amount)?.text = value
+        binding.navView.getHeaderView(0)
+            ?.findViewById<TextView>(R.id.patrimony_balance_amount)?.text = value
     }
 
     private fun populatePatrimonyBalance(value: String) {
-        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_patrimony_amount)?.text = value
+        binding.navView.getHeaderView(0)
+            ?.findViewById<TextView>(R.id.secondary_asset_patrimony_amount)?.text = value
     }
 
     private fun populateOperatingFundsBalance(value: String) {
-        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_operating_funds_amount)?.text =
+        binding.navView.getHeaderView(0)
+            ?.findViewById<TextView>(R.id.secondary_asset_operating_funds_amount)?.text =
             value
     }
 
     private fun populateInvestmentsBalance(value: String) {
-        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_investments_amount)?.text = value
+        binding.navView.getHeaderView(0)
+            ?.findViewById<TextView>(R.id.secondary_asset_investments_amount)?.text = value
     }
 
     private fun populateDebtBalance(value: String) {
-        binding.navView.getHeaderView(0)?.findViewById<TextView>(R.id.secondary_asset_debt_amount)?.text = value
+        binding.navView.getHeaderView(0)
+            ?.findViewById<TextView>(R.id.secondary_asset_debt_amount)?.text = value
     }
 
 
@@ -114,47 +158,19 @@ class PrivateActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedL
         return toolbar
     }
 
-    private fun setupDrawerMenu(toolbar: Toolbar) {
-        drawer = binding.drawerLayout
-        binding.navView.setNavigationItemSelectedListener(this)
-        toggle = ActionBarDrawerToggle(
-            this,
-            drawer,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawer.addDrawerListener(toggle)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
+    private fun setupDrawerMenu() {
+        setSupportActionBar(binding.toolbar)
+        val navController = getNavController()
+        NavigationUI.setupWithNavController(binding.navView, navController)
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
-        binding.navView.getHeaderView(0).setOnClickListener { goToAccountsView() }
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        toggle.syncState()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        toggle.onConfigurationChanged(newConfig)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
+        val logoutItem = binding.navView.menu.findItem(R.id.nav_item_logout)
+        logoutItem.setOnMenuItemClickListener {
+            showLogoutDialog()
+            true
         }
-        return super.onOptionsItemSelected(item)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_item_logout -> showLogoutDialog()
-        }
-
-        return true
-    }
 
     private fun showLogoutDialog() {
         AlertDialog.Builder(this@PrivateActivity)
@@ -167,7 +183,6 @@ class PrivateActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedL
     }
 
     private fun doLogout() {
-        val userDataManager: UserDataManager by inject()
         lifecycleScope.launch(Dispatchers.IO) {
             privateViewModel.clearUserSessionData() // clear session data
             withContext(Dispatchers.IO) {

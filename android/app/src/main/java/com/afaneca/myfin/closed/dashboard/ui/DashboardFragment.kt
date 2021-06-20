@@ -25,19 +25,13 @@ import java.util.*
 class DashboardFragment :
     BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val rootView = super.onCreateView(inflater, container, savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         bindObservers()
         bindListeners()
         getMonthlyIncomeExpensesDistributionDataForCurrentMonth()
         setupMonthlyOverviewChart()
-        return rootView;
     }
-
 
     private fun setupMonthlyOverviewChart() {
         /*val pieChart = ChartUtils.buildHalfPieChart(
@@ -50,7 +44,6 @@ class DashboardFragment :
 
     override fun onResume() {
         super.onResume()
-        setActionBarTitle(getString(R.string.dashboard_label))
     }
 
 
