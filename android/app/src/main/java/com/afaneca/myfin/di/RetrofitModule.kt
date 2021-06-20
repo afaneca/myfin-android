@@ -48,7 +48,7 @@ private fun retrofit(
                         /*it.addHeader("Authorization", "Bearer $authToken")*/
                         it.addHeader("X-App-Version", getAppVersion())
                         it.addHeader("X-Platform", "Android")
-                        it.addHeader("authusername", getAuthUsername())
+                        it.addHeader("authusername", getAuthUsername(userDataManager))
                         it.addHeader("sessionkey", getAuthToken(userDataManager))
                         it.addHeader("mobile", "true")
                     }.build())
@@ -69,6 +69,7 @@ private fun getAuthToken(userDataManager: UserDataManager): String {
     return userDataManager.getSessionKey() ?: ""
 }
 
-private fun getAuthUsername(): String = "tony"
+private fun getAuthUsername(userDataManager: UserDataManager): String =
+    userDataManager.getLastUsername()
 
 private fun getAppVersion(): String = BuildConfig.VERSION_NAME
