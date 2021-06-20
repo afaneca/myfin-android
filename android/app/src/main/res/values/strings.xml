@@ -35,4 +35,16 @@
     <string name="biometric_auth_prompt_description">Confirme a sua identidade para avançar</string>
     <string name="biometric_auth_prompt_subtitle">Biometria</string>
     <string name="biometric_auth_prompt_title">@string/generic_authentication</string>
+
+    <!-- Main Menu -->
+    <string name="main_menu_dashboard">Dashboard</string>
+    <string name="main_menu_transactions">Transações</string>
+    <string name="main_menu_accounts">Contas</string>
+    <string name="main_menu_categories">Categorias</string>
+    <string name="main_menu_entities">Entidades</string>
+    <string name="main_menu_rules">Regras</string>
+    <string name="main_menu_budgets">Orçamentos</string>
+    <string name="main_menu_investments">Investimentos</string>
+    <string name="main_menu_stats">Estatísticas</string>
+    <string name="main_menu_group_administration">Gestão</string>
 </resources>

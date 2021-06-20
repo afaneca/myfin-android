@@ -2,43 +2,63 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
         <item
-            android:id="@+id/nav_item_one"
-            android:icon="@drawable/account_circle_black"
+            android:id="@+id/nav_item_dashboard"
+            android:icon="@drawable/ic_dashboard_white_24dp"
             android:iconTint="@color/colorAccent"
-            android:title="Item 1" />
+            android:title="@string/main_menu_dashboard" />
         <item
-            android:id="@+id/nav_item_two"
-            android:icon="@drawable/account_circle_black"
+            android:id="@+id/nav_item_transactions"
+            android:enabled="false"
+            android:icon="@drawable/ic_list_alt_white_24dp"
             android:iconTint="@color/colorAccent"
-            android:title="Item 2" />
+            android:title="@string/main_menu_transactions" />
         <item
-            android:id="@+id/nav_item_three"
-            android:icon="@drawable/account_circle_black"
+            android:id="@+id/nav_item_budgets"
+            android:enabled="false"
+            android:icon="@drawable/ic_bookmarks_white_24dp"
             android:iconTint="@color/colorAccent"
-            android:title="Item 3" />
+            android:title="@string/main_menu_budgets" />
+        <item
+            android:id="@+id/nav_item_investments"
+            android:enabled="false"
+            android:icon="@drawable/ic_bar_chart_white_24dp"
+            android:iconTint="@color/colorAccent"
+            android:title="@string/main_menu_investments" />
+        <item
+            android:id="@+id/nav_item_stats"
+            android:enabled="false"
+            android:icon="@drawable/ic_insights_white_24dp"
+            android:iconTint="@color/colorAccent"
+            android:title="@string/main_menu_stats" />
     </group>
 
-    <group android:id="@+id/group_menu">
-        <item
-            android:id="@+id/nav_item_four"
-            android:title="Item 4" />
-        <item
-            android:id="@+id/nav_item_five"
-            android:title="Item 5" />
-    </group>
 
-    <item android:title="Title 1">
+    <item android:title="@string/main_menu_group_administration">
         <menu>
             <item
-                android:id="@+id/nav_item_six"
+                android:id="@+id/nav_item_accounts"
+                android:enabled="false"
+                android:icon="@drawable/ic_account_balance_white_24dp"
                 android:iconTint="@color/colorAccent"
-                android:icon="@drawable/account_circle_black"
-                android:title="Item 6" />
+                android:title="@string/main_menu_accounts" />
             <item
-                android:id="@+id/nav_item_seven"
-                android:icon="@drawable/account_circle_black"
+                android:id="@+id/nav_item_categories"
+                android:enabled="false"
+                android:icon="@drawable/ic_folder_shared_white_24dp"
                 android:iconTint="@color/colorAccent"
-                android:title="Item 7" />
+                android:title="@string/main_menu_categories" />
+            <item
+                android:id="@+id/nav_item_entities"
+                android:enabled="false"
+                android:icon="@drawable/ic_business_white_24dp"
+                android:iconTint="@color/colorAccent"
+                android:title="@string/main_menu_entities" />
+            <item
+                android:id="@+id/nav_item_rules"
+                android:enabled="false"
+                android:icon="@drawable/ic_lightbulb_white_24dp"
+                android:iconTint="@color/colorAccent"
+                android:title="@string/main_menu_rules" />
         </menu>
     </item>
     <group android:id="@+id/group_menu_logout">
