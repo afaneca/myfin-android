@@ -58,4 +58,10 @@
     <string name="preferences_theme_option_system_default">Automático (Sistema)</string>
     <string name="generic_appearance">Aparência</string>
     <string name="preferences_theme_summary">Escolha o tema da aplicação</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_monthly_overview_chart_planned_amount_label">/%s</string>
+
+    <!-- Misc -->
+
 </resources>
