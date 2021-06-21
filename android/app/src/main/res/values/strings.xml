@@ -61,7 +61,12 @@
 
     <!-- Dashboard -->
     <string name="dashboard_monthly_overview_chart_planned_amount_label">/%s</string>
+    <string name="generic_settings">Definições</string>
+    <string name="preferences_theme_title">Tema</string>
 
     <!-- Misc -->
-
+    <string name="preferences_theme_option_key_light">preferences_theme_option_light</string>
+    <string name="preferences_theme_option_key_dark">preferences_theme_option_dark</string>
+    <string name="preferences_theme_option_key_system">preferences_theme_option_system</string>
+    <string name="preferences_key_theme">preferences_key_theme</string>
 </resources>

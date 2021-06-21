@@ -6,8 +6,8 @@
         <item>@string/preferences_theme_option_system_default</item>
     </string-array>
     <string-array name="preferences_theme_options_array">
-        <item>@id/preferences_theme_option_dark</item>
-        <item>@id/preferences_theme_option_light</item>
-        <item>@id/preferences_theme_option_system</item>
+        <item>@string/preferences_theme_option_key_dark</item>
+        <item>@string/preferences_theme_option_key_light</item>
+        <item>@string/preferences_theme_option_key_system</item>
     </string-array>
 </resources>

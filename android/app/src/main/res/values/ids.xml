@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="preferences_theme_option_light" />
-    <item type="id" name="preferences_theme_option_dark" />
-    <item type="id" name="preferences_theme_option_system" />
-    <item type="id" name="preferences_key_theme" />
+    <!--<item type="id" name="preferences_key_theme" />-->
 </resources>

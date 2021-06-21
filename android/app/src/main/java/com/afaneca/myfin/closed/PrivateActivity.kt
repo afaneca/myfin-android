@@ -1,7 +1,9 @@
 package com.afaneca.myfin.closed
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -19,6 +21,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseActivity
+import com.afaneca.myfin.closed.preferences.PreferencesActivity
 import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.databinding.ActivityPrivateBinding
 import com.afaneca.myfin.open.login.ui.LoginActivity
@@ -55,7 +58,8 @@ class PrivateActivity : BaseActivity() {
         setContentView(binding.root)
         privateViewModel = ViewModelProvider(this).get(PrivateViewModel::class.java)
 
-        setupDrawerMenu(/*setupToolbar()*/)
+        setupToolbar()
+        setupDrawerMenu()
 
 
         /* Observers*/
@@ -99,7 +103,7 @@ class PrivateActivity : BaseActivity() {
         }
     }
 
-    fun getNavController() : NavController {
+    fun getNavController(): NavController {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
         return navHostFragment.navController
@@ -114,10 +118,22 @@ class PrivateActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = getNavController()
+        if (item.itemId == R.id.item_preferences) {
+            Intent(this, PreferencesActivity::class.java).also {
+                startActivity(it)
+            }
 
+            return super.onOptionsItemSelected(item)
+        }
+
+        val navController = getNavController()
         return item.onNavDestinationSelected(navController)
                 || super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_toolbar, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
 
@@ -159,7 +175,6 @@ class PrivateActivity : BaseActivity() {
     }
 
     private fun setupDrawerMenu() {
-        setSupportActionBar(binding.toolbar)
         val navController = getNavController()
         NavigationUI.setupWithNavController(binding.navView, navController)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
