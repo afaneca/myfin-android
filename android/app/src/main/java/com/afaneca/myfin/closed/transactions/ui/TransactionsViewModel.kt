@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
  */
 class TransactionsViewModel(
     private val repository: TransactionsRepository
-) : ViewModel() {
+) : ViewModel(), TransactionsListAdapter.TransactionsListItemClickListener {
 
     private val _transactionsListData: SingleLiveEvent<Resource<LatestTransactionsListResponse>> =
         SingleLiveEvent()
@@ -26,6 +26,9 @@ class TransactionsViewModel(
         MutableLiveData()
     val transactionsListDataset = _transactionsListDataset
 
+    private val _clickedTransactionDetails: MutableLiveData<MyFinTransaction> = MutableLiveData()
+    val clickedTransactionDetails = _clickedTransactionDetails
+
 
     fun requestTransactionsList(trxLimit: Int = 50) = viewModelScope.launch {
         _transactionsListData.value =
@@ -35,6 +38,10 @@ class TransactionsViewModel(
                 (_transactionsListData.value as Resource.Success<LatestTransactionsListResponse>).data
             )
         }
+    }
+
+    override fun onTransactionClick(trx: MyFinTransaction) {
+        _clickedTransactionDetails.postValue(trx)
     }
 
 }

@@ -22,7 +22,8 @@ import kotlin.collections.ArrayList
  */
 class TransactionsListAdapter(
     private val context: Context,
-    private val dataset: List<MyFinTransaction>
+    private val dataset: List<MyFinTransaction>,
+    private val clickListener: TransactionsListItemClickListener
 ) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>(), Filterable {
     var datasetFiltered: List<MyFinTransaction> = ArrayList()
 
@@ -31,7 +32,15 @@ class TransactionsListAdapter(
     }
 
     inner class ViewHolder(val binding: TransactionsListItemBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindListener(
+            clickListener: TransactionsListItemClickListener,
+            item: MyFinTransaction
+        ) {
+            binding.root.setOnClickListener { clickListener.onTransactionClick(item) }
+
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -56,6 +65,8 @@ class TransactionsListAdapter(
             categoryEntityDividerView.visible(!item.entityName.isNullOrBlank() && !item.categoryName.isNullOrBlank())
             setupAmountStyle(item.type, holder.binding)
         }
+
+        holder.bindListener(clickListener, item)
     }
 
     private fun setupAmountStyle(type: String, binding: TransactionsListItemBinding) {
@@ -100,5 +111,9 @@ class TransactionsListAdapter(
             }
 
         }
+    }
+
+    interface TransactionsListItemClickListener {
+        fun onTransactionClick(trx: MyFinTransaction)
     }
 }

@@ -22,9 +22,6 @@ import com.afaneca.myfin.utils.visible
  */
 class TransactionsFragment :
     BaseFragment<TransactionsViewModel, FragmentTransactionsBinding, TransactionsRepository>() {
-    override fun getViewModel(): Class<TransactionsViewModel> = TransactionsViewModel::class.java
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindObververs()
@@ -60,12 +57,21 @@ class TransactionsFragment :
                 if (it == null) return@observe
                 setupTransactionsRecyclerView(it)
             })
+
+            clickedTransactionDetails.observe(viewLifecycleOwner, {
+                if (it == null) return@observe
+                showTransactionDetailsBottomSheetFragment(it)
+            })
         }
+    }
+
+    private fun showTransactionDetailsBottomSheetFragment(trx: MyFinTransaction) {
+
     }
 
     private fun setupTransactionsRecyclerView(dataset: List<MyFinTransaction>) {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = TransactionsListAdapter(requireContext(), dataset)
+        binding.recyclerView.adapter = TransactionsListAdapter(requireContext(), dataset, viewModel)
         binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 binding.recyclerView.context,
@@ -85,6 +91,9 @@ class TransactionsFragment :
         })
     }
 
+
+    /**/
+    override fun getViewModel(): Class<TransactionsViewModel> = TransactionsViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
