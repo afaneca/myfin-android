@@ -1,6 +1,7 @@
 package com.afaneca.myfin.data.network
 
 import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
+import com.afaneca.myfin.closed.transactions.data.LatestTransactionsListResponse
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
 import retrofit2.http.*
 
@@ -25,4 +26,10 @@ interface MyFinAPIServices {
         @Query("month") month: Int,
         @Query("year") year: Int
     ): MonthlyIncomeExpensesDistributionResponse
+
+    // TRANSACTIONS
+    @GET("trxs")
+    suspend fun getLatestTransactionsList(
+        @Query("trx_limit") trxLimit: Int = 300,
+    ): LatestTransactionsListResponse
 }
