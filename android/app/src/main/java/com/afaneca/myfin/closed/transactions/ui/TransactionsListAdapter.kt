@@ -3,6 +3,8 @@ package com.afaneca.myfin.closed.transactions.ui
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
@@ -12,6 +14,8 @@ import com.afaneca.myfin.utils.DateUtils
 import com.afaneca.myfin.utils.MyFinConstants
 import com.afaneca.myfin.utils.formatMoney
 import com.afaneca.myfin.utils.visible
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by me on 26/06/2021
@@ -19,8 +23,12 @@ import com.afaneca.myfin.utils.visible
 class TransactionsListAdapter(
     private val context: Context,
     private val dataset: List<MyFinTransaction>
-) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>(), Filterable {
+    var datasetFiltered: List<MyFinTransaction> = ArrayList()
 
+    init {
+        datasetFiltered = dataset
+    }
 
     inner class ViewHolder(val binding: TransactionsListItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -32,7 +40,7 @@ class TransactionsListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dataset[position]
+        val item = datasetFiltered[position]
 
         holder.binding.apply {
             dateDay.text = DateUtils.getDayOfMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L)
@@ -61,5 +69,36 @@ class TransactionsListAdapter(
         )
     }
 
-    override fun getItemCount() = dataset.size
+    override fun getItemCount() = datasetFiltered.size
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString()
+                if (charSearch.isEmpty()) {
+                    datasetFiltered = dataset
+                } else {
+                    val resultList = ArrayList<MyFinTransaction>()
+                    for (item in dataset) {
+                        if (item.toString().toLowerCase(Locale.ROOT).contains(
+                                charSearch.toLowerCase(
+                                    Locale.ROOT
+                                )
+                            )
+                        )
+                            resultList.add(item)
+                    }
+                    datasetFiltered = resultList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = datasetFiltered
+                return filterResults
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                datasetFiltered = results?.values as List<MyFinTransaction>
+                notifyDataSetChanged()
+            }
+
+        }
+    }
 }

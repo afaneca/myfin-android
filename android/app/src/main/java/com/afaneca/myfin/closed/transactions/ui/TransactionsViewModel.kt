@@ -27,7 +27,7 @@ class TransactionsViewModel(
     val transactionsListDataset = _transactionsListDataset
 
 
-    fun requestTransactionsList(trxLimit: Int = 300) = viewModelScope.launch {
+    fun requestTransactionsList(trxLimit: Int = 50) = viewModelScope.launch {
         _transactionsListData.value =
             repository.getTransactionsList(trxLimit)
         if (_transactionsListData.value is Resource.Success<LatestTransactionsListResponse>) {
