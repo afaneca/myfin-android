@@ -52,4 +52,17 @@
         <item name="cardCornerRadius">10dp</item>
     </style>
 
+    <!-- Amount Types TextViews -->
+    <style name="AmountTypeCredit" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorGreen</item>
+    </style>
+
+    <style name="AmountTypeDebit" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+
+    <style name="AmountTypeTransfer" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorOrange</item>
+    </style>
+
 </resources>

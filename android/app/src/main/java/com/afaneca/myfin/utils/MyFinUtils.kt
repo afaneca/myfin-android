@@ -13,10 +13,10 @@ object MyFinUtils {
     fun getOnlyOperatingFundsAccountsFromFullList(originalList: List<UserAccountEntity>): List<UserAccountEntity> =
         originalList.filter { acc ->
             !acc.type.isNullOrBlank() && when (acc.type) {
-                Constants.ACCOUNT_TYPE.CHECKING.value,
-                Constants.ACCOUNT_TYPE.SAVINGS.value,
-                Constants.ACCOUNT_TYPE.MEAL.value,
-                Constants.ACCOUNT_TYPE.WALLET.value
+                MyFinConstants.ACCOUNT_TYPE.CHECKING.value,
+                MyFinConstants.ACCOUNT_TYPE.SAVINGS.value,
+                MyFinConstants.ACCOUNT_TYPE.MEAL.value,
+                MyFinConstants.ACCOUNT_TYPE.WALLET.value
                 -> true
                 else -> false
             }
@@ -28,7 +28,7 @@ object MyFinUtils {
     fun getOnlyInvestingAccountsFromFullList(originalList: List<UserAccountEntity>): List<UserAccountEntity> =
         originalList.filter { acc ->
             !acc.type.isNullOrBlank() && when (acc.type) {
-                Constants.ACCOUNT_TYPE.INVESTING.value,
+                MyFinConstants.ACCOUNT_TYPE.INVESTING.value,
                 -> true
                 else -> false
             }
@@ -40,7 +40,7 @@ object MyFinUtils {
     fun getOnlyCreditAccountsFromFullList(originalList: List<UserAccountEntity>): List<UserAccountEntity> =
         originalList.filter { acc ->
             !acc.type.isNullOrBlank() && when (acc.type) {
-                Constants.ACCOUNT_TYPE.CREDIT.value,
+                MyFinConstants.ACCOUNT_TYPE.CREDIT.value,
                 -> true
                 else -> false
             }

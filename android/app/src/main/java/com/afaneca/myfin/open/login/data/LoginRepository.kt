@@ -6,7 +6,7 @@ import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
-import com.afaneca.myfin.utils.Constants
+import com.afaneca.myfin.utils.MyFinConstants
 import com.afaneca.myfin.utils.PasswordStorageHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -47,14 +47,14 @@ class LoginRepository(
 
     fun saveEncryptedPassword(context: Context, password: String) {
         val passwordStorageHelper = PasswordStorageHelper(context)
-        passwordStorageHelper.setData(Constants.PASSWORD_STORAGE_KEY, password.toByteArray())
+        passwordStorageHelper.setData(MyFinConstants.PASSWORD_STORAGE_KEY, password.toByteArray())
         //userData.saveEncryptedPassword(password)
     }
 
     fun getPassword(context: Context): String {
         val passwordStorageHelper = PasswordStorageHelper(context)
         return String(
-            (passwordStorageHelper.getData(Constants.PASSWORD_STORAGE_KEY) ?: ByteArray(0))
+            (passwordStorageHelper.getData(MyFinConstants.PASSWORD_STORAGE_KEY) ?: ByteArray(0))
         )
     }
 

@@ -28,8 +28,8 @@ interface MyFinAPIServices {
     ): MonthlyIncomeExpensesDistributionResponse
 
     // TRANSACTIONS
-    @GET("trxs")
+    @GET("trxs/")
     suspend fun getLatestTransactionsList(
-        @Query("trx_limit") trxLimit: Int = 300,
+        @Query("trx_limit") trxLimit: Int,
     ): LatestTransactionsListResponse
 }

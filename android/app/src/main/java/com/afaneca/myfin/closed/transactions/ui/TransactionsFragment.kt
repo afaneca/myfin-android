@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.ui.NavigationUI
-import com.afaneca.myfin.R
+import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.base.BaseFragment
-import com.afaneca.myfin.closed.PrivateActivity
+import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
+import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentTransactionsBinding
+import com.afaneca.myfin.utils.visible
 
 /**
  * Created by me on 20/06/2021
@@ -22,12 +25,51 @@ class TransactionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindObververs()
+        getTransactionsList()
 
-        // TODO - remove this mock
-        binding.textView2.setOnClickListener {
+        /*binding.textView2.setOnClickListener {
             (activity as PrivateActivity).getNavController()
                 .navigate(R.id.action_transactionsFragment_to_transactionDetailsFragment)
+        }*/
+
+        //setupTransactionsList(getMockTransactionsList())
+    }
+
+    private fun getTransactionsList() {
+        viewModel.requestTransactionsList()
+    }
+
+    private fun bindObververs() {
+        viewModel.apply {
+            getTransactionsListData().observe(viewLifecycleOwner, {
+                binding.loadingPb.root.visible(it is Resource.Loading)
+                when (it) {
+                    is Resource.Success -> {
+
+                    }
+                    is Resource.Failure -> {
+                        Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
+
+            transactionsListDataset.observe(viewLifecycleOwner, {
+                if (it == null) return@observe
+                setupTransactionsRecyclerView(it)
+            })
         }
+    }
+
+    private fun setupTransactionsRecyclerView(dataset: List<MyFinTransaction>) {
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = TransactionsListAdapter(requireContext(), dataset)
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                binding.recyclerView.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
     }
 
 

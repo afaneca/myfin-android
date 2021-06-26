@@ -10,13 +10,19 @@
     <color name="colorBackground">#ffffff</color>
     <color name="colorOnBackground">#393e46</color>
     <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnSurface">#000000</color>
+    <color name="colorOnSurface">#B6B4B4</color>
     <color name="colorError">#B00020</color>
     <color name="colorOnError">#FFFFFF</color>
 
     <!---->
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#4ecca3</color>
+    <!---->
+
+    <!-- MyFin Colors -->
+    <color name="colorGreen">@android:color/holo_green_dark</color>
+    <color name="colorOrange">@android:color/holo_orange_dark</color>
+    <color name="colorRed">@android:color/holo_red_light</color>
     <!---->
 
     <array name="progressRainbow">

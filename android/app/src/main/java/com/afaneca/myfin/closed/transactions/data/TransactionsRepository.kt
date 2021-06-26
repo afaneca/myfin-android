@@ -11,4 +11,7 @@ class TransactionsRepository(
     private val api: MyFinAPIServices,
     private val userData: UserDataManager
 ) : BaseRepository() {
+    suspend fun getTransactionsList(
+        trxLimit: Int
+    ) = safeAPICall { api.getLatestTransactionsList(trxLimit) }
 }
