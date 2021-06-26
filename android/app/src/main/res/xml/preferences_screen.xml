@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:title="@string/generic_appearance">
+        <!--android:summary="@string/preferences_theme_summary"-->
         <ListPreference
             android:defaultValue="@string/preferences_theme_option_key_system"
-            android:dialogIcon="@drawable/ic_lightbulb_white_24dp"
+            android:dialogIcon="@drawable/ic_lightbulb_24dp"
             android:entries="@array/preferences_theme_options_labels_array"
             android:entryValues="@array/preferences_theme_options_array"
-            android:icon="@drawable/ic_lightbulb_white_24dp"
+            android:icon="@drawable/ic_lightbulb_24dp"
             android:key="@string/preferences_key_theme"
-            android:summary="@string/preferences_theme_summary"
+            app:useSimpleSummaryProvider="true"
             android:title="@string/preferences_theme_title" />
     </PreferenceCategory>
 

@@ -5,25 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.PrivateActivity
-import com.afaneca.myfin.open.login.data.LoginRepository
-import com.afaneca.myfin.databinding.FragmentLoginBinding
 import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
+import com.afaneca.myfin.databinding.FragmentLoginBinding
+import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.utils.BiometricsHelper
 import com.afaneca.myfin.utils.enable
 import com.afaneca.myfin.utils.startNewActivity
 import com.afaneca.myfin.utils.visible
-import com.google.android.material.snackbar.Snackbar
-import com.mikhaellopez.biometric.BiometricHelper
-import com.mikhaellopez.biometric.BiometricPromptInfo
-import org.koin.android.ext.android.inject
 
 
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRepository>() {
@@ -99,16 +92,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             val username = binding.usernameEt.text.toString().trim()
             val password = binding.passwordEt.text.toString().trim()
             checkIfLoginButtonShouldBeEnabled(username, password)
-        }
-
-        binding.floatingActionButton.setOnClickListener {
-            when (AppCompatDelegate.getDefaultNightMode()) {
-                AppCompatDelegate.MODE_NIGHT_YES -> AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_NO
-                )
-                else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-
         }
     }
 

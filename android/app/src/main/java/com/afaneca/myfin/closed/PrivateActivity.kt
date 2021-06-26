@@ -1,15 +1,12 @@
 package com.afaneca.myfin.closed
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -22,17 +19,14 @@ import androidx.navigation.ui.onNavDestinationSelected
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseActivity
 import com.afaneca.myfin.closed.preferences.PreferencesActivity
-import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.databinding.ActivityPrivateBinding
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
-import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_private.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinApiExtension
 
 class PrivateActivity : BaseActivity() {
@@ -89,17 +83,6 @@ class PrivateActivity : BaseActivity() {
                 if (it.isNullOrEmpty()) return@observe
                 populateDebtBalance(it)
             })
-        }
-
-        // TODO - remove this!
-        val fab = binding.floatingActionButton
-        fab.setOnClickListener {
-            when (AppCompatDelegate.getDefaultNightMode()) {
-                AppCompatDelegate.MODE_NIGHT_YES -> AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_NO
-                )
-                else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
         }
     }
 
