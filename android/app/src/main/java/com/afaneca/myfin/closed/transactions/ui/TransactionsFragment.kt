@@ -82,6 +82,10 @@ class TransactionsFragment :
                 DividerItemDecoration.VERTICAL
             )
         )
+        // to make the whole thing clickable
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
+        }
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false
