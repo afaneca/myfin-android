@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <dimen name="fab_margin">16dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="fragment_horizontal_margin">16dp</dimen>
@@ -14,6 +14,7 @@
     <dimen name="default_title_text_size">20sp</dimen>
     <dimen name="default_paragraph_text_size">14sp</dimen>
     <dimen name="default_paragraph_smaller_text_size">12sp</dimen>
+    <dimen name="default_paragraph_smallest_text_size">10sp</dimen>
     <dimen name="default_subtitle_text_size">16sp</dimen>
 
     <!-- DrawerLayout Navigation -->

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/origin_account_label_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="Conta de Origem"
+                android:textAlignment="center"
+                android:textSize="@dimen/default_paragraph_smallest_text_size"
+                app:layout_constraintEnd_toStartOf="@+id/destination_account_label_tv"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/amount_tv"
+                style="@style/AmountTypeCredit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="@dimen/default_title_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="19.99€" />
+
+            <TextView
+                android:id="@+id/origin_account_value_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/destination_account_value_tv"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/origin_account_label_tv"
+                tools:text="BST - Conta Ordenado" />
+
+            <TextView
+                android:id="@+id/destination_account_label_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Conta Destino"
+                android:textAlignment="center"
+                android:textSize="@dimen/default_paragraph_smallest_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/origin_account_label_tv"
+                app:layout_constraintTop_toTopOf="@+id/origin_account_label_tv" />
+
+            <TextView
+                android:id="@+id/destination_account_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/origin_account_value_textview"
+                app:layout_constraintStart_toStartOf="@+id/destination_account_label_tv"
+                app:layout_constraintTop_toBottomOf="@+id/destination_account_label_tv"
+                tools:text="Conta Externa" />
+
+            <TextView
+                android:id="@+id/category_label_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Categoria"
+                android:textAlignment="center"
+                android:textSize="@dimen/default_paragraph_smallest_text_size"
+                app:layout_constraintEnd_toStartOf="@+id/entity_label_tv"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/origin_account_value_textview" />
+
+            <TextView
+                android:id="@+id/entity_label_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Entidade"
+                android:textAlignment="center"
+                android:textSize="@dimen/default_paragraph_smallest_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/category_label_tv"
+                app:layout_constraintTop_toTopOf="@+id/category_label_tv" />
+
+            <TextView
+                android:id="@+id/category_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/category_label_tv"
+                app:layout_constraintEnd_toStartOf="@+id/entity_value_tv"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/category_label_tv"
+                tools:text="Saúde" />
+
+            <TextView
+                android:id="@+id/entity_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/category_value_tv"
+                app:layout_constraintStart_toStartOf="@+id/entity_label_tv"
+                app:layout_constraintTop_toBottomOf="@+id/entity_label_tv"
+                tools:text="Farmácia Henriques (Calvão)" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/amount_tv"
+                tools:text="TRF CRED INTRABANC P/ ANTONIO DANIEL NEVE-16151999" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

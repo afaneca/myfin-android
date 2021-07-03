@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +21,7 @@ import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseActivity
 import com.afaneca.myfin.closed.preferences.PreferencesActivity
 import com.afaneca.myfin.databinding.ActivityPrivateBinding
+
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
 import kotlinx.android.synthetic.main.activity_private.*
@@ -48,8 +50,14 @@ class PrivateActivity : BaseActivity() {
     @KoinApiExtension
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPrivateBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding =
+            DataBindingUtil.setContentView(
+                this,
+                R.layout.activity_private
+            ) as ActivityPrivateBinding
+
+        //ActivityPrivateBinding.inflate(layoutInflater)
+        /*setContentView(binding.root)*/
         privateViewModel = ViewModelProvider(this).get(PrivateViewModel::class.java)
 
         setupToolbar()

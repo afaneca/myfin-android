@@ -39,7 +39,7 @@ class DashboardFragment :
     private fun bindObservers() {
         viewModel.apply {
             getMonthlyIncomeExpensesDistributionData().observe(viewLifecycleOwner, {
-                binding.loadingPb.root.visible(it is Resource.Loading)
+                binding.loadingPb.visible(it is Resource.Loading)
                 when (it) {
                     is Resource.Success -> {
                     }

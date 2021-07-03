@@ -42,7 +42,7 @@ class TransactionsFragment :
     private fun bindObververs() {
         viewModel.apply {
             getTransactionsListData().observe(viewLifecycleOwner, {
-                binding.loadingPb.root.visible(it is Resource.Loading)
+                binding.loadingPb.visible(it is Resource.Loading)
                 when (it) {
                     is Resource.Success -> {
 
