@@ -11,7 +11,11 @@
     <dimen name="default_margin_half">4dp</dimen>
 
     <!-- Text Sizes -->
+    <dimen name="default_title_biggest_text_size">32sp</dimen>
+    <dimen name="default_title_bigger_text_size">24sp</dimen>
     <dimen name="default_title_text_size">20sp</dimen>
+    <dimen name="default_paragraph_biggest_text_size">18sp</dimen>
+    <dimen name="default_paragraph_bigger_text_size">16sp</dimen>
     <dimen name="default_paragraph_text_size">14sp</dimen>
     <dimen name="default_paragraph_smaller_text_size">12sp</dimen>
     <dimen name="default_paragraph_smallest_text_size">10sp</dimen>

@@ -66,7 +66,11 @@ class TransactionsFragment :
     }
 
     private fun showTransactionDetailsBottomSheetFragment(trx: MyFinTransaction) {
-
+        val bottomSheetFragment = TransactionDetailsBottomSheetFragment.newInstance(trx)
+        bottomSheetFragment.show(
+            parentFragmentManager,
+            TransactionDetailsBottomSheetFragment.javaClass.name
+        )
     }
 
     private fun setupTransactionsRecyclerView(dataset: List<MyFinTransaction>) {

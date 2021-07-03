@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.TransactionsListItemBinding
 import com.afaneca.myfin.utils.DateUtils
-import com.afaneca.myfin.utils.MyFinConstants
 import com.afaneca.myfin.utils.formatMoney
+import com.afaneca.myfin.utils.setupAmountStyle
 import com.afaneca.myfin.utils.visible
 import java.util.*
 import kotlin.collections.ArrayList
@@ -70,14 +69,7 @@ class TransactionsListAdapter(
     }
 
     private fun setupAmountStyle(type: String, binding: TransactionsListItemBinding) {
-        TextViewCompat.setTextAppearance(
-            binding.transactionAmountTv,
-            when (type) {
-                MyFinConstants.MYFIN_TRX_TYPE.INCOME.value -> R.style.AmountTypeCredit
-                MyFinConstants.MYFIN_TRX_TYPE.EXPENSE.value -> R.style.AmountTypeDebit
-                else -> R.style.AmountTypeTransfer
-            }
-        )
+        setupAmountStyle(type, binding.transactionAmountTv)
     }
 
     override fun getItemCount() = datasetFiltered.size

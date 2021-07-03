@@ -3,6 +3,7 @@ package com.afaneca.myfin.base.objects
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Keep
 data class MyFinTransaction(
@@ -32,4 +33,4 @@ data class MyFinTransaction(
     val transactionId: String,
     @SerializedName("type")
     val type: String
-)
+) : Serializable

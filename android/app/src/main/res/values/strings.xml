@@ -35,6 +35,10 @@
     <string name="biometric_auth_prompt_description">Confirme a sua identidade para avançar</string>
     <string name="biometric_auth_prompt_subtitle">Biometria</string>
     <string name="biometric_auth_prompt_title">@string/generic_authentication</string>
+    <string name="account_type_external_label">Conta Externa</string>
+    <string name="no_category_label">Sem Categoria</string>
+    <string name="no_entity_label">Sem Entidade</string>
+    <string name="no_description_label">Sem Descrição</string>
 
     <!-- Main Menu -->
     <string name="main_menu_dashboard">Dashboard</string>
@@ -72,4 +76,8 @@
     <string name="preferences_theme_option_key_dark">preferences_theme_option_dark</string>
     <string name="preferences_theme_option_key_system">preferences_theme_option_system</string>
     <string name="preferences_key_theme">preferences_key_theme</string>
+    <string name="account_from_label">Conta Origem</string>
+    <string name="account_to_label">Conta Destino</string>
+    <string name="category_label">Categoria</string>
+    <string name="entity_label">Entidade</string>
 </resources>
