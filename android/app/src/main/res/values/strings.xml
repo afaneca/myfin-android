@@ -69,7 +69,7 @@
     <string name="preferences_theme_title">Tema</string>
 
     <!-- Transactions -->
-    <string name="transactions_list_item_month_year_format">%s %s</string>
+    <string name="transactions_list_item_month_year_format">%s%s</string>
 
     <!-- Misc -->
     <string name="preferences_theme_option_key_light">preferences_theme_option_light</string>
