@@ -14,4 +14,9 @@ class TransactionsRepository(
     suspend fun getTransactionsList(
         trxLimit: Int
     ) = safeAPICall { api.getLatestTransactionsList(trxLimit) }
+
+    suspend fun getTransactionsByPage(
+        page: Int,
+        pageSize: Int
+    ) = safeAPICall { api.getTransactionsListByPage(page, pageSize) }
 }

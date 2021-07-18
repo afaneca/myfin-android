@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
  */
 class TransactionsListAdapter(
     private val context: Context,
-    private val dataset: List<MyFinTransaction>,
+    private var dataset: List<MyFinTransaction>,
     private val clickListener: TransactionsListItemClickListener
 ) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>(), Filterable {
     var datasetFiltered: List<MyFinTransaction> = ArrayList()
@@ -66,6 +66,11 @@ class TransactionsListAdapter(
         }
 
         holder.bindListener(clickListener, item)
+    }
+
+    fun updateDataset(newDataset: List<MyFinTransaction>) {
+        (dataset as ArrayList<MyFinTransaction>).clear()
+        (dataset as ArrayList<MyFinTransaction>).addAll(newDataset)
     }
 
     private fun setupAmountStyle(type: String, binding: TransactionsListItemBinding) {

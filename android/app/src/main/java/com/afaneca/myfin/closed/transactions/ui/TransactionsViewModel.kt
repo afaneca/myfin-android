@@ -13,9 +13,12 @@ import kotlinx.coroutines.launch
 /**
  * Created by me on 20/06/2021
  */
+private const val TRX_PAGE_SIZE = 25
+
 class TransactionsViewModel(
     private val repository: TransactionsRepository
 ) : ViewModel(), TransactionsListAdapter.TransactionsListItemClickListener {
+
 
     private val _transactionsListData: SingleLiveEvent<Resource<LatestTransactionsListResponse>> =
         SingleLiveEvent()
@@ -23,25 +26,49 @@ class TransactionsViewModel(
     fun getTransactionsListData() = _transactionsListData
 
     private val _transactionsListDataset: MutableLiveData<List<MyFinTransaction>> =
-        MutableLiveData()
+        MutableLiveData(ArrayList())
     val transactionsListDataset = _transactionsListDataset
 
     private val _clickedTransactionDetails: MutableLiveData<MyFinTransaction> = MutableLiveData()
     val clickedTransactionDetails = _clickedTransactionDetails
 
+    private val _trxHasMore: MutableLiveData<Boolean> = MutableLiveData(true)
+    private val trxHasMore = _trxHasMore
 
-    fun requestTransactionsList(trxLimit: Int = 50) = viewModelScope.launch {
-        _transactionsListData.value =
-            repository.getTransactionsList(trxLimit)
-        if (_transactionsListData.value is Resource.Success<LatestTransactionsListResponse>) {
-            _transactionsListDataset.postValue(
-                (_transactionsListData.value as Resource.Success<LatestTransactionsListResponse>).data
-            )
+    private var _trxCurrentPage: Int = 0
+
+
+    private fun requestTransactionsList(page: Int, pageSize: Int = TRX_PAGE_SIZE) =
+        viewModelScope.launch {
+            _transactionsListData.value = Resource.Loading
+            _transactionsListData.value =
+                repository.getTransactionsByPage(page, pageSize)
+            if (_transactionsListData.value is Resource.Success<LatestTransactionsListResponse>) {
+                val newItems =
+                    (_transactionsListData.value as Resource.Success<LatestTransactionsListResponse>).data
+                _trxHasMore.postValue(!newItems.isEmpty())
+                val aggregatedList: List<MyFinTransaction> =
+                    newItems + _transactionsListDataset.value!!
+
+                _transactionsListDataset.postValue(aggregatedList)
+            }
         }
-    }
 
     override fun onTransactionClick(trx: MyFinTransaction) {
         _clickedTransactionDetails.postValue(trx)
+    }
+
+    fun requestTransactions() {
+        _trxCurrentPage = 0
+        requestTransactionsList(_trxCurrentPage)
+    }
+
+    fun requestMoreTransactions() {
+        if (!trxHasMore.value!!) {
+            return
+        }
+
+        requestTransactionsList(++_trxCurrentPage)
     }
 
 }

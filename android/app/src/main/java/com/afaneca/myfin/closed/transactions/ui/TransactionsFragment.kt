@@ -9,6 +9,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
@@ -16,6 +17,7 @@ import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentTransactionsBinding
 import com.afaneca.myfin.utils.visible
+
 
 /**
  * Created by me on 20/06/2021
@@ -36,7 +38,11 @@ class TransactionsFragment :
     }
 
     private fun getTransactionsList() {
-        viewModel.requestTransactionsList()
+        viewModel.requestTransactions()
+    }
+
+    private fun onMoreTransactionsAsked() {
+        viewModel.requestMoreTransactions()
     }
 
     private fun bindObververs() {
@@ -55,7 +61,13 @@ class TransactionsFragment :
 
             transactionsListDataset.observe(viewLifecycleOwner, {
                 if (it == null) return@observe
-                setupTransactionsRecyclerView(it)
+                if (binding.recyclerView.adapter == null)
+                    setupTransactionsRecyclerView(it)
+                else {
+                    (binding.recyclerView.adapter!! as TransactionsListAdapter).updateDataset(it)
+                    binding.recyclerView.adapter!!.notifyDataSetChanged()
+                }
+
             })
 
             clickedTransactionDetails.observe(viewLifecycleOwner, {
@@ -96,6 +108,17 @@ class TransactionsFragment :
                 return false
             }
 
+        })
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1) && dy > 0) {
+                    //scrolled to BOTTOM
+                    onMoreTransactionsAsked()
+                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
+                    //scrolled to TOP
+                }
+            }
         })
     }
 

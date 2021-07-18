@@ -32,4 +32,10 @@ interface MyFinAPIServices {
     suspend fun getLatestTransactionsList(
         @Query("trx_limit") trxLimit: Int,
     ): LatestTransactionsListResponse
+
+    @GET("trxs/page/{page}")
+    suspend fun getTransactionsListByPage(
+        @Path(value = "page", encoded = true) page: Int,
+        @Query("page_size") trxLimit: Int,
+    ): LatestTransactionsListResponse
 }
