@@ -14,14 +14,5 @@
         android:id="@+id/transactionsFragment"
         android:name="com.afaneca.myfin.closed.transactions.ui.TransactionsFragment"
         android:label="@string/transactions_label"
-        tools:layout="@layout/fragment_transactions" >
-        <action
-            android:id="@+id/action_transactionsFragment_to_transactionDetailsFragment"
-            app:destination="@id/transactionDetailsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/transactionDetailsFragment"
-        android:name="com.afaneca.myfin.closed.transactions.ui.TransactionDetailsFragment"
-        android:label="@string/transaction_details_label"
-        tools:layout="@layout/fragment_transaction_details" />
+        tools:layout="@layout/fragment_transactions" />
 </navigation>

@@ -37,7 +37,6 @@ class TransactionsViewModel(
 
     private var _trxCurrentPage: Int = 0
 
-
     private fun requestTransactionsList(page: Int, pageSize: Int = TRX_PAGE_SIZE) =
         viewModelScope.launch {
             _transactionsListData.value = Resource.Loading
@@ -70,5 +69,4 @@ class TransactionsViewModel(
 
         requestTransactionsList(++_trxCurrentPage)
     }
-
 }

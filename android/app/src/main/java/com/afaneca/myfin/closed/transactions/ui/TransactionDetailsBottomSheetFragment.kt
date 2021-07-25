@@ -23,14 +23,12 @@ class TransactionDetailsBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentTransactionDetailsBottomSheetBinding
 
     companion object {
-        private final val BUNDLE_IN_TRX_OBJECT_TAG = "BUNDLE_IN_TRX_OBJECT_TAG"
+        private const val BUNDLE_IN_TRX_OBJECT_TAG = "BUNDLE_IN_TRX_OBJECT_TAG"
 
-        fun newInstance(trxObj: MyFinTransaction): TransactionDetailsBottomSheetFragment {
-            val args = Bundle()
-            args.putSerializable(BUNDLE_IN_TRX_OBJECT_TAG, trxObj)
-            val fragment = TransactionDetailsBottomSheetFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(trxObj: MyFinTransaction) = TransactionDetailsBottomSheetFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(BUNDLE_IN_TRX_OBJECT_TAG, trxObj)
+            }
         }
     }
 

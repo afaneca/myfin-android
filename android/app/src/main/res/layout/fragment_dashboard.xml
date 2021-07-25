@@ -8,6 +8,16 @@
         android:layout_height="match_parent"
         tools:context=".closed.dashboard.ui.DashboardFragment">
 
+        <include
+            android:id="@+id/loading_pb"
+            layout="@layout/include_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.tenclouds.gaugeseekbar.GaugeSeekBar
             android:id="@+id/monthly_overview_pchart"
             android:layout_width="0dp"
@@ -51,16 +61,6 @@
             app:layout_constraintTop_toBottomOf="@+id/progressTextTitle"
             tools:text="917,27 €/1 849,04 €" />
 
-        <include
-            android:id="@+id/loading_pb"
-            layout="@layout/include_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <!-- <ProgressBar
              android:id="@+id/loading_pb"
              style="?android:attr/progressBarStyle"
@@ -93,6 +93,41 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/chart_current_amount_tv"
             tools:text="/1 849,04 €" />
+
+        <TextView
+            android:id="@+id/latest_transactions_tv"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Últimas transações"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/monthly_overview_pchart" />
+
+        <!--<View
+            android:id="@+id/latest_transactions_title_divider_v"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/latest_transactions_tv" />-->
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/latest_transactions_fragment"
+            android:name="com.afaneca.myfin.closed.dashboard.ui.DashboardTransactionsFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin_half"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/latest_transactions_tv"
+            tools:background="@color/red"
+            tools:layout="@layout/fragment_transactions"
+            tools:layout_height="100dp" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

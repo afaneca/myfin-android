@@ -18,6 +18,7 @@ import java.util.*
 class DashboardFragment :
     BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
 
+    /*val args: DashboardFragmentA*/
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindObservers()

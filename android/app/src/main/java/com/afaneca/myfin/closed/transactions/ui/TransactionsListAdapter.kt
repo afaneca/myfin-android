@@ -22,7 +22,7 @@ import kotlin.collections.ArrayList
 class TransactionsListAdapter(
     private val context: Context,
     private var dataset: List<MyFinTransaction>,
-    private val clickListener: TransactionsListItemClickListener
+    private val clickListener: TransactionsListItemClickListener,
 ) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>(), Filterable {
     var datasetFiltered: List<MyFinTransaction> = ArrayList()
 
