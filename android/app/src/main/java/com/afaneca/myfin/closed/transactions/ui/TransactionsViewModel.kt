@@ -57,9 +57,9 @@ class TransactionsViewModel(
         _clickedTransactionDetails.postValue(trx)
     }
 
-    fun requestTransactions() {
+    fun requestTransactions(pageSize: Int = TRX_PAGE_SIZE) {
         _trxCurrentPage = 0
-        requestTransactionsList(_trxCurrentPage)
+        requestTransactionsList(_trxCurrentPage, pageSize)
     }
 
     fun requestMoreTransactions() {
