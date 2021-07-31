@@ -64,7 +64,7 @@ class DashboardTransactionsFragment :
     }
 
     private fun getTransactionsList() {
-        viewModel.requestTransactions()
+        viewModel.requestTransactions(5)
     }
 
     private fun showTransactionDetailsBottomSheetFragment(trx: MyFinTransaction) {
