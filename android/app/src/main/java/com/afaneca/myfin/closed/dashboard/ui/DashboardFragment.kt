@@ -13,10 +13,6 @@ import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentDashboardBinding
 import com.afaneca.myfin.utils.ChartUtils
 import com.afaneca.myfin.utils.visible
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.tabs.TabLayout
 import java.util.*
 
@@ -24,22 +20,25 @@ import java.util.*
 class DashboardFragment :
     BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
 
-    /*val args: DashboardFragmentA*/
+    companion object {
+        private const val TAB_PIE_CHART_EXPENSES_POSITION = 0
+        private const val TAB_PIE_CHART_INCOME_POSITION = 1
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
         bindListeners()
-        setupMonthlyDistributionCharts()
         getMonthlyIncomeExpensesDistributionDataForCurrentMonth()
     }
 
     private fun setupMonthlyDistributionCharts() {
-        binding.incomeDistributionPiechartTabLayout.addOnTabSelectedListener(object :
+        binding.amountDistributionPiechartTabLayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
-                    1 -> setupExpensesDistributionPieChart()
-                    0 -> setupIncomeDistributionPieChart()
+                    TAB_PIE_CHART_EXPENSES_POSITION -> setupExpensesDistributionPieChart()
+                    TAB_PIE_CHART_INCOME_POSITION -> setupIncomeDistributionPieChart()
                 }
             }
 
@@ -56,7 +55,7 @@ class DashboardFragment :
     private fun getMonthlyIncomeExpensesDistributionDataForCurrentMonth() {
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
         val currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        viewModel.requestMonthlyExpensesIncomeDistribution(currentMonth, currentYear)
+        viewModel.requestMonthlyExpensesIncomeDistribution(7/*currentMonth*/, currentYear)
     }
 
     private fun bindListeners() {
@@ -69,12 +68,27 @@ class DashboardFragment :
                 binding.loadingPb.visible(it is Resource.Loading)
                 when (it) {
                     is Resource.Success -> {
-                        setupExpensesDistributionPieChart() // TODO - add real data
-                        setupIncomeDistributionPieChart()
+                        setupMonthlyDistributionCharts()
+                        setupExpensesDistributionPieChart()
                     }
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                     }
+                }
+            })
+            expensesDistributionChartData.observe(viewLifecycleOwner, {
+                val selectedTabPosition =
+                    binding.amountDistributionPiechartTabLayout.selectedTabPosition
+                if (selectedTabPosition == TAB_PIE_CHART_EXPENSES_POSITION) {
+                    setupExpensesDistributionPieChart()
+                }
+            })
+
+            incomeDistributionChartData.observe(viewLifecycleOwner, {
+                val selectedTabPosition =
+                    binding.amountDistributionPiechartTabLayout.selectedTabPosition
+                if (selectedTabPosition == TAB_PIE_CHART_INCOME_POSITION) {
+                    setupIncomeDistributionPieChart()
                 }
             })
 
@@ -87,43 +101,21 @@ class DashboardFragment :
     }
 
     private fun setupIncomeDistributionPieChart() {
-        var dataset = ArrayList<PieEntry>()
-        dataset.apply {
-            add(PieEntry(50F, "data 1"))
-            add(PieEntry(30F, "data 2"))
-            add(PieEntry(10F, "data 3"))
-            add(PieEntry(10F, "data 4"))
-        }
-
-        val pieDataSet: PieDataSet = PieDataSet(dataset, "dataset 123")
-        pieDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
-
         ChartUtils.buildPieChart(
             requireContext(),
-            binding.expensesDistributionPiechart,
-            "Despesa",
-            PieData(pieDataSet),
+            binding.amountDistributionPiechart,
+            getString(R.string.generic_expenses),
+            viewModel.incomeDistributionChartData.value!!.toMap(),
             isLegendEnabled = false
         )
     }
 
     private fun setupExpensesDistributionPieChart() {
-        var dataset = ArrayList<PieEntry>()
-        dataset.apply {
-            add(PieEntry(25F, "eheh"))
-            add(PieEntry(25F, "ohoh"))
-            add(PieEntry(40F, "eheh"))
-            add(PieEntry(10F, "ihih"))
-        }
-
-        val pieDataSet: PieDataSet = PieDataSet(dataset, "dataset 123")
-        pieDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
-
         ChartUtils.buildPieChart(
             requireContext(),
-            binding.expensesDistributionPiechart,
-            "Receita",
-            PieData(pieDataSet),
+            binding.amountDistributionPiechart,
+            getString(R.string.generic_income),
+            viewModel.expensesDistributionChartData.value!!.toMap(),
             isLegendEnabled = false
         )
     }

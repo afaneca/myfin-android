@@ -5,9 +5,11 @@ import androidx.core.content.ContextCompat
 import com.afaneca.myfin.R
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.DataSet
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.utils.ColorTemplate
+import java.util.*
 
 /**
  * Created by me on 13/06/2021
@@ -57,6 +59,43 @@ class ChartUtils {
             pieChart.invalidate()
 
             return pieChart
+        }
+
+
+        fun buildPieChart(
+            context: Context,
+            pieChart: PieChart,
+            title: String,
+            dataset: Map<String, Double>,
+            isLegendEnabled: Boolean = true
+        ) {
+            var pieEntryList = ArrayList<PieEntry>()
+            for (item in dataset) {
+                pieEntryList.add(PieEntry(item.value.toFloat(), item.key))
+            }
+            val pieDataSet: PieDataSet =
+                PieDataSet(pieEntryList, title).apply {
+                    setColors(
+                        *ColorTemplate.MATERIAL_COLORS,
+                        *ColorTemplate.COLORFUL_COLORS
+                    )
+                }
+
+            pieChart.apply {
+                setUsePercentValues(true)
+                /*description = Description().apply { text = "Distribuição das Despesas" }*/
+                centerText = title
+                isDrawHoleEnabled = true
+                isRotationEnabled = true
+                data = PieData(pieDataSet)
+                description.isEnabled = false
+                legend.isEnabled = isLegendEnabled
+                legend.textColor = context.getColor(R.color.colorOnPrimary)
+            }
+
+            pieChart.highlightValues(null)
+            pieChart.invalidate()
+            pieChart.animateXY(500, 500)
         }
     }
 }
