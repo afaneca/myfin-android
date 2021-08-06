@@ -1,4 +1,4 @@
-package com.afaneca.myfin.utils
+package com.afaneca.myfin.utils.charts
 
 import android.content.Context
 import androidx.core.content.ContextCompat
@@ -77,13 +77,15 @@ class ChartUtils {
                 PieDataSet(pieEntryList, title).apply {
                     setColors(
                         *ColorTemplate.MATERIAL_COLORS,
-                        *ColorTemplate.COLORFUL_COLORS
                     )
+                    /*setDrawValues(false)*/
+                    valueTextSize = 10f
+                    valueFormatter = PieChartPercentageValueFormatter()
                 }
 
             pieChart.apply {
-                setUsePercentValues(true)
                 /*description = Description().apply { text = "Distribuição das Despesas" }*/
+                setUsePercentValues(true)
                 centerText = title
                 isDrawHoleEnabled = true
                 isRotationEnabled = true
@@ -91,8 +93,12 @@ class ChartUtils {
                 description.isEnabled = false
                 legend.isEnabled = isLegendEnabled
                 legend.textColor = context.getColor(R.color.colorOnPrimary)
-            }
 
+                setDrawEntryLabels(false)
+                /*setEntryLabelTextSize(context.resources.getDimension(R.dimen.default_title_text_size))*/
+                /*setUsePercentValues(true)*/
+            }
+            pieChart.marker = PieChartMarkerView(context)
             pieChart.highlightValues(null)
             pieChart.invalidate()
             pieChart.animateXY(500, 500)

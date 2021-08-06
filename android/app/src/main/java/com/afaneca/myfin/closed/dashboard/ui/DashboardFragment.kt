@@ -11,7 +11,7 @@ import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentDashboardBinding
-import com.afaneca.myfin.utils.ChartUtils
+import com.afaneca.myfin.utils.charts.ChartUtils
 import com.afaneca.myfin.utils.visible
 import com.google.android.material.tabs.TabLayout
 import java.util.*
@@ -55,7 +55,7 @@ class DashboardFragment :
     private fun getMonthlyIncomeExpensesDistributionDataForCurrentMonth() {
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
         val currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        viewModel.requestMonthlyExpensesIncomeDistribution(7/*currentMonth*/, currentYear)
+        viewModel.requestMonthlyExpensesIncomeDistribution(currentMonth, currentYear)
     }
 
     private fun bindListeners() {
