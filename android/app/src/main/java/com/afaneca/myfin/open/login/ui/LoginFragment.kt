@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
+import com.afaneca.myfin.Consts
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.PrivateActivity
 import com.afaneca.myfin.data.network.MyFinAPIServices
@@ -103,10 +104,13 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
 
     // BIOMETRICS
     private fun checkBiometrics() {
-        biometricsHelper.showBiometricPrompt {
-            //  SUCCESS
+        if (Consts.APP_ENVIRONMENT.equals(Consts.Environments.DEV))
             viewModel.attemptBiometricLogin(requireContext())
-        }
+        else
+            biometricsHelper.showBiometricPrompt {
+                //  SUCCESS
+                viewModel.attemptBiometricLogin(requireContext())
+            }
     }
 
 
