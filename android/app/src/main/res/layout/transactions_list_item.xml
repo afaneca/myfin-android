@@ -6,6 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/default_margin"
         android:layout_marginVertical="@dimen/default_margin_half"
         android:background="@color/colorBackground">
         <!--android:background="@color/colorOnSurface"-->
@@ -61,7 +62,7 @@
             android:layout_marginStart="@dimen/default_margin_half"
             android:ellipsize="end"
             android:singleLine="true"
-            app:layout_constraintEnd_toStartOf="@+id/transaction_amount_tv"
+            app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
             app:layout_constraintStart_toEndOf="@+id/barrier_vertical_date_end"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="DÉBITO DIRETO-MEO, SA-35318606882" />

@@ -18,3 +18,14 @@ fun setupAmountStyle(type: String, textView: TextView) {
         }
     )
 }
+
+fun setupBalanceStyle(amount: Double, textView: TextView) {
+    TextViewCompat.setTextAppearance(
+        textView,
+        when {
+            amount > 0 -> R.style.AmountTypeCredit
+            amount == 0.toDouble() -> R.style.AmountTypeTransfer
+            else -> R.style.AmountTypeDebit
+        }
+    )
+}

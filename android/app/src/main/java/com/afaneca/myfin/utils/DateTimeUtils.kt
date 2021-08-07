@@ -6,7 +6,7 @@ import java.util.*
 /**
  * Created by me on 26/06/2021
  */
-class DateUtils {
+class DateTimeUtils {
 
     companion object {
         fun getDayOfMonthFromDate(date: Date): String {

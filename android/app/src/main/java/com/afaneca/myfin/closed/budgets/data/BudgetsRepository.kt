@@ -8,5 +8,5 @@ class BudgetsRepository(
     private val api: MyFinAPIServices,
     private val userData: UserDataManager
 ) : BaseRepository() {
-
+    suspend fun getBudgetsList() = safeAPICall { api.getBudgetsList() }
 }

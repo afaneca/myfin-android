@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
 import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
 import com.afaneca.myfin.data.network.Resource
-import com.afaneca.myfin.utils.DateUtils
+import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.SingleLiveEvent
 import com.afaneca.myfin.utils.formatMoney
 import kotlinx.coroutines.launch
@@ -50,7 +50,7 @@ class DashboardViewModel(
                 (_monthlyIncomeExpensesDistributionData.value as Resource.Success<MonthlyIncomeExpensesDistributionResponse>).data
             _monthlyOverviewChartData.postValue(generateMonthlyOverviewChartDataObject(response))
             _lastUpdateTimestampFormatted.postValue(
-                DateUtils.getFormattedDateTimeFromUnixTime(
+                DateTimeUtils.getFormattedDateTimeFromUnixTime(
                     response.lastUpdateTimestamp
                 )
             )

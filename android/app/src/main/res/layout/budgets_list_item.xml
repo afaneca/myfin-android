@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/main_wrapper_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginVertical="@dimen/default_margin_half">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/default_margin_half"
+            android:paddingVertical="@dimen/default_margin">
+            <!--android:background="@color/colorOnSurface"-->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/colorOnBackground"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--android:layout_marginTop="@dimen/default_margin_half"-->
+
+            <TextView
+                android:id="@+id/date_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/default_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/date_icon_iv"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="jan." />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_vertical_amount_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="start"
+                app:constraint_referenced_ids="budget_balance_tv"
+                tools:layout_editor_absoluteX="342dp"
+                tools:layout_editor_absoluteY="24dp" />
+
+            <TextView
+                android:id="@+id/budget_description_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_double"
+                android:layout_marginBottom="@dimen/default_margin_double"
+                android:ellipsize="end"
+                android:maxLines="3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date_month"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="DÉBITO DIRETO-MEO, SA-35318606882 gf sd gfsd gfdsgfds fadsf dasf adsf adsf adsf ads fasdf adsf asdf adsf adsf asdf adsf asd fads fasdf ads fadsf 234e1 dsa" />
+
+            <TextView
+                android:id="@+id/date_year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:textAlignment="center"
+                android:textSize="@dimen/default_paragraph_smaller_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/date_month"
+                app:layout_constraintStart_toEndOf="@+id/date_month"
+                tools:text="2021" />
+
+            <TextView
+                android:id="@+id/budget_balance_tv"
+                style="@style/AmountTypeDebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:textAlignment="textEnd"
+                android:textSize="@dimen/default_paragraph_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/barrier_vertical_amount_start"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="-635.56€" />
+
+            <ImageView
+                android:id="@+id/date_icon_iv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/date_month"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/date_month"
+                app:srcCompat="@drawable/ic_bookmarks_white_24dp"
+                app:tint="@color/colorAccent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.TransactionsListItemBinding
-import com.afaneca.myfin.utils.DateUtils
+import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.formatMoney
 import com.afaneca.myfin.utils.setupAmountStyle
 import com.afaneca.myfin.utils.visible
@@ -51,11 +51,12 @@ class TransactionsListAdapter(
         val item = datasetFiltered[position]
 
         holder.binding.apply {
-            dateDay.text = DateUtils.getDayOfMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L)
+            dateDay.text =
+                DateTimeUtils.getDayOfMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L)
             dateMonthYear.text = String.format(
                 context.getString(R.string.transactions_list_item_month_year_format),
-                DateUtils.getAbbreviatedMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L),
-                DateUtils.getFullYearFromUnixTime(item.dateTimestamp.toLong() * 1000L)
+                DateTimeUtils.getAbbreviatedMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L),
+                DateTimeUtils.getFullYearFromUnixTime(item.dateTimestamp.toLong() * 1000L)
             ) //"Jun 2021"
             transactionDescriptionTv.text = item.description ?: ""
             transactionAmountTv.text = formatMoney(item.amount.toDoubleOrNull() ?: 0.00)

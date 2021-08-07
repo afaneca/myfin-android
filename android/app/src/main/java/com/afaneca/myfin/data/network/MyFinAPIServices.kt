@@ -1,5 +1,6 @@
 package com.afaneca.myfin.data.network
 
+import com.afaneca.myfin.closed.budgets.data.BudgetsListResponse
 import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
 import com.afaneca.myfin.closed.transactions.data.LatestTransactionsListResponse
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
@@ -38,4 +39,8 @@ interface MyFinAPIServices {
         @Path(value = "page", encoded = true) page: Int,
         @Query("page_size") trxLimit: Int,
     ): LatestTransactionsListResponse
+
+    // BUDGETS
+    @GET("budgets/")
+    suspend fun getBudgetsList(): BudgetsListResponse
 }
