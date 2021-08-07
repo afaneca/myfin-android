@@ -17,7 +17,7 @@ data class MyFinBudget(
     @SerializedName("debit_amount")
     val debitAmount: Double,
     @SerializedName("initial_balance")
-    val initialBalance: Any?,
+    val initialBalance: String,
     @SerializedName("is_open")
     val isOpen: String,
     @SerializedName("month")

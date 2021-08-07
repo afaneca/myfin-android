@@ -17,3 +17,8 @@ fun formatMoney(value: Double, currency: String = "EUR"): String {
 
     return format.format(value)
 }
+
+fun parseStringToBoolean(value: String): Boolean {
+    val trueEquivalents = listOf<String>("1", "true")
+    return trueEquivalents.contains(value.toLowerCase())
+}

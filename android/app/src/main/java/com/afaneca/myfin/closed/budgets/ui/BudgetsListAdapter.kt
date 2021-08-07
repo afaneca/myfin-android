@@ -3,11 +3,13 @@ package com.afaneca.myfin.closed.budgets.ui
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinBudget
 import com.afaneca.myfin.databinding.BudgetsListItemBinding
 import com.afaneca.myfin.utils.formatMoney
+import com.afaneca.myfin.utils.parseStringToBoolean
 import com.afaneca.myfin.utils.setupBalanceStyle
 import java.time.Month
 import java.time.format.TextStyle
@@ -77,6 +79,14 @@ class BudgetsListAdapter(
                 context.getColor(
                     if (isCurrentMonth) android.R.color.white
                     else R.color.colorAccent
+                )
+            )
+
+            dateIconIv.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    context,
+                    if (parseStringToBoolean(item.isOpen)) R.drawable.ic_baseline_lock_open_24
+                    else R.drawable.ic_baseline_lock_24
                 )
             )
 
