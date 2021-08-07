@@ -15,4 +15,9 @@
         android:name="com.afaneca.myfin.closed.transactions.ui.TransactionsFragment"
         android:label="@string/transactions_label"
         tools:layout="@layout/fragment_transactions" />
+    <fragment
+        android:id="@+id/budgetsFragment"
+        android:name="com.afaneca.myfin.closed.budgets.ui.BudgetsFragment"
+        android:label="@string/budgets_label"
+        tools:layout="@layout/fragment_budgets" />
 </navigation>

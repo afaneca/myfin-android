@@ -2,6 +2,8 @@ package com.afaneca.myfin.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
+import com.afaneca.myfin.closed.budgets.ui.BudgetsViewModel
 import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
 import com.afaneca.myfin.closed.dashboard.ui.DashboardViewModel
 import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
@@ -32,6 +34,9 @@ class BaseViewModelFactory(
             ) as T
             modelClass.isAssignableFrom(TransactionsViewModel::class.java) -> TransactionsViewModel(
                 repository as TransactionsRepository
+            ) as T
+            modelClass.isAssignableFrom(BudgetsViewModel::class.java) -> BudgetsViewModel(
+                repository as BudgetsRepository
             ) as T
             // Add More ViewModels here
             else -> throw IllegalArgumentException("ViewModel class not found")

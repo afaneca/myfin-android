@@ -41,7 +41,8 @@ class PrivateActivity : BaseActivity() {
             // Tof level destinations - will show hamburger menu in toolbar
             setOf(
                 R.id.dashboardFragment,
-                R.id.transactionsFragment
+                R.id.transactionsFragment,
+                R.id.budgetsFragment
             ),
             binding.drawerLayout
         )
