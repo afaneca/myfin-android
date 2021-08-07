@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -72,7 +73,7 @@ class BudgetsFragment :
 
             if (isCurrentMonth) {
                 smoothScrollToBudget(dataset.indexOf(budget))
-                break;
+                break
             }
         }
     }
@@ -100,7 +101,9 @@ class BudgetsFragment :
         BudgetsRepository(remoteDataSource.create(MyFinAPIServices::class.java), userData)
 
     override fun onBudgetClick(trx: MyFinBudget) {
-        TODO("Not yet implemented")
+        val action =
+            BudgetsFragmentDirections.actionBudgetsFragmentToBudgetDetailsFragment(trx.budgetId)
+        findNavController().navigate(action)
     }
 
 }

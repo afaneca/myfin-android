@@ -19,5 +19,18 @@
         android:id="@+id/budgetsFragment"
         android:name="com.afaneca.myfin.closed.budgets.ui.BudgetsFragment"
         android:label="@string/budgets_label"
-        tools:layout="@layout/fragment_budgets" />
+        tools:layout="@layout/fragment_budgets">
+        <action
+            android:id="@+id/action_budgetsFragment_to_budgetDetailsFragment"
+            app:destination="@id/budgetDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/budgetDetailsFragment"
+        android:name="com.afaneca.myfin.closed.budgets.ui.BudgetDetailsFragment"
+        android:label="@string/budget_details_label"
+        tools:layout="@layout/fragment_budget_details">
+        <argument
+            android:name="budgetId"
+            app:argType="string" />
+    </fragment>
 </navigation>

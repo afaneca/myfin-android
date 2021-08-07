@@ -59,6 +59,7 @@
     <string name="transactions_label">Transações</string>
     <string name="transaction_details_label">Detalhes de transação</string>
     <string name="budgets_label">Orçamentos</string>
+    <string name="budget_details_label">Detalhes de Orçamento</string>
 
     <!-- Preferences -->
     <string name="preferences_theme_option_dark_theme">Tema Escuro</string>

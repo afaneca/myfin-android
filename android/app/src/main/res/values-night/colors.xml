@@ -23,6 +23,8 @@
     <color name="colorGreen">@android:color/holo_green_dark</color>
     <color name="colorOrange">@android:color/holo_orange_dark</color>
     <color name="colorRed">@android:color/holo_red_light</color>
+    <color name="colorGray">#888888</color>
+    <color name="light_gray">#B3ADAD</color>
     <!---->
 
 </resources>

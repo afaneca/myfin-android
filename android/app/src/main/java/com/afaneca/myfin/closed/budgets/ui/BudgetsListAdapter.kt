@@ -42,7 +42,7 @@ class BudgetsListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = dataset[position]
-
+        holder.bindListener(clickListener, item)
         holder.binding.apply {
             val currentDate = Calendar.getInstance()
             val isCurrentMonth =
