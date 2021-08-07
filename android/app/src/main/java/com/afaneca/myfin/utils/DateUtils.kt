@@ -44,5 +44,10 @@ class DateUtils {
         fun getAbbreviatedMonthFromUnixTime(unixTime: Long): String {
             return getAbbreviatedMonthFromDate(Date(unixTime))
         }
+
+        fun getFormattedDateTimeFromUnixTime(unixTime: Long): String {
+            val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+            return sdf.format(Date(unixTime * 1000L))
+        }
     }
 }

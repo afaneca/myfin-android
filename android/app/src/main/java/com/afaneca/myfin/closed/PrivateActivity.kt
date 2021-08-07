@@ -154,7 +154,6 @@ class PrivateActivity : BaseActivity() {
             ?.findViewById<TextView>(R.id.secondary_asset_debt_amount)?.text = value
     }
 
-
     private fun goToAccountsView() {
         // TODO - navigate to accounts view
     }

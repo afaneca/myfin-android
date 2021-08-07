@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
+import com.afaneca.myfin.closed.PrivateActivity
 import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
@@ -97,7 +99,17 @@ class DashboardFragment :
                 setupMonthlyOverviewChart(it.progressValue, it.currentAmount, it.plannedAmount)
             })
 
+            lastUpdateTimestampFormatted.observe(viewLifecycleOwner, {
+                if (it == null) return@observe
+                refreshLastUpdateTimestampValue(it)
+            })
+
         }
+    }
+
+    private fun refreshLastUpdateTimestampValue(formattedTimestamp: String) {
+        (activity as PrivateActivity).findViewById<TextView>(R.id.last_update_timestamp_value).text =
+            formattedTimestamp
     }
 
     private fun setupIncomeDistributionPieChart() {

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
 import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
 import com.afaneca.myfin.data.network.Resource
+import com.afaneca.myfin.utils.DateUtils
 import com.afaneca.myfin.utils.SingleLiveEvent
 import com.afaneca.myfin.utils.formatMoney
 import kotlinx.coroutines.launch
@@ -26,6 +27,9 @@ class DashboardViewModel(
     val monthlyOverviewChartData: LiveData<MonthlyOverviewChartData>
         get() = _monthlyOverviewChartData
 
+    private val _lastUpdateTimestampFormatted: MutableLiveData<String> = MutableLiveData()
+    val lastUpdateTimestampFormatted: LiveData<String> get() = _lastUpdateTimestampFormatted
+
     private val _expensesDistributionChartData: MutableLiveData<MutableMap<String, Double>> =
         MutableLiveData(mutableMapOf())
     val expensesDistributionChartData: LiveData<MutableMap<String, Double>>
@@ -42,18 +46,20 @@ class DashboardViewModel(
                 month, year
             )
         if (_monthlyIncomeExpensesDistributionData.value is Resource.Success<MonthlyIncomeExpensesDistributionResponse>) {
-            _monthlyOverviewChartData.postValue(
-                generateMonthlyOverviewChartDataObject(
-                    (_monthlyIncomeExpensesDistributionData.value as Resource.Success<MonthlyIncomeExpensesDistributionResponse>).data
+            val response =
+                (_monthlyIncomeExpensesDistributionData.value as Resource.Success<MonthlyIncomeExpensesDistributionResponse>).data
+            _monthlyOverviewChartData.postValue(generateMonthlyOverviewChartDataObject(response))
+            _lastUpdateTimestampFormatted.postValue(
+                DateUtils.getFormattedDateTimeFromUnixTime(
+                    response.lastUpdateTimestamp
                 )
             )
-
         }
 
     }
 
 
-    private fun generateMonthlyOverviewChartDataObject(response: MonthlyIncomeExpensesDistributionResponse): DashboardViewModel.MonthlyOverviewChartData {
+    private fun generateMonthlyOverviewChartDataObject(response: MonthlyIncomeExpensesDistributionResponse): MonthlyOverviewChartData {
         var plannedAmount = 0.00
         var currentAmount = 0.00
 

@@ -8,5 +8,7 @@ import com.google.gson.annotations.SerializedName
 @Keep
 class MonthlyIncomeExpensesDistributionResponse(
     @SerializedName("categories")
-    val categories: List<MyFinCategory>
+    val categories: List<MyFinCategory>,
+    @SerializedName("last_update_timestamp")
+    val lastUpdateTimestamp: Long
 ) : BaseResponse()
