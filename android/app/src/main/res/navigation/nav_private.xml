@@ -32,5 +32,9 @@
         <argument
             android:name="budgetId"
             app:argType="string" />
+        <argument
+            android:name="isOpen"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 </navigation>

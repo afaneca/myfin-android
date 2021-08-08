@@ -22,6 +22,7 @@ import com.afaneca.myfin.utils.setupBalanceStyle
 import com.afaneca.myfin.utils.visible
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayout.VISIBLE
 
 /**
  * Created by me on 07/08/2021
@@ -33,7 +34,7 @@ class BudgetDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.isOpen = args.isOpen
         bindObservers()
         getBudgetDetails(args.budgetId)
         setupTabLayout()
@@ -69,7 +70,15 @@ class BudgetDetailsFragment :
                 if (isTabExpenses) it.expensesPlannedAmountFormatted else it.incomePlannedAmountFormatted
             binding.budgetProgressCurrentAmountTv.text =
                 if (isTabExpenses) it.expensesCurrentAmountFormatted else it.incomeCurrentAmountFormatted
-
+            binding.budgetStatusTv.text =
+                getString(if (budgetDetailsData.isOpen) R.string.generic_open else R.string.generic_closed)
+            binding.budgetStatusWrapperCv.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (budgetDetailsData.isOpen) R.color.colorGreen else R.color.colorRed
+                )
+            )
+            binding.budgetStatusWrapperCv.visibility = VISIBLE
             refreshProgressBarState(if (isTabExpenses) it.expensesProgressPercentage else it.incomeProgressPercentage)
             setupCategoriesList(it.myFinBudgetCategories, isTabExpenses)
         }

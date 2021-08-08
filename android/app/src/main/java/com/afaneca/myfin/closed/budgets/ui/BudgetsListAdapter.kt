@@ -30,7 +30,7 @@ class BudgetsListAdapter(
     }
 
     interface BudgetsListItemClickListener {
-        fun onBudgetClick(trx: MyFinBudget)
+        fun onBudgetClick(budget: MyFinBudget)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

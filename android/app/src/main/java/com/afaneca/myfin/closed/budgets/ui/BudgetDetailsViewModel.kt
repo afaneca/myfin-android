@@ -13,6 +13,7 @@ import com.afaneca.myfin.utils.SingleLiveEvent
 import com.afaneca.myfin.utils.formatMoney
 import kotlinx.coroutines.launch
 import java.time.format.TextStyle
+import java.util.*
 
 /**
  * Created by me on 07/08/2021
@@ -22,6 +23,7 @@ class BudgetDetailsViewModel(
 ) : ViewModel() {
     enum class TAB { EXPENSES, INCOME }
 
+    var isOpen: Boolean = false
     private var _selectedTab = TAB.EXPENSES
     fun getSelectedTab() = _selectedTab
 
@@ -45,7 +47,6 @@ class BudgetDetailsViewModel(
             var expensesCurrentAmountTotal = 0.0
             var incomePlannedAmountTotal = 0.0
             var incomeCurrentAmountTotal = 0.0
-            val isOpen = true // TODO bind real flag 'isOpen' data
 
             for (category in budgetDetails.data.myFinBudgetCategories) {
                 expensesPlannedAmountTotal += category.plannedAmountDebit.toDoubleOrNull() ?: 0.00
@@ -61,7 +62,7 @@ class BudgetDetailsViewModel(
                         DateTimeUtils.convertMonthIntToString(
                             budgetDetails.data.month.toIntOrNull() ?: 1,
                             TextStyle.FULL_STANDALONE
-                        ).capitalize()
+                        ).capitalize(Locale.ROOT)
                     } ${budgetDetails.data.year}",
                     formatMoney(expensesPlannedAmountTotal),
                     formatMoney(expensesCurrentAmountTotal),
@@ -78,7 +79,8 @@ class BudgetDetailsViewModel(
                     else
                         incomeCurrentAmountTotal - expensesPlannedAmountTotal,
                     ((expensesCurrentAmountTotal / expensesPlannedAmountTotal) * 100).toInt(),
-                    ((incomeCurrentAmountTotal / incomePlannedAmountTotal) * 100).toInt()
+                    ((incomeCurrentAmountTotal / incomePlannedAmountTotal) * 100).toInt(),
+                    isOpen
                 )
             )
         }
@@ -111,6 +113,7 @@ class BudgetDetailsViewModel(
         val balanceAmountFormatted: String,
         val balanceAmount: Double,
         val expensesProgressPercentage: Int,
-        val incomeProgressPercentage: Int
+        val incomeProgressPercentage: Int,
+        val isOpen: Boolean
     )
 }

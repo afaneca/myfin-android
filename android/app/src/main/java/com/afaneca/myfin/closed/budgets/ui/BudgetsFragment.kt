@@ -16,6 +16,7 @@ import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetsBinding
+import com.afaneca.myfin.utils.parseStringToBoolean
 import com.afaneca.myfin.utils.visible
 import java.util.*
 
@@ -100,9 +101,12 @@ class BudgetsFragment :
     override fun getFragmentRepository(): BudgetsRepository =
         BudgetsRepository(remoteDataSource.create(MyFinAPIServices::class.java), userData)
 
-    override fun onBudgetClick(trx: MyFinBudget) {
+    override fun onBudgetClick(budget: MyFinBudget) {
         val action =
-            BudgetsFragmentDirections.actionBudgetsFragmentToBudgetDetailsFragment(trx.budgetId)
+            BudgetsFragmentDirections.actionBudgetsFragmentToBudgetDetailsFragment(
+                budget.budgetId,
+                parseStringToBoolean(budget.isOpen)
+            )
         findNavController().navigate(action)
     }
 

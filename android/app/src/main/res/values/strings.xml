@@ -33,6 +33,8 @@
     <string name="generic_cancel">Cancelar</string>
     <string name="generic_authentication">Autenticação</string>
     <string name="generic_last_update">Última atualização</string>
+    <string name="generic_open">Aberto</string>
+    <string name="generic_closed">Fechado</string>
 
     <string name="biometric_auth_prompt_description">Confirme a sua identidade para avançar</string>
     <string name="biometric_auth_prompt_subtitle">Biometria</string>
