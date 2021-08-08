@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
@@ -108,8 +107,7 @@ class DashboardFragment :
     }
 
     private fun refreshLastUpdateTimestampValue(formattedTimestamp: String) {
-        (activity as PrivateActivity).findViewById<TextView>(R.id.last_update_timestamp_value).text =
-            formattedTimestamp
+        (activity as PrivateActivity).refreshLastUpdateTimestampValue(formattedTimestamp)
     }
 
     private fun setupIncomeDistributionPieChart() {

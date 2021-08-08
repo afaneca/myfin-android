@@ -145,7 +145,7 @@ class PrivateActivity : BaseActivity() {
             value
     }
 
-    private fun populateInvestmentsBalance(value: String) {
+    protected fun populateInvestmentsBalance(value: String) {
         binding.navView.getHeaderView(0)
             ?.findViewById<TextView>(R.id.secondary_asset_investments_amount)?.text = value
     }
@@ -153,6 +153,11 @@ class PrivateActivity : BaseActivity() {
     private fun populateDebtBalance(value: String) {
         binding.navView.getHeaderView(0)
             ?.findViewById<TextView>(R.id.secondary_asset_debt_amount)?.text = value
+    }
+
+    fun refreshLastUpdateTimestampValue(formattedTimestamp: String) {
+        binding.navView.getHeaderView(0)
+            ?.findViewById<TextView>(R.id.last_update_timestamp_value)?.text = formattedTimestamp
     }
 
     private fun goToAccountsView() {
@@ -201,5 +206,4 @@ class PrivateActivity : BaseActivity() {
         startNewActivity(LoginActivity::class.java)
         finish()
     }
-
 }
