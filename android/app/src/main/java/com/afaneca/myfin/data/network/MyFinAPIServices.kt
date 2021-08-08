@@ -2,6 +2,7 @@ package com.afaneca.myfin.data.network
 
 import com.afaneca.myfin.closed.budgets.data.BudgetsListResponse
 import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
+import com.afaneca.myfin.closed.transactions.data.BudgetDetailsResponse
 import com.afaneca.myfin.closed.transactions.data.LatestTransactionsListResponse
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
 import retrofit2.http.*
@@ -43,4 +44,9 @@ interface MyFinAPIServices {
     // BUDGETS
     @GET("budgets/")
     suspend fun getBudgetsList(): BudgetsListResponse
+
+    @GET("budgets/{id}")
+    suspend fun getBudgetDetails(
+        @Path(value = "id", encoded = true) id: String
+    ): BudgetDetailsResponse
 }

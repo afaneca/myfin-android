@@ -9,4 +9,5 @@ class BudgetsRepository(
     private val userData: UserDataManager
 ) : BaseRepository() {
     suspend fun getBudgetsList() = safeAPICall { api.getBudgetsList() }
+    suspend fun getBudgetDetails(id: String) = safeAPICall { api.getBudgetDetails(id) }
 }

@@ -1,6 +1,8 @@
 package com.afaneca.myfin.utils
 
 import java.text.SimpleDateFormat
+import java.time.Month
+import java.time.format.TextStyle
 import java.util.*
 
 /**
@@ -48,6 +50,16 @@ class DateTimeUtils {
         fun getFormattedDateTimeFromUnixTime(unixTime: Long): String {
             val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
             return sdf.format(Date(unixTime * 1000L))
+        }
+
+        fun convertMonthIntToString(
+            monthInt: Int,
+            textStyle: TextStyle = TextStyle.SHORT_STANDALONE
+        ): String {
+            return Month.of(monthInt).getDisplayName(
+                textStyle,
+                Locale.getDefault()
+            )
         }
     }
 }

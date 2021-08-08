@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinBudget
 import com.afaneca.myfin.databinding.BudgetsListItemBinding
+import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.formatMoney
 import com.afaneca.myfin.utils.parseStringToBoolean
 import com.afaneca.myfin.utils.setupBalanceStyle
-import java.time.Month
-import java.time.format.TextStyle
 import java.util.*
 
 class BudgetsListAdapter(
@@ -56,10 +55,7 @@ class BudgetsListAdapter(
                 )
             )
 
-            dateMonth.text = Month.of(item.month.toIntOrNull() ?: 1).getDisplayName(
-                TextStyle.SHORT_STANDALONE,
-                Locale.getDefault()
-            )
+            dateMonth.text = DateTimeUtils.convertMonthIntToString(item.month.toIntOrNull() ?: 1)
             dateYear.text = item.year
             budgetDescriptionTv.text = item.observations
             budgetBalanceTv.text = formatMoney(item.balanceValue)

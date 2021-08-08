@@ -1,5 +1,7 @@
 package com.afaneca.myfin.utils
 
+import android.animation.ObjectAnimator
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.widget.TextViewCompat
 import com.afaneca.myfin.R
@@ -28,4 +30,14 @@ fun setupBalanceStyle(amount: Double, textView: TextView) {
             else -> R.style.AmountTypeDebit
         }
     )
+}
+
+fun setProgressBarValueWithAnimation(
+    progressBarView: ProgressBar,
+    newProgress: Int,
+    animationDuration: Long = 500
+) {
+    ObjectAnimator.ofInt(progressBarView, "progress", newProgress)
+        .setDuration(animationDuration)
+        .start()
 }

@@ -7,6 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/loading_pb"
+            layout="@layout/include_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/budget_month_year_tv"
             android:layout_width="wrap_content"
@@ -36,12 +46,12 @@
             android:layout_width="0dp"
             android:layout_height="10dp"
             android:layout_marginTop="@dimen/default_margin_half"
-            android:progress="90"
+            android:progress="0"
             android:progressDrawable="@drawable/budget_progressbar_gradient"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/budget_progress_planned_amount_tv" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -66,7 +76,7 @@
         </com.google.android.material.tabs.TabLayout>
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/budget_progress_current_amount_tv"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="30dp"
@@ -78,15 +88,15 @@
             tools:text="1654.21€" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/budget_progress_planned_amount_tv"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:gravity="bottom"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/default_paragraph_smaller_text_size"
-            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintBottom_toBottomOf="@+id/budget_progress_current_amount_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="@+id/budget_progress_current_amount_tv"
             tools:text="952.63€" />
 
         <androidx.core.widget.NestedScrollView
