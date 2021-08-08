@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
+import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
 import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetDetailsBinding
@@ -24,7 +27,8 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
  * Created by me on 07/08/2021
  */
 class BudgetDetailsFragment :
-    BaseFragment<BudgetDetailsViewModel, FragmentBudgetDetailsBinding, BudgetsRepository>() {
+    BaseFragment<BudgetDetailsViewModel, FragmentBudgetDetailsBinding, BudgetsRepository>(),
+    BudgetDetailsCategoriesListAdapter.BudgetDetailsCategoryListItemClickListener {
     private val args: BudgetDetailsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,8 +71,26 @@ class BudgetDetailsFragment :
                 if (isTabExpenses) it.expensesCurrentAmountFormatted else it.incomeCurrentAmountFormatted
 
             refreshProgressBarState(if (isTabExpenses) it.expensesProgressPercentage else it.incomeProgressPercentage)
+            setupCategoriesList(it.myFinBudgetCategories, isTabExpenses)
         }
     }
+
+    private fun setupCategoriesList(categories: List<MyFinBudgetCategory>, isTabExpenses: Boolean) {
+        binding.categoriesRv.layoutManager = LinearLayoutManager(context)
+        binding.categoriesRv.adapter = BudgetDetailsCategoriesListAdapter(
+            requireContext(),
+            viewModel.sortCategoriesList(categories as ArrayList<MyFinBudgetCategory>),
+            this,
+            isTabExpenses
+        )
+        binding.categoriesRv.addItemDecoration(
+            DividerItemDecoration(
+                binding.categoriesRv.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+    }
+
 
     private fun refreshProgressBarState(progress: Int) {
         /*binding.progressBar.progress = progress*/
@@ -83,6 +105,10 @@ class BudgetDetailsFragment :
                 ContextCompat.getColor(it, viewColor)
             )
         }
+    }
+
+    override fun onCategoryClick(cat: MyFinBudgetCategory) {
+        // TODO
     }
 
     private fun setupTabLayout() {

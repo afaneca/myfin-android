@@ -84,6 +84,15 @@ class BudgetDetailsViewModel(
         }
     }
 
+    fun sortCategoriesList(myFinBudgetCategories: ArrayList<MyFinBudgetCategory>): ArrayList<MyFinBudgetCategory> {
+        val isExpenses = _selectedTab == TAB.EXPENSES
+        myFinBudgetCategories.sortByDescending {
+            if (isExpenses) it.currentAmountDebit.toDoubleOrNull()
+                ?: 0.0 else it.currentAmountCredit.toDoubleOrNull() ?: 0.0
+        }
+        return myFinBudgetCategories
+    }
+
     fun onTabSelected(position: Int) {
         _selectedTab = when (position) {
             0 -> TAB.EXPENSES

@@ -76,6 +76,9 @@
     <!-- Transactions -->
     <string name="transactions_list_item_month_year_format">%s%s</string>
 
+    <!-- Budgets -->
+    <string name="budget_details_category_percent_of_planned_amount">%.2f%% de %s</string>
+
     <!-- Misc -->
     <string name="generic_income">Receita</string>
     <string name="generic_expenses">Despesa</string>

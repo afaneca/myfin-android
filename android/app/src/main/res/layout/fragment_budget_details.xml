@@ -47,6 +47,7 @@
             android:layout_height="10dp"
             android:layout_marginTop="@dimen/default_margin_half"
             android:progress="0"
+            tools:progress="50"
             android:progressDrawable="@drawable/budget_progressbar_gradient"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -109,6 +110,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categories_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/default_margin_half" />
