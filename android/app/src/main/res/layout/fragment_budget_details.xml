@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="4dp"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/default_paragraph_smallest_text_size"
                 android:textStyle="bold"
                 tools:text="Aberto" />

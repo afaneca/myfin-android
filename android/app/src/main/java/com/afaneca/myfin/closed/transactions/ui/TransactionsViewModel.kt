@@ -69,4 +69,10 @@ class TransactionsViewModel(
 
         requestTransactionsList(++_trxCurrentPage)
     }
+
+    fun clearData() {
+        _trxCurrentPage = 0
+        _transactionsListData.value = null
+        _transactionsListDataset.value = ArrayList()
+    }
 }
