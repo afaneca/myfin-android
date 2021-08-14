@@ -42,7 +42,8 @@ class PrivateActivity : BaseActivity() {
             setOf(
                 R.id.dashboardFragment,
                 R.id.transactionsFragment,
-                R.id.budgetsFragment
+                R.id.budgetsFragment,
+                R.id.accountsFragment
             ),
             binding.drawerLayout
         )

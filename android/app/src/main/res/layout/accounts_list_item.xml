@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/default_margin_half"
+        android:background="@color/colorBackground"
+        android:paddingVertical="@dimen/default_margin">
+
+        <TextView
+            android:id="@+id/account_name_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="@dimen/default_subtitle_text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/account_balance_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Banco CTT" />
+
+        <TextView
+            android:id="@+id/account_balance_tv"
+            style="@style/AmountTypeDebit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAlignment="textEnd"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="-161 412.79 €" />
+
+        <TextView
+            android:id="@+id/account_type_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:singleLine="true"
+            app:layout_constraintEnd_toStartOf="@+id/account_balance_tv"
+            app:layout_constraintStart_toStartOf="@+id/account_name_tv"
+            app:layout_constraintTop_toBottomOf="@+id/account_name_tv"
+            tools:text="Crédito" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/account_status_wrapper_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:backgroundTint="@color/colorGreen"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/account_name_tv"
+            app:layout_constraintStart_toStartOf="@+id/account_name_tv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/account_status_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginVertical="2dp"
+                android:textColor="@android:color/white"
+                tools:text="Ativa"
+                android:textSize="8sp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

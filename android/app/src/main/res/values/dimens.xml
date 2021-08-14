@@ -9,6 +9,7 @@
     <dimen name="default_margin">8dp</dimen>
     <dimen name="default_margin_double">16dp</dimen>
     <dimen name="default_margin_triple">24dp</dimen>
+    <dimen name="default_margin_biggest">32dp</dimen>
 
     <!-- Text Sizes -->
     <dimen name="default_title_biggest_text_size">32sp</dimen>

@@ -47,7 +47,7 @@ class TransactionsViewModel(
                     (_transactionsListData.value as Resource.Success<LatestTransactionsListResponse>).data
                 _trxHasMore.postValue(!newItems.isEmpty())
                 val aggregatedList: List<MyFinTransaction> =
-                    newItems + _transactionsListDataset.value!!
+                    _transactionsListDataset.value!! + newItems
 
                 _transactionsListDataset.postValue(aggregatedList)
             }
@@ -68,5 +68,11 @@ class TransactionsViewModel(
         }
 
         requestTransactionsList(++_trxCurrentPage)
+    }
+
+    fun clearData() {
+        _trxCurrentPage = 0
+        _transactionsListData.value = null
+        _transactionsListDataset.value = ArrayList()
     }
 }

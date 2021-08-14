@@ -62,6 +62,5 @@ class LoginRepository(
         GlobalScope.launch(Dispatchers.IO) {
             db.userAccountsDao().insertAll(userAccounts)
         }
-
     }
 }
