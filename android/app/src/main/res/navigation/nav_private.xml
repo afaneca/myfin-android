@@ -34,7 +34,12 @@
             app:argType="string" />
         <argument
             android:name="isOpen"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
+    <fragment
+        android:id="@+id/accountsFragment"
+        android:name="com.afaneca.myfin.closed.accounts.ui.AccountsFragment"
+        android:label="@string/accounts_label"
+        tools:layout="@layout/fragment_accounts" />
 </navigation>

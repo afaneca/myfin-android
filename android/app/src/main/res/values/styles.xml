@@ -65,4 +65,9 @@
         <item name="android:textColor">@color/colorOrange</item>
     </style>
 
+    <!-- TabLayout -->
+    <style name="DefaultTabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@null</item>
+    </style>
+
 </resources>

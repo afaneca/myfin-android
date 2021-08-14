@@ -3,15 +3,12 @@ package com.afaneca.myfin.closed
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.afaneca.myfin.data.UserDataManager
-import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.utils.MyFinUtils
 import com.afaneca.myfin.utils.formatMoney
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
-import org.koin.core.component.inject
 
 /**
  * Created by me on 14/06/2021
@@ -66,7 +63,7 @@ class PrivateViewModel : ViewModel(), KoinComponent {
     private fun getFormattedAggregatedOperatingFundAccountsBalance(accsList: List<UserAccountEntity>): String =
         formatMoney(
             calculateAggregatedOperatingFundAccountsBalance(
-                MyFinUtils.getOnlyOperatingFundsAccountsFromFullList(
+                MyFinUtils.getOnlyOperatingFundsAccountsFromDBFullList(
                     accsList
                 )
             )
@@ -82,7 +79,7 @@ class PrivateViewModel : ViewModel(), KoinComponent {
     private fun getFormattedAggregatedInvestingAccountsBalance(accsList: List<UserAccountEntity>): String =
         formatMoney(
             calculateAggregatedInvestingAccountsBalance(
-                MyFinUtils.getOnlyInvestingAccountsFromFullList(
+                MyFinUtils.getOnlyInvestingAccountsFromDBFullList(
                     accsList
                 )
             )
@@ -98,7 +95,7 @@ class PrivateViewModel : ViewModel(), KoinComponent {
     private fun getFormattedAggregatedDebtAccountsBalance(accsList: List<UserAccountEntity>): String =
         formatMoney(
             calculateAggregatedDebtAccountsBalance(
-                MyFinUtils.getOnlyCreditAccountsFromFullList(
+                MyFinUtils.getOnlyCreditAccountsFromDBFullList(
                     accsList
                 )
             )
