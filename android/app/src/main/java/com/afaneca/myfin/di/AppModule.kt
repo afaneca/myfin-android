@@ -36,7 +36,7 @@ fun provideMyFinDatabase(context: Context, userDataManager: UserDataManager): My
     return Room.databaseBuilder(
         context,
         MyFinDatabase::class.java,
-        "myfin_db"
+        "${BuildConfig.APPLICATION_ID}_db"
     ).fallbackToDestructiveMigration()
         .openHelperFactory(
             SupportFactory(

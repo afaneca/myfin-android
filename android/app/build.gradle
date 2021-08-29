@@ -11,8 +11,6 @@ android {
     ext.application_id = "com.afaneca.myfin"
 
 
-
-
     defaultConfig {
         applicationId "$application_id"
         minSdkVersion 26
@@ -35,25 +33,27 @@ android {
     }
 
 
-    signingConfigs {
+    /*signingConfigs {
         release {
-            /*storeFile file("my-release-key.jks")
+            *//*storeFile file("my-release-key.jks")
             storePassword "password"
             keyAlias "my-alias"
-            keyPassword "password"*/
+            keyPassword "password"*//*
         }
-    }
+    }*/
 
     flavorDimensions "env"
     productFlavors {
         dev {
             dimension "env"
             applicationId application_id + ".dev"
+            resValue "string", "app_name", "MyFin.dev"
         }
         prod {
             dimension "env"
             applicationId application_id
-            signingConfig signingConfigs.release
+            /*signingConfig signingConfigs.release*/
+            resValue "string", "app_name", "MyFin"
         }
     }
 
