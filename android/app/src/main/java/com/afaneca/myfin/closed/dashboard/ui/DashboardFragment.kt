@@ -114,7 +114,7 @@ class DashboardFragment :
         ChartUtils.buildPieChart(
             requireContext(),
             binding.amountDistributionPiechart,
-            getString(R.string.generic_expenses),
+            getString(R.string.generic_income),
             viewModel.incomeDistributionChartData.value!!.toMap(),
             isLegendEnabled = false
         )
@@ -124,7 +124,7 @@ class DashboardFragment :
         ChartUtils.buildPieChart(
             requireContext(),
             binding.amountDistributionPiechart,
-            getString(R.string.generic_income),
+            getString(R.string.generic_expenses),
             viewModel.expensesDistributionChartData.value!!.toMap(),
             isLegendEnabled = false
         )
