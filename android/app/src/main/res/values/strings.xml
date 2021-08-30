@@ -84,7 +84,7 @@
     <string name="preferences_theme_title">Tema</string>
 
     <!-- Transactions -->
-    <string name="transactions_list_item_month_year_format">%s%s</string>
+    <string name="transactions_list_item_date_format">%s %s %s</string>
 
     <!-- Budgets -->
     <string name="budget_details_category_percent_of_planned_amount">%.2f%% de %s</string>
