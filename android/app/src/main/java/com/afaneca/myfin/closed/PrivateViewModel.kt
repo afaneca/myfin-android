@@ -3,6 +3,7 @@ package com.afaneca.myfin.closed
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.afaneca.myfin.data.PrivateRepository
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.utils.MyFinUtils
 import com.afaneca.myfin.utils.formatMoney
