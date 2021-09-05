@@ -21,19 +21,16 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RetrofitModule {
-    @Provides
-    fun provideOkHttp() = OkHttpClient.Builder()
-        .build()
+object NetworkModule {
 
     @Provides
-    @Named("retrofit_base_url")
+    @Named("api_base_url")
     fun provideRetrofitBaseUrl() = Consts.BASE_URL
 
     @Singleton
     @Provides
-    fun provideRetrofit(
-        @Named("retrofit_base_url") baseUrl: String,
+    fun provideService(
+        @Named("api_base_url") baseUrl: String,
         userDataManager: UserDataManager,
     ): MyFinAPIServices =
         Retrofit.Builder()
@@ -61,22 +58,14 @@ object RetrofitModule {
             .build()
             .create(MyFinAPIServices::class.java)
 
-    /*@Provides
-    fun <Api> provideBuildApi(retrofit: Retrofit, api: Class<Api>): Api {
-        return retrofit.create(api)
-    }*/
+    private fun getAuthToken(userDataManager: UserDataManager): String {
+        return userDataManager.getSessionKey() ?: ""
+    }
+
+    private fun getAuthUsername(userDataManager: UserDataManager): String =
+        userDataManager.getLastUsername()
+
+    private fun getAppVersion(): String = BuildConfig.VERSION_NAME
 }
 
 
-private fun okHttp() = OkHttpClient.Builder()
-    .build()
-
-
-private fun getAuthToken(userDataManager: UserDataManager): String {
-    return userDataManager.getSessionKey() ?: ""
-}
-
-private fun getAuthUsername(userDataManager: UserDataManager): String =
-    userDataManager.getLastUsername()
-
-private fun getAppVersion(): String = BuildConfig.VERSION_NAME
