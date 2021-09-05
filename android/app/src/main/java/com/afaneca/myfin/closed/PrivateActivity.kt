@@ -24,13 +24,14 @@ import com.afaneca.myfin.databinding.ActivityPrivateBinding
 
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_private.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinApiExtension
 
+@AndroidEntryPoint
 class PrivateActivity : BaseActivity() {
     private lateinit var binding: ActivityPrivateBinding
     private lateinit var drawer: DrawerLayout
@@ -49,7 +50,6 @@ class PrivateActivity : BaseActivity() {
         )
     }
 
-    @KoinApiExtension
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =

@@ -8,14 +8,19 @@ import com.afaneca.myfin.closed.transactions.data.LatestTransactionsListResponse
 import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.SingleLiveEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by me on 20/06/2021
  */
 private const val TRX_PAGE_SIZE = 25
 
-class TransactionsViewModel(
+@HiltViewModel
+class TransactionsViewModel
+@Inject
+constructor(
     private val repository: TransactionsRepository
 ) : ViewModel(), TransactionsListAdapter.TransactionsListItemClickListener {
 

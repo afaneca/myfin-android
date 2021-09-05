@@ -6,19 +6,18 @@ import androidx.lifecycle.ViewModel
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.utils.MyFinUtils
 import com.afaneca.myfin.utils.formatMoney
-import org.koin.core.component.KoinApiExtension
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * Created by me on 14/06/2021
  */
 
-@KoinApiExtension
-class PrivateViewModel : ViewModel(), KoinComponent {
-    private val repository: PrivateRepository by lazy {
-        PrivateRepository(get(), get())
-    }
+@HiltViewModel
+class PrivateViewModel @Inject constructor(
+    private val repository: PrivateRepository
+) : ViewModel() {
+
 
     private var _patrimonyBalance: MutableLiveData<String> = MutableLiveData("0.00")
     val patrimonyBalance: LiveData<String>

@@ -11,104 +11,119 @@ import androidx.security.crypto.MasterKey
 import com.afaneca.myfin.BuildConfig
 import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.db.MyFinDatabase
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
 import java.security.SecureRandom
+import javax.inject.Singleton
 
 
 /**
  * Created by me on 10/06/2021
  */
-val appModule = module {
-    single { provideUserDataManager() }
-    single { provideSecretUserData(androidContext()) }
-    single { provideMyFinDatabase(androidContext(), get()) }
-}
 
-fun provideUserDataManager() = UserDataManager()
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
 
-fun provideMyFinDatabase(context: Context, userDataManager: UserDataManager): MyFinDatabase {
-    return Room.databaseBuilder(
-        context,
-        MyFinDatabase::class.java,
-        "${BuildConfig.APPLICATION_ID}_db"
-    ).fallbackToDestructiveMigration()
-        .openHelperFactory(
-            SupportFactory(
-                SQLiteDatabase.getBytes(
-                    getDBEncryptionPassphrase(
-                        context,
-                        userDataManager
-                    ).toCharArray()
+    @Singleton
+    @Provides
+    fun provideUserDataManager(userSharedPreferences: EncryptedSharedPreferences) =
+        UserDataManager(userSharedPreferences)
+
+    @Singleton
+    @Provides
+    fun provideMyFinDatabase(
+        @ApplicationContext context: Context,
+        userDataManager: UserDataManager
+    ): MyFinDatabase {
+        return Room.databaseBuilder(
+            context,
+            MyFinDatabase::class.java,
+            "${BuildConfig.APPLICATION_ID}_db"
+        ).fallbackToDestructiveMigration()
+            .openHelperFactory(
+                SupportFactory(
+                    SQLiteDatabase.getBytes(
+                        getDBEncryptionPassphrase(
+                            context,
+                            userDataManager
+                        ).toCharArray()
+                    )
                 )
             )
-        )
-        .build()
-}
-
-/**
- * If there's no passphrase stored in the EncryptedSharedPrefs yet,
- * it generates a new one, stores it there and returns it
- */
-fun getDBEncryptionPassphrase(context: Context, userDataManager: UserDataManager): String {
-    var passphrase = userDataManager.getDBPassphrase()
-    if (passphrase.isNullOrBlank()) {
-        passphrase = generatePassword(context, userDataManager)
-        GlobalScope.launch(Dispatchers.IO) {
-            userDataManager.saveDBPassphrase(passphrase)
-        }
+            .build()
     }
-    return passphrase
-}
 
-/**
- * Generate random and quasi secure password
- * Source: https://stackoverflow.com/a/62052122
- */
-fun generatePassword(context: Context, userDataManager: UserDataManager): String {
-    val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    @Singleton
+    @Provides
+    fun provideSecretUserData(@ApplicationContext context: Context): EncryptedSharedPreferences {
+        val spec = KeyGenParameterSpec.Builder(
+            MasterKey.DEFAULT_MASTER_KEY_ALIAS,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        )
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            .setKeySize(MasterKey.DEFAULT_AES_GCM_MASTER_KEY_SIZE)
+            .build()
 
-    val passPassphraseBase = "${BuildConfig.APPLICATION_ID}_$androidId:"
+        val masterKey = MasterKey.Builder(context)
+            .setKeyGenParameterSpec(spec)
+            .build()
 
-    val random = SecureRandom()
-    val salt = ByteArray(32)
-    random.nextBytes(salt)
+        return EncryptedSharedPreferences.create(
+            context,
+            "user_data_encrypted",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        ) as EncryptedSharedPreferences
+    }
 
-    val passPhrase = passPassphraseBase.toByteArray() + salt
+    /**
+     * If there's no passphrase stored in the EncryptedSharedPrefs yet,
+     * it generates a new one, stores it there and returns it
+     */
+    fun getDBEncryptionPassphrase(context: Context, userDataManager: UserDataManager): String {
+        var passphrase = userDataManager.getDBPassphrase()
+        if (passphrase.isNullOrBlank()) {
+            passphrase = generatePassword(context, userDataManager)
+            GlobalScope.launch(Dispatchers.IO) {
+                userDataManager.saveDBPassphrase(passphrase)
+            }
+        }
+        return passphrase
+    }
 
-    val pass = Base64.encodeToString(passPhrase, Base64.NO_WRAP)
+    /**
+     * Generate random and quasi secure password
+     * Source: https://stackoverflow.com/a/62052122
+     */
+    fun generatePassword(context: Context, userDataManager: UserDataManager): String {
+        val androidId =
+            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 
-    return pass
-}
+        val passPassphraseBase = "${BuildConfig.APPLICATION_ID}_$androidId:"
 
-private fun getAuthToken(userDataManager: UserDataManager): String {
-    return userDataManager.getSessionKey() ?: ""
-}
+        val random = SecureRandom()
+        val salt = ByteArray(32)
+        random.nextBytes(salt)
 
-fun provideSecretUserData(context: Context): EncryptedSharedPreferences {
-    val spec = KeyGenParameterSpec.Builder(
-        MasterKey.DEFAULT_MASTER_KEY_ALIAS,
-        KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-    )
-        .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-        .setKeySize(MasterKey.DEFAULT_AES_GCM_MASTER_KEY_SIZE)
-        .build()
+        val passPhrase = passPassphraseBase.toByteArray() + salt
 
-    val masterKey = MasterKey.Builder(context)
-        .setKeyGenParameterSpec(spec)
-        .build()
+        val pass = Base64.encodeToString(passPhrase, Base64.NO_WRAP)
 
-    return EncryptedSharedPreferences.create(
-        context,
-        "user_data_encrypted",
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    ) as EncryptedSharedPreferences
+        return pass
+    }
+
+    private fun getAuthToken(userDataManager: UserDataManager): String {
+        return userDataManager.getSessionKey() ?: ""
+    }
 }

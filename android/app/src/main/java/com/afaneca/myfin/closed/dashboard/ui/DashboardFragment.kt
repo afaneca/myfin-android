@@ -5,29 +5,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.PrivateActivity
-import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
-import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentDashboardBinding
 import com.afaneca.myfin.utils.charts.ChartUtils
 import com.afaneca.myfin.utils.visible
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
-
+@AndroidEntryPoint
 class DashboardFragment :
-    BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
+    BaseFragment() {
 
     companion object {
         private const val TAB_PIE_CHART_EXPENSES_POSITION = 0
         private const val TAB_PIE_CHART_INCOME_POSITION = 1
     }
 
+    private lateinit var binding: FragmentDashboardBinding
+    private val viewModel: DashboardViewModel by viewModels()
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         bindObservers()
         bindListeners()
         getMonthlyIncomeExpensesDistributionDataForCurrentMonth()
@@ -143,16 +157,4 @@ class DashboardFragment :
         )
 
     }
-
-    override fun getViewModel(): Class<DashboardViewModel> = DashboardViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ) = FragmentDashboardBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository() = DashboardRepository(
-        remoteDataSource.create(MyFinAPIServices::class.java), userData
-    )
-
 }

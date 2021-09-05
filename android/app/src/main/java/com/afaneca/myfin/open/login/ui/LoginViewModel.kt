@@ -1,21 +1,31 @@
 package com.afaneca.myfin.open.login.ui
 
 import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.Resource
-import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
+import com.afaneca.myfin.open.login.data.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by me on 21/12/2020
  */
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel
+@Inject
+constructor(
     private val repository: LoginRepository,
     private val userDataManager: UserDataManager
 ) : ViewModel() {
+
+
     private val isToKeepSession by lazy { repository.getIsToKeepSession() }
     private val lastUsername by lazy { repository.getLastUsername() }
 
@@ -52,8 +62,7 @@ class LoginViewModel(
     }
 
     private fun hasPasswordStored(): Boolean {
-        // TODO - unmock this
-        return true
+        return !userDataManager.getSessionKey().isBlank()
     }
 
     fun attemptLogin(

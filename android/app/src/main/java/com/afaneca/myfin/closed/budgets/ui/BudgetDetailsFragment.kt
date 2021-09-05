@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
-import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
 import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
-import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetDetailsBinding
 import com.afaneca.myfin.utils.setProgressBarValueWithAnimation
@@ -23,14 +22,27 @@ import com.afaneca.myfin.utils.visible
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.VISIBLE
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Created by me on 07/08/2021
  */
+@AndroidEntryPoint
 class BudgetDetailsFragment :
-    BaseFragment<BudgetDetailsViewModel, FragmentBudgetDetailsBinding, BudgetsRepository>(),
+    BaseFragment(),
     BudgetDetailsCategoriesListAdapter.BudgetDetailsCategoryListItemClickListener {
     private val args: BudgetDetailsFragmentArgs by navArgs()
+    private lateinit var binding: FragmentBudgetDetailsBinding
+    private val viewModel: BudgetDetailsViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentBudgetDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -135,16 +147,4 @@ class BudgetDetailsFragment :
             }
         })
     }
-
-    /**/
-    override fun getViewModel(): Class<BudgetDetailsViewModel> = BudgetDetailsViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentBudgetDetailsBinding =
-        FragmentBudgetDetailsBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): BudgetsRepository =
-        BudgetsRepository(remoteDataSource.create(MyFinAPIServices::class.java), userData)
 }
