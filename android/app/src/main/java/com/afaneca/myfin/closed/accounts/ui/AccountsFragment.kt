@@ -86,7 +86,10 @@ class AccountsFragment :
                 binding.accountsListEmptyViewTv.visible(false)
                 binding.accountsListRv.visible(true)
                 binding.accountsListRv.layoutManager = LinearLayoutManager(context)
-                binding.accountsListRv.adapter = AccountsListAdapter(it, accsList)
+                if (binding.accountsListRv.adapter == null)
+                    binding.accountsListRv.adapter = AccountsListAdapter(it, accsList)
+                else
+                    (binding.accountsListRv.adapter as AccountsListAdapter).submitList(accsList)
                 binding.accountsListRv.addItemDecoration(
                     DividerItemDecoration(
                         binding.accountsListRv.context,

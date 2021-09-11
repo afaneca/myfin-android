@@ -25,9 +25,9 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_logout_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:tint="@color/colorAccent" />
         <!--<TextView
             android:id="@+id/date_day"
@@ -135,9 +135,11 @@
             android:id="@+id/date_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
             android:singleLine="true"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/default_paragraph_smaller_text_size"
+            app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
             app:layout_constraintStart_toStartOf="@+id/transaction_description_tv"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="30 Agosto 2021" />

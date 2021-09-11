@@ -5,6 +5,9 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinAccount
@@ -19,8 +22,26 @@ import com.afaneca.myfin.utils.visible
  */
 class AccountsListAdapter(
     private val context: Context,
-    private var dataset: List<MyFinAccount>
-) : RecyclerView.Adapter<AccountsListAdapter.ViewHolder>() {
+    dataset: List<MyFinAccount>
+) : ListAdapter<MyFinAccount, AccountsListAdapter.ViewHolder>(
+    AsyncDifferConfig.Builder<MyFinAccount>(
+        DiffCallback()
+    ).build()
+) {
+
+    init {
+        submitList(dataset)
+    }
+
+    /* DIFFUTIL */
+    private class DiffCallback : DiffUtil.ItemCallback<MyFinAccount>() {
+        override fun areItemsTheSame(oldItem: MyFinAccount, newItem: MyFinAccount) =
+            oldItem.accountId == newItem.accountId
+
+        override fun areContentsTheSame(oldItem: MyFinAccount, newItem: MyFinAccount) =
+            oldItem == newItem
+    }
+
 
     inner class ViewHolder(val binding: AccountsListItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -32,7 +53,7 @@ class AccountsListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dataset[position]
+        val item = getItem(position)
 
         holder.binding.apply {
             accountNameTv.text = item.name
@@ -50,6 +71,4 @@ class AccountsListAdapter(
             accountStatusWrapperCv.visible(true)
         }
     }
-
-    override fun getItemCount() = dataset.size
 }
