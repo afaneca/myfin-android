@@ -101,6 +101,15 @@ constructor(
         attemptLogin(username ?: "", password, true, context)
     }
 
+    fun onUsernameInputChanged(input: String) {
+        _usernameInput.value = input.trim()
+        refreshLoginBtnState()
+    }
+
+    fun onPasswordInputChanged(input: String) {
+        _passwordInput.value = input.trim()
+        refreshLoginBtnState()
+    }
 
     private fun saveUserAccounts(userAccounts: List<UserAccountEntity>) {
         repository.saveUserAccounts(userAccounts)
@@ -121,4 +130,10 @@ constructor(
     private fun saveSessionToken(token: String) = viewModelScope.launch {
         repository.saveSessionKeyToken(token)
     }
+
+    private fun refreshLoginBtnState() {
+        shouldLoginButtonBeEnabled.postValue(!_usernameInput.value.isNullOrBlank() && !_passwordInput.value.isNullOrBlank())
+    }
+
+
 }

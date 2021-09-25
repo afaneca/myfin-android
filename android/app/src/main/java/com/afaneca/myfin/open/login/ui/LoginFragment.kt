@@ -64,7 +64,7 @@ class LoginFragment : BaseFragment() {
         })
 
         viewModel.usernameInput.observe(viewLifecycleOwner, {
-            if (!it.isNullOrBlank()) {
+            if (!it.isNullOrBlank() && binding.usernameEt.text.isNullOrEmpty()) {
                 // set default username
                 binding.usernameEt.setText(it)
             }
@@ -92,22 +92,15 @@ class LoginFragment : BaseFragment() {
             viewModel.attemptLogin(username, password, keepSession, requireContext())
         }
 
-        binding.passwordEt.addTextChangedListener {
-            val username = binding.usernameEt.text.toString().trim()
-            val password = binding.passwordEt.text.toString().trim()
-            checkIfLoginButtonShouldBeEnabled(username, password)
-        }
-
         binding.usernameEt.addTextChangedListener {
             val username = binding.usernameEt.text.toString().trim()
-            val password = binding.passwordEt.text.toString().trim()
-            checkIfLoginButtonShouldBeEnabled(username, password)
+            viewModel.onUsernameInputChanged(username)
         }
-    }
 
-    private fun checkIfLoginButtonShouldBeEnabled(usernameInput: String, passwordInput: String) {
-        viewModel.shouldLoginButtonBeEnabled.value =
-            ((usernameInput.isNotEmpty() && passwordInput.isNotEmpty()))
+        binding.passwordEt.addTextChangedListener {
+            val password = binding.passwordEt.text.toString()
+            viewModel.onPasswordInputChanged(password)
+        }
     }
 
 
