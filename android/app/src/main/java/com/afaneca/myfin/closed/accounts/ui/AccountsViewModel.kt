@@ -9,12 +9,15 @@ import com.afaneca.myfin.closed.accounts.data.AccountsRepository
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.MyFinUtils
 import com.afaneca.myfin.utils.SingleLiveEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by me on 14/08/2021
  */
-class AccountsViewModel(
+@HiltViewModel
+class AccountsViewModel @Inject constructor(
     private val repository: AccountsRepository
 ) : ViewModel() {
 

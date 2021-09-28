@@ -77,6 +77,11 @@ class ChartUtils {
                 PieDataSet(pieEntryList, title).apply {
                     setColors(
                         *ColorTemplate.MATERIAL_COLORS,
+                        *ColorTemplate.LIBERTY_COLORS,
+                        *ColorTemplate.COLORFUL_COLORS,
+                        *ColorTemplate.JOYFUL_COLORS,
+                        *ColorTemplate.PASTEL_COLORS,
+                        *ColorTemplate.VORDIPLOM_COLORS
                     )
                     /*setDrawValues(false)*/
                     valueTextSize = 10f
@@ -87,14 +92,17 @@ class ChartUtils {
                 /*description = Description().apply { text = "Distribuição das Despesas" }*/
                 setUsePercentValues(true)
                 centerText = title
+                setCenterTextColor(context.getColor(R.color.colorOnPrimary))
+                setHoleColor(context.getColor(android.R.color.transparent))
                 isDrawHoleEnabled = true
                 isRotationEnabled = true
                 data = PieData(pieDataSet)
                 description.isEnabled = false
                 legend.isEnabled = isLegendEnabled
                 legend.textColor = context.getColor(R.color.colorOnPrimary)
-
                 setDrawEntryLabels(false)
+                setDrawEntryLabels(false)
+                holeRadius = 64F
                 /*setEntryLabelTextSize(context.resources.getDimension(R.dimen.default_title_text_size))*/
                 /*setUsePercentValues(true)*/
             }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyFin</string>
+    <!--<string name="app_name">MyFin</string>-->
     <string name="title_activity_base">BaseActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -84,7 +84,7 @@
     <string name="preferences_theme_title">Tema</string>
 
     <!-- Transactions -->
-    <string name="transactions_list_item_month_year_format">%s%s</string>
+    <string name="transactions_list_item_date_format">%s %s %s</string>
 
     <!-- Budgets -->
     <string name="budget_details_category_percent_of_planned_amount">%.2f%% de %s</string>

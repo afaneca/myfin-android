@@ -6,9 +6,14 @@ import com.afaneca.myfin.closed.budgets.data.BudgetsListResponse
 import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.SingleLiveEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BudgetsViewModel(
+@HiltViewModel
+class BudgetsViewModel
+@Inject
+constructor(
     private val repository: BudgetsRepository
 ) : ViewModel() {
 

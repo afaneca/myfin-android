@@ -1,21 +1,30 @@
 package com.afaneca.myfin.open.login.ui
 
 import android.content.Context
-import androidx.lifecycle.*
-import com.afaneca.myfin.data.UserDataManager
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.Resource
-import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
+import com.afaneca.myfin.open.login.data.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by me on 21/12/2020
  */
-class LoginViewModel(
-    private val repository: LoginRepository,
-    private val userDataManager: UserDataManager
+@HiltViewModel
+class LoginViewModel
+@Inject
+constructor(
+    private val repository: LoginRepository
 ) : ViewModel() {
+
+
     private val isToKeepSession by lazy { repository.getIsToKeepSession() }
     private val lastUsername by lazy { repository.getLastUsername() }
 
@@ -52,8 +61,7 @@ class LoginViewModel(
     }
 
     private fun hasPasswordStored(): Boolean {
-        // TODO - unmock this
-        return true
+        return !repository.getSessionKey().isBlank()
     }
 
     fun attemptLogin(
@@ -92,6 +100,15 @@ class LoginViewModel(
         attemptLogin(username ?: "", password, true, context)
     }
 
+    fun onUsernameInputChanged(input: String) {
+        _usernameInput.value = input.trim()
+        refreshLoginBtnState()
+    }
+
+    fun onPasswordInputChanged(input: String) {
+        _passwordInput.value = input.trim()
+        refreshLoginBtnState()
+    }
 
     private fun saveUserAccounts(userAccounts: List<UserAccountEntity>) {
         repository.saveUserAccounts(userAccounts)
@@ -112,4 +129,11 @@ class LoginViewModel(
     private fun saveSessionToken(token: String) = viewModelScope.launch {
         repository.saveSessionKeyToken(token)
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun refreshLoginBtnState() {
+        shouldLoginButtonBeEnabled.postValue(!_usernameInput.value.isNullOrBlank() && !_passwordInput.value.isNullOrBlank())
+    }
+
+
 }

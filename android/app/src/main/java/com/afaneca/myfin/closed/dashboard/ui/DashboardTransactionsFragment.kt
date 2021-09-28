@@ -5,25 +5,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.base.objects.MyFinTransaction
-import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
 import com.afaneca.myfin.closed.transactions.ui.TransactionDetailsBottomSheetFragment
 import com.afaneca.myfin.closed.transactions.ui.TransactionsListAdapter
 import com.afaneca.myfin.closed.transactions.ui.TransactionsViewModel
-import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentDashboardTransactionsBinding
 import com.afaneca.myfin.utils.visible
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Created by me on 25/07/2021
  */
+@AndroidEntryPoint
 class DashboardTransactionsFragment :
-    BaseFragment<TransactionsViewModel, FragmentDashboardTransactionsBinding, TransactionsRepository>() {
+    BaseFragment() {
+    private lateinit var binding: FragmentDashboardTransactionsBinding
+    private val viewModel: TransactionsViewModel by viewModels()
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentDashboardTransactionsBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,18 +98,4 @@ class DashboardTransactionsFragment :
             )
         )
     }
-
-
-    /**/
-    override fun getViewModel(): Class<TransactionsViewModel> = TransactionsViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ) = FragmentDashboardTransactionsBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository() =
-        TransactionsRepository(remoteDataSource.create(MyFinAPIServices::class.java), userData)
-
-
 }
