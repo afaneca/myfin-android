@@ -5,11 +5,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:context=".closed.dashboard.ui.DashboardFragment">
 
             <include
@@ -113,11 +114,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/distribution_charts_label_tv" />
 
             <com.google.android.material.tabs.TabLayout
+                style="@style/DefaultTabLayout"
                 android:id="@+id/amount_distribution_piechart_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:background="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -126,12 +127,12 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Despesa" />
+                    android:text="@string/generic_expenses" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Receita" />
+                    android:text="@string/generic_income" />
             </com.google.android.material.tabs.TabLayout>
 
             <TextView
@@ -165,6 +166,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/latest_transactions_tv"
                 tools:background="@color/red"
+                android:scrollbars="none"
                 tools:layout="@layout/fragment_transactions"
                 tools:layout_height="100dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>

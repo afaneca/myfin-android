@@ -2,17 +2,18 @@ package com.afaneca.myfin.data
 
 import android.annotation.SuppressLint
 import androidx.security.crypto.EncryptedSharedPreferences
-import org.koin.core.component.KoinApiExtension
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import javax.inject.Inject
 
 
 /**
  * Created by me on 12/06/2021
  */
-@KoinApiExtension
-class UserDataManager : KoinComponent {
-    private val userSharedPrefs: EncryptedSharedPreferences by inject()
+
+class UserDataManager
+@Inject
+constructor(
+    var userSharedPrefs: EncryptedSharedPreferences
+) {
 
     /* SESSION KEY */
     fun saveSessionKey(sessionKey: String) {

@@ -8,14 +8,19 @@ import com.afaneca.myfin.closed.transactions.data.LatestTransactionsListResponse
 import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.SingleLiveEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by me on 20/06/2021
  */
 private const val TRX_PAGE_SIZE = 25
 
-class TransactionsViewModel(
+@HiltViewModel
+class TransactionsViewModel
+@Inject
+constructor(
     private val repository: TransactionsRepository
 ) : ViewModel(), TransactionsListAdapter.TransactionsListItemClickListener {
 
@@ -47,7 +52,7 @@ class TransactionsViewModel(
                     (_transactionsListData.value as Resource.Success<LatestTransactionsListResponse>).data
                 _trxHasMore.postValue(!newItems.isEmpty())
                 val aggregatedList: List<MyFinTransaction> =
-                    newItems + _transactionsListDataset.value!!
+                    _transactionsListDataset.value!! + newItems
 
                 _transactionsListDataset.postValue(aggregatedList)
             }
@@ -68,5 +73,11 @@ class TransactionsViewModel(
         }
 
         requestTransactionsList(++_trxCurrentPage)
+    }
+
+    fun clearData() {
+        _trxCurrentPage = 0
+        _transactionsListData.value = null
+        _transactionsListDataset.value = ArrayList()
     }
 }

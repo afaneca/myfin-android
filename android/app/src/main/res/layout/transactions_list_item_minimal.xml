@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/default_margin"
+        android:layout_marginVertical="@dimen/default_margin_half"
+        android:background="@color/colorBackground">
+        <!--android:background="@color/colorOnSurface"-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorOnBackground"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/barrier_vertical_date_end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/date_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/default_paragraph_text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/date_month_year"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="23" />
+
+        <!--android:layout_marginTop="@dimen/default_margin_half"-->
+        <TextView
+            android:id="@+id/date_month_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/default_paragraph_smaller_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_day"
+            tools:text="Nov 2021" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_vertical_date_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="date_day, date_month_year" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_vertical_amount_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="transaction_amount_tv" />
+
+        <TextView
+            android:id="@+id/transaction_description_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_half"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
+            app:layout_constraintStart_toEndOf="@+id/barrier_vertical_date_end"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="DÉBITO DIRETO-MEO, SA-35318606882" />
+
+        <TextView
+            android:id="@+id/transaction_amount_tv"
+            style="@style/AmountTypeDebit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_half"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/default_paragraph_text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/barrier_vertical_amount_start"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0.21€" />
+
+        <TextView
+            android:id="@+id/transaction_entity_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:singleLine="true"
+            android:textSize="@dimen/default_paragraph_smaller_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/transaction_description_tv"
+            app:layout_constraintTop_toBottomOf="@+id/transaction_description_tv"
+            tools:text="Altice/Meo" />
+
+        <View
+            android:id="@+id/category_entity_divider_view"
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="@dimen/default_margin_half"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/transaction_entity_tv"
+            app:layout_constraintStart_toEndOf="@+id/transaction_entity_tv"
+            app:layout_constraintTop_toTopOf="@+id/transaction_entity_tv" />
+
+        <TextView
+            android:id="@+id/transaction_category_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_half"
+            android:singleLine="true"
+            android:textSize="@dimen/default_paragraph_smaller_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/transaction_entity_tv"
+            app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
+            app:layout_constraintStart_toEndOf="@+id/category_entity_divider_view"
+            tools:text="Utilitários 💧⚡📺" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

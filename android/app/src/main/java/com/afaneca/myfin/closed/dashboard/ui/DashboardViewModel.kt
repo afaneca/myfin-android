@@ -10,9 +10,12 @@ import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.SingleLiveEvent
 import com.afaneca.myfin.utils.formatMoney
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DashboardViewModel(
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
     private val repository: DashboardRepository
 ) : ViewModel() {
 

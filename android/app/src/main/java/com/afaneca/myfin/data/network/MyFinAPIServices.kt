@@ -1,5 +1,6 @@
 package com.afaneca.myfin.data.network
 
+import com.afaneca.myfin.closed.accounts.data.AccountsListResponse
 import com.afaneca.myfin.closed.budgets.data.BudgetsListResponse
 import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
 import com.afaneca.myfin.closed.transactions.data.BudgetDetailsResponse
@@ -49,4 +50,8 @@ interface MyFinAPIServices {
     suspend fun getBudgetDetails(
         @Path(value = "id", encoded = true) id: String
     ): BudgetDetailsResponse
+
+    // ACCOUNTS
+    @GET("accounts/")
+    suspend fun getAccountsList(): AccountsListResponse
 }

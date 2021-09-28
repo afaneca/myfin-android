@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,8 +13,6 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.base.components.MyFinLinearSmoothScroller
 import com.afaneca.myfin.base.objects.MyFinBudget
-import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
-import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetsBinding
 import com.afaneca.myfin.utils.parseStringToBoolean
@@ -25,8 +24,19 @@ import java.util.*
  * Created by me on 07/08/2021
  */
 class BudgetsFragment :
-    BaseFragment<BudgetsViewModel, FragmentBudgetsBinding, BudgetsRepository>(),
+    BaseFragment(),
     BudgetsListAdapter.BudgetsListItemClickListener {
+    private lateinit var binding: FragmentBudgetsBinding
+    private val viewModel: BudgetsViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentBudgetsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,17 +99,6 @@ class BudgetsFragment :
     private fun getBudgetsList() {
         viewModel.requestBudgetsList()
     }
-
-    /**/
-    override fun getViewModel(): Class<BudgetsViewModel> = BudgetsViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentBudgetsBinding = FragmentBudgetsBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): BudgetsRepository =
-        BudgetsRepository(remoteDataSource.create(MyFinAPIServices::class.java), userData)
 
     override fun onBudgetClick(budget: MyFinBudget) {
         val action =

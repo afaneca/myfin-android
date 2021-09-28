@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyFin</string>
+    <!--<string name="app_name">MyFin</string>-->
     <string name="title_activity_base">BaseActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -62,6 +62,14 @@
     <string name="transaction_details_label">Detalhes de transação</string>
     <string name="budgets_label">Orçamentos</string>
     <string name="budget_details_label">Detalhes de Orçamento</string>
+    <string name="accounts_label">Contas</string>
+    <string name="account_checking_label">Conta à Ordem</string>
+    <string name="account_savings_label">Conta Poupança</string>
+    <string name="account_investing_label">Investimento</string>
+    <string name="account_credit_label">Crédito</string>
+    <string name="account_meal_card_label">Cartão-Refeição</string>
+    <string name="account_wallet_label">Carteira</string>
+    <string name="account_other_label">Outra</string>
 
     <!-- Preferences -->
     <string name="preferences_theme_option_dark_theme">Tema Escuro</string>
@@ -76,7 +84,7 @@
     <string name="preferences_theme_title">Tema</string>
 
     <!-- Transactions -->
-    <string name="transactions_list_item_month_year_format">%s%s</string>
+    <string name="transactions_list_item_date_format">%s %s %s</string>
 
     <!-- Budgets -->
     <string name="budget_details_category_percent_of_planned_amount">%.2f%% de %s</string>
@@ -92,4 +100,7 @@
     <string name="account_to_label">Conta Destino</string>
     <string name="category_label">Categoria</string>
     <string name="entity_label">Entidade</string>
+    <string name="account_status_active">Ativa</string>
+    <string name="account_status_inactive">Inativa</string>
+    <string name="generic_no_data_to_display_label">Nenhum dado para mostrar</string>
 </resources>

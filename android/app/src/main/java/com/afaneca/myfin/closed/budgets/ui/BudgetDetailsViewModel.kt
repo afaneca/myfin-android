@@ -11,14 +11,17 @@ import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.SingleLiveEvent
 import com.afaneca.myfin.utils.formatMoney
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.format.TextStyle
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by me on 07/08/2021
  */
-class BudgetDetailsViewModel(
+@HiltViewModel
+class BudgetDetailsViewModel @Inject constructor(
     private val repository: BudgetsRepository
 ) : ViewModel() {
     enum class TAB { EXPENSES, INCOME }

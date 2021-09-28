@@ -6,31 +6,40 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.afaneca.myfin.Consts
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.PrivateActivity
-import com.afaneca.myfin.data.network.MyFinAPIServices
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentLoginBinding
-import com.afaneca.myfin.open.login.data.LoginRepository
 import com.afaneca.myfin.utils.BiometricsHelper
 import com.afaneca.myfin.utils.enable
 import com.afaneca.myfin.utils.startNewActivity
 import com.afaneca.myfin.utils.visible
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRepository>() {
+@AndroidEntryPoint
+class LoginFragment : BaseFragment() {
     private val biometricsHelper by lazy { BiometricsHelper(this) }
+    private lateinit var binding: FragmentLoginBinding
+    private val viewModel: LoginViewModel by viewModels()
+
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = super.onCreateView(inflater, container, savedInstanceState)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         bindObservers()
         bindListeners()
-        return rootView;
     }
 
     private fun bindObservers() {
@@ -55,7 +64,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
         })
 
         viewModel.usernameInput.observe(viewLifecycleOwner, {
-            if (!it.isNullOrBlank()) {
+            if (!it.isNullOrBlank() && binding.usernameEt.text.isNullOrEmpty()) {
                 // set default username
                 binding.usernameEt.setText(it)
             }
@@ -83,22 +92,15 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             viewModel.attemptLogin(username, password, keepSession, requireContext())
         }
 
-        binding.passwordEt.addTextChangedListener {
-            val username = binding.usernameEt.text.toString().trim()
-            val password = binding.passwordEt.text.toString().trim()
-            checkIfLoginButtonShouldBeEnabled(username, password)
-        }
-
         binding.usernameEt.addTextChangedListener {
             val username = binding.usernameEt.text.toString().trim()
-            val password = binding.passwordEt.text.toString().trim()
-            checkIfLoginButtonShouldBeEnabled(username, password)
+            viewModel.onUsernameInputChanged(username)
         }
-    }
 
-    private fun checkIfLoginButtonShouldBeEnabled(usernameInput: String, passwordInput: String) {
-        viewModel.shouldLoginButtonBeEnabled.value =
-            ((usernameInput.isNotEmpty() && passwordInput.isNotEmpty()))
+        binding.passwordEt.addTextChangedListener {
+            val password = binding.passwordEt.text.toString()
+            viewModel.onPasswordInputChanged(password)
+        }
     }
 
 
@@ -113,18 +115,4 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, LoginRe
             }
     }
 
-
-    override fun getViewModel() = LoginViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ) = FragmentLoginBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository() =
-        LoginRepository(
-            remoteDataSource.create(MyFinAPIServices::class.java),
-            userData,
-            db
-        )
 }

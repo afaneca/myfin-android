@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.TransactionsListItemBinding
-import com.afaneca.myfin.utils.DateTimeUtils
-import com.afaneca.myfin.utils.formatMoney
-import com.afaneca.myfin.utils.setupAmountStyle
-import com.afaneca.myfin.utils.visible
+import com.afaneca.myfin.utils.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,22 +50,56 @@ class TransactionsListAdapter(
         val item = datasetFiltered[position]
 
         holder.binding.apply {
-            dateDay.text =
-                DateTimeUtils.getDayOfMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L)
-            dateMonthYear.text = String.format(
-                context.getString(R.string.transactions_list_item_month_year_format),
+            dateTv.text = String.format(
+                context.getString(R.string.transactions_list_item_date_format),
+                DateTimeUtils.getDayOfMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L),
                 DateTimeUtils.getAbbreviatedMonthFromUnixTime(item.dateTimestamp.toLong() * 1000L),
                 DateTimeUtils.getFullYearFromUnixTime(item.dateTimestamp.toLong() * 1000L)
-            ) //"Jun 2021"
+            ) //"30 Jun 2021"
             transactionDescriptionTv.text = item.description ?: ""
             transactionAmountTv.text = formatMoney(item.amount.toDoubleOrNull() ?: 0.00)
             transactionEntityTv.text = item.entityName ?: ""
             transactionCategoryTv.text = item.categoryName ?: ""
             categoryEntityDividerView.visible(!item.entityName.isNullOrBlank() && !item.categoryName.isNullOrBlank())
             setupAmountStyle(item.type, holder.binding)
+            setupIconStyle(item.type, holder.binding.iconIv)
         }
 
         holder.bindListener(clickListener, item)
+    }
+
+    private fun setupIconStyle(type: String, imageView: ImageView) {
+        when (type) {
+            MyFinConstants.MYFIN_TRX_TYPE.INCOME.value -> {
+                /*imageView.setColorFilter(ContextCompat.getColor(context, R.color.colorGreen))*/
+                imageView.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        context,
+                        R.drawable.ic_login_black_24dp
+                    )
+                )
+            }
+            MyFinConstants.MYFIN_TRX_TYPE.EXPENSE.value -> {
+                /*imageView.setColorFilter(ContextCompat.getColor(context, R.color.colorRed))*/
+                imageView.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        context,
+                        R.drawable.ic_logout_24dp
+                    )
+                )
+            }
+            else -> {
+                /*imageView.setColorFilter(ContextCompat.getColor(context, R.color.colorOrange))*/
+                imageView.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        context,
+                        R.drawable.ic_sync_alt_black_24dp
+                    )
+                )
+            }
+        }
+
+
     }
 
     fun updateDataset(newDataset: List<MyFinTransaction>) {

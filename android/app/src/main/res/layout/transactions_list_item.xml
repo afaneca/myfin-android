@@ -6,9 +6,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/default_margin"
         android:layout_marginVertical="@dimen/default_margin_half"
-        android:background="@color/colorBackground">
+        android:background="@color/colorBackground"
+        android:paddingVertical="@dimen/default_margin">
         <!--android:background="@color/colorOnSurface"-->
         <View
             android:layout_width="0dp"
@@ -20,7 +20,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <ImageView
+            android:id="@+id/icon_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_logout_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorAccent" />
+        <!--<TextView
             android:id="@+id/date_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,22 +40,21 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="23" />
 
-        <!--android:layout_marginTop="@dimen/default_margin_half"-->
+        &lt;!&ndash;android:layout_marginTop="@dimen/default_margin_half"&ndash;&gt;
         <TextView
             android:id="@+id/date_month_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/default_paragraph_smaller_text_size"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/date_day"
-            tools:text="Nov 2021" />
+            tools:layout_editor_absoluteY="28dp"
+            tools:text="Nov 2021" />-->
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_vertical_date_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="end"
-            app:constraint_referenced_ids="date_day, date_month_year" />
+            app:constraint_referenced_ids="icon_iv" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_vertical_amount_start"
@@ -59,12 +67,16 @@
             android:id="@+id/transaction_description_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin_half"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="2"
+            android:singleLine="false"
+            android:textSize="@dimen/default_paragraph_bigger_text_size"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
             app:layout_constraintStart_toEndOf="@+id/barrier_vertical_date_end"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_tv"
             tools:text="DÉBITO DIRETO-MEO, SA-35318606882" />
 
         <TextView
@@ -88,6 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:singleLine="true"
+            android:textColor="@color/light_gray"
             android:textSize="@dimen/default_paragraph_smaller_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/transaction_description_tv"
@@ -109,12 +122,27 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin_half"
+            android:layout_marginEnd="@dimen/default_margin"
             android:singleLine="true"
+            android:textColor="@color/light_gray"
             android:textSize="@dimen/default_paragraph_smaller_text_size"
             app:layout_constraintBottom_toBottomOf="@+id/transaction_entity_tv"
             app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
             app:layout_constraintStart_toEndOf="@+id/category_entity_divider_view"
             tools:text="Utilitários 💧⚡📺" />
+
+        <TextView
+            android:id="@+id/date_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:singleLine="true"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/default_paragraph_smaller_text_size"
+            app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
+            app:layout_constraintStart_toStartOf="@+id/transaction_description_tv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="30 Agosto 2021" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

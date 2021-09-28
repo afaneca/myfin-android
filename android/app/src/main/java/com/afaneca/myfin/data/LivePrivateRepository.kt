@@ -1,48 +1,49 @@
-package com.afaneca.myfin.closed
+package com.afaneca.myfin.data
 
 import androidx.lifecycle.LiveData
-import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.BaseRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinApiExtension
-import org.koin.core.component.KoinComponent
+import javax.inject.Inject
+
 
 /**
  * Created by me on 14/06/2021
  */
-@KoinApiExtension
-class PrivateRepository(
+
+class LivePrivateRepository
+@Inject
+constructor(
     private val db: MyFinDatabase,
     private var userData: UserDataManager
-) : BaseRepository(), KoinComponent {
+) : PrivateRepository, BaseRepository() {
 
     // CRUD
-    fun insertAccount(userAccountObj: UserAccountEntity) {
+    override fun insertAccount(userAccountObj: UserAccountEntity) {
         GlobalScope.launch(IO) {
             db.userAccountsDao()
                 .insert(userAccountObj)
         }
     }
 
-    fun insertAccounts(userAccountObj: List<UserAccountEntity>) {
+    override fun insertAccounts(userAccountObj: List<UserAccountEntity>) {
         GlobalScope.launch(IO) {
             db.userAccountsDao()
                 .insertAll(userAccountObj)
         }
     }
 
-    fun getAllUserAccounts(): LiveData<List<UserAccountEntity>> = db.userAccountsDao().getAll()
+    override fun getAllUserAccounts(): LiveData<List<UserAccountEntity>> =
+        db.userAccountsDao().getAll()
 
-    fun deleteUserAccount(userAccountObj: UserAccountEntity) =
+    override fun deleteUserAccount(userAccountObj: UserAccountEntity) =
         db.userAccountsDao().delete(userAccountObj)
 
-    fun deleteAllUserAccounts() = db.userAccountsDao().deleteAll()
-    fun clearUserSessionData() {
+    override fun deleteAllUserAccounts() = db.userAccountsDao().deleteAll()
+    override fun clearUserSessionData() {
         userData.clearUserSessionData()
         db.clearAllTables()
     }

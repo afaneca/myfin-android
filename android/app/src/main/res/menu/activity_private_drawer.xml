@@ -36,8 +36,8 @@
     <item android:title="@string/main_menu_group_administration">
         <menu>
             <item
-                android:id="@+id/nav_item_accounts"
-                android:enabled="false"
+                android:id="@+id/accountsFragment"
+                android:enabled="true"
                 android:icon="@drawable/ic_account_balance_white_24dp"
                 android:iconTint="@color/colorAccent"
                 android:title="@string/main_menu_accounts" />

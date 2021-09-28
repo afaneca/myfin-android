@@ -1,17 +1,14 @@
 package com.afaneca.myfin.open.login.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.service.autofill.UserData
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseActivity
 import com.afaneca.myfin.closed.PrivateActivity
-import com.afaneca.myfin.data.UserDataManager
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : BaseActivity() {
-    protected val userData: UserDataManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
