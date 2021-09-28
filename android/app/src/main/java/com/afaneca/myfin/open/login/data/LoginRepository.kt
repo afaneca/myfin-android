@@ -18,4 +18,5 @@ interface LoginRepository {
     fun saveEncryptedPassword(context: Context, password: String)
     fun getPassword(context: Context): String
     fun saveUserAccounts(userAccounts: List<UserAccountEntity>)
+    fun getSessionKey(): String
 }

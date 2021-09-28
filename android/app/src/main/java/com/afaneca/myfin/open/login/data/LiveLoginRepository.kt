@@ -63,4 +63,7 @@ class LiveLoginRepository(
             db.userAccountsDao().insertAll(userAccounts)
         }
     }
+
+    override fun getSessionKey() = userData.getSessionKey()
+
 }

@@ -1,11 +1,11 @@
 package com.afaneca.myfin.open.login.ui
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.open.login.data.AttemptLoginResponse
@@ -21,8 +21,7 @@ import javax.inject.Inject
 class LoginViewModel
 @Inject
 constructor(
-    private val repository: LoginRepository,
-    private val userDataManager: UserDataManager
+    private val repository: LoginRepository
 ) : ViewModel() {
 
 
@@ -62,7 +61,7 @@ constructor(
     }
 
     private fun hasPasswordStored(): Boolean {
-        return !userDataManager.getSessionKey().isBlank()
+        return !repository.getSessionKey().isBlank()
     }
 
     fun attemptLogin(
@@ -131,7 +130,8 @@ constructor(
         repository.saveSessionKeyToken(token)
     }
 
-    private fun refreshLoginBtnState() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun refreshLoginBtnState() {
         shouldLoginButtonBeEnabled.postValue(!_usernameInput.value.isNullOrBlank() && !_passwordInput.value.isNullOrBlank())
     }
 
