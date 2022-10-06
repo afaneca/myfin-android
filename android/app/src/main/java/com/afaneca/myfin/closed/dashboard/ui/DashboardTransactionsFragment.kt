@@ -46,7 +46,7 @@ class DashboardTransactionsFragment :
 
     private fun bindObservers() {
         viewModel.apply {
-            getTransactionsListData().observe(viewLifecycleOwner, {
+            getTransactionsListData().observe(viewLifecycleOwner) {
                 binding.loadingPb.visible(it is Resource.Loading)
                 when (it) {
                     is Resource.Success -> {
@@ -55,8 +55,9 @@ class DashboardTransactionsFragment :
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                     }
+                    else -> {}
                 }
-            })
+            }
 
             transactionsListDataset.observe(viewLifecycleOwner, {
                 if (it == null) return@observe

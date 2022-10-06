@@ -39,7 +39,7 @@ class AccountsFragment :
     }
 
     private fun bindObservers() {
-        viewModel.getAccountsListResponse().observe(viewLifecycleOwner, {
+        viewModel.getAccountsListResponse().observe(viewLifecycleOwner) {
             binding.loadingPb.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Failure -> Toast.makeText(
@@ -50,12 +50,13 @@ class AccountsFragment :
                 is Resource.Success -> {
                     setupTabLayout()
                 }
+                else -> {}
             }
-        })
+        }
 
-        viewModel.getAccountsListData().observe(viewLifecycleOwner, {
+        viewModel.getAccountsListData().observe(viewLifecycleOwner) {
             setupAccountsListRecyclerView(it)
-        })
+        }
     }
 
     private fun setupTabLayout() {

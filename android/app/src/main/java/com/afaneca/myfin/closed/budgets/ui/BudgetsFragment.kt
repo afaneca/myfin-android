@@ -46,7 +46,7 @@ class BudgetsFragment :
     }
 
     private fun bindObservers() {
-        viewModel.getBudgetsListData().observe(viewLifecycleOwner, {
+        viewModel.getBudgetsListData().observe(viewLifecycleOwner) {
             binding.loadingPb.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Success -> {
@@ -55,8 +55,9 @@ class BudgetsFragment :
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 }
+                else -> {}
             }
-        })
+        }
     }
 
     private fun setupBudgetsList(dataset: List<MyFinBudget>) {

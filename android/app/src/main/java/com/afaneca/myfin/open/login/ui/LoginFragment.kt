@@ -60,21 +60,22 @@ class LoginFragment : BaseFragment() {
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 }
+                else -> {}
             }
         })
 
-        viewModel.usernameInput.observe(viewLifecycleOwner, {
+        viewModel.usernameInput.observe(viewLifecycleOwner) {
             if (!it.isNullOrBlank() && binding.usernameEt.text.isNullOrEmpty()) {
                 // set default username
                 binding.usernameEt.setText(it)
             }
-        })
+        }
 
-        viewModel.triggerBiometricAuth.observe(viewLifecycleOwner, {
+        viewModel.triggerBiometricAuth.observe(viewLifecycleOwner) {
             if (it) {
                 checkBiometrics()
             }
-        })
+        }
     }
 
     private fun goToPrivateActivity() {
