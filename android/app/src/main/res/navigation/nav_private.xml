@@ -42,4 +42,12 @@
         android:name="com.afaneca.myfin.closed.accounts.ui.AccountsFragment"
         android:label="@string/accounts_label"
         tools:layout="@layout/fragment_accounts" />
+    <dialog
+        android:id="@+id/budgetDetailsCategoryBottomSheetFragment"
+        android:name="com.afaneca.myfin.closed.budgets.ui.BudgetDetailsCategoryBottomSheetFragment"
+        android:label="BudgetDetailsCategoryBottomSheetFragment">
+        <action
+            android:id="@+id/action_budgetDetailsCategoryBottomSheetFragment_to_budgetDetailsFragment"
+            app:destination="@id/budgetDetailsFragment" />
+    </dialog>
 </navigation>

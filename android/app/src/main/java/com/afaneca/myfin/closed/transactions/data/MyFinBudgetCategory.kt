@@ -3,6 +3,7 @@ package com.afaneca.myfin.closed.transactions.data
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Keep
 data class MyFinBudgetCategory(
@@ -48,4 +49,4 @@ data class MyFinBudgetCategory(
     val type: String,
     @SerializedName("users_user_id")
     val usersUserId: String
-)
+) : Serializable

@@ -8,7 +8,7 @@ buildscript {
         sqlcipher_version = "4.4.3"
         preference_version = "1.2.0"
         nav_version = "2.5.2"
-        hilt_version = "2.38.1"
+        hilt_version = '2.44'
     }
 
     repositories {
@@ -16,7 +16,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.1'
+        classpath 'com.android.tools.build:gradle:7.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version")
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"

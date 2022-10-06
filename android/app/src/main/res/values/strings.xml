@@ -103,4 +103,9 @@
     <string name="account_status_active">Ativa</string>
     <string name="account_status_inactive">Inativa</string>
     <string name="generic_no_data_to_display_label">Nenhum dado para mostrar</string>
+    <string name="current_expense">Despesa Atual</string>
+    <string name="current_income">Receita Atual</string>
+    <string name="planned_expense">Despesa Estimada</string>
+    <string name="planned_income">Receita Estimada</string>
+    <string name="generic_save">Guardar</string>
 </resources>
