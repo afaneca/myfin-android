@@ -57,7 +57,7 @@ class BudgetDetailsFragment :
     }
 
     private fun bindObservers() {
-        viewModel.getBudgetDetailsRequest().observe(viewLifecycleOwner, {
+        viewModel.getBudgetDetailsRequest().observe(viewLifecycleOwner) {
             binding.loadingPb.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Failure -> {
@@ -65,11 +65,11 @@ class BudgetDetailsFragment :
                 }
                 else -> {}
             }
-        })
+        }
 
-        viewModel.budgetDetailsData.observe(viewLifecycleOwner, {
+        viewModel.budgetDetailsData.observe(viewLifecycleOwner) {
             bindDataToViews(it)
-        })
+        }
     }
 
     private fun bindDataToViews(budgetDetailsData: BudgetDetailsViewModel.BudgetDetailsData?) {
@@ -130,11 +130,13 @@ class BudgetDetailsFragment :
     }
 
     override fun onCategoryClick(cat: MyFinBudgetCategory) {
-        showBudgetCategoryDetailsBottomSheetFragment(cat)
+        if (viewModel.isOpen)
+            showBudgetCategoryDetailsBottomSheetFragment(cat)
     }
 
     private fun showBudgetCategoryDetailsBottomSheetFragment(cat: MyFinBudgetCategory) {
-        val bottomSheetFragment = BudgetDetailsCategoryBottomSheetFragment.newInstance(cat)
+        val bottomSheetFragment =
+            BudgetDetailsCategoryBottomSheetFragment.newInstance(args.budgetId, cat)
         bottomSheetFragment.show(
             parentFragmentManager,
             BudgetDetailsCategoryBottomSheetFragment::class.java.name
