@@ -130,7 +130,15 @@ class BudgetDetailsFragment :
     }
 
     override fun onCategoryClick(cat: MyFinBudgetCategory) {
-        // TODO
+        showBudgetCategoryDetailsBottomSheetFragment(cat)
+    }
+
+    private fun showBudgetCategoryDetailsBottomSheetFragment(cat: MyFinBudgetCategory) {
+        val bottomSheetFragment = BudgetDetailsCategoryBottomSheetFragment.newInstance(cat)
+        bottomSheetFragment.show(
+            parentFragmentManager,
+            BudgetDetailsCategoryBottomSheetFragment::class.java.name
+        )
     }
 
     private fun setupTabLayout() {

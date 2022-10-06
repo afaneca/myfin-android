@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="obj"
+            type="com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory" />
+
+        <variable
+            name="formattedIncomeAmount"
+            type="String" />
+
+        <variable
+            name="formattedExpenseAmount"
+            type="String" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginVertical="@dimen/default_margin_triple"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/current_expense_label_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_double"
+                    android:text="@string/current_expense"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/default_paragraph_smallest_text_size"
+                    app:layout_constraintEnd_toStartOf="@+id/current_income_tv"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/description_tv" />
+
+                <TextView
+                    android:id="@+id/amount_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{obj.name}'
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/default_title_bigger_text_size"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Cat Name" />
+
+                <TextView
+                    android:id="@+id/current_expense_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text='@{formattedExpenseAmount ?? "-"}'
+                    android:textAlignment="center"
+                    android:textSize="@dimen/default_paragraph_bigger_text_size"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/destination_account_value_tv"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_expense_label_tv"
+                    tools:text="53.99€" />
+
+                <TextView
+                    android:id="@+id/current_income_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/current_income"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/default_paragraph_smallest_text_size"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/current_expense_label_tv"
+                    app:layout_constraintTop_toTopOf="@+id/current_expense_label_tv" />
+
+                <TextView
+                    android:id="@+id/destination_account_value_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text='@{formattedIncomeAmount ?? "-"}'
+                    android:textAlignment="center"
+                    android:textSize="@dimen/default_paragraph_bigger_text_size"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/current_expense_tv"
+                    app:layout_constraintStart_toStartOf="@+id/current_income_tv"
+                    app:layout_constraintTop_toBottomOf="@+id/current_income_tv"
+                    tools:text="23.72€" />
+
+                <TextView
+                    android:id="@+id/planned_expense_label_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/planned_expense"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/default_paragraph_smallest_text_size"
+                    app:layout_constraintEnd_toStartOf="@+id/planned_income_label_tv"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_expense_tv" />
+
+                <TextView
+                    android:id="@+id/planned_income_label_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/planned_income"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/default_paragraph_smallest_text_size"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/planned_expense_label_tv"
+                    app:layout_constraintTop_toTopOf="@+id/planned_expense_label_tv" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/planned_expense_til"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_margin"
+                    app:layout_constraintEnd_toEndOf="@+id/planned_expense_label_tv"
+                    app:layout_constraintEnd_toStartOf="@+id/planned_income_til"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/planned_expense_label_tv"
+                    app:suffixText="€">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/planned_expense_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:text="@{obj.plannedAmountDebit}"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/default_paragraph_bigger_text_size"
+                        android:textStyle="bold"
+                        tools:text="250.75" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/planned_income_til"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/planned_expense_til"
+                    app:layout_constraintStart_toStartOf="@+id/planned_income_label_tv"
+                    app:layout_constraintTop_toBottomOf="@+id/planned_income_label_tv"
+                    app:suffixText="€">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/planned_income_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:text="@{obj.plannedAmountCredit}"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/default_paragraph_bigger_text_size"
+                        android:textStyle="bold"
+                        tools:text="1050.69" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/description_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{obj.description ?? @string/no_description_label}"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/amount_tv"
+                    tools:text="xyz" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_margin"
+                    android:text="@string/generic_save"
+                    android:visibility="invisible"
+                    app:layout_constraintLeft_toLeftOf="@id/planned_expense_til"
+                    app:layout_constraintRight_toRightOf="@id/planned_income_til"
+                    app:layout_constraintTop_toBottomOf="@id/planned_expense_til"
+                    tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
