@@ -8,4 +8,11 @@ interface BudgetsRepository {
     suspend fun getBudgetDetails(
         id: String
     ): Resource<BudgetDetailsResponse>
+
+    suspend fun updateBudgetCategoryAmounts(
+        budgetId: String,
+        catId: String,
+        plannedExpenseAmount: String,
+        plannedIncomeAmount: String
+    ): Resource<Unit>
 }

@@ -13,7 +13,7 @@ class MyFinLinearSmoothScroller(private val context: Context) : LinearSmoothScro
     }
 
     override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-        return 120f / displayMetrics.densityDpi
+        return 60f / displayMetrics.densityDpi
     }
 
     override fun calculateDtToFit(

@@ -51,6 +51,15 @@ interface MyFinAPIServices {
         @Path(value = "id", encoded = true) id: String
     ): BudgetDetailsResponse
 
+    @FormUrlEncoded
+    @PUT("budgets/{id}")
+    suspend fun updateBudgetCategoryPlannedAmounts(
+        @Path(value = "id", encoded = true) budgetId: String,
+        @Field("category_id") catId: String,
+        @Field("planned_expense") plannedExpense: String,
+        @Field("planned_income") plannedIncome: String,
+    ): Unit
+
     // ACCOUNTS
     @GET("accounts/")
     suspend fun getAccountsList(): AccountsListResponse

@@ -1,6 +1,7 @@
 package com.afaneca.myfin.closed.transactions.ui
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -45,11 +46,20 @@ class TransactionDetailsBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments != null) {
-            var trx =
-                requireArguments().getSerializable(BUNDLE_IN_TRX_OBJECT_TAG) as MyFinTransaction
-            binding.trxObj = trx
-            binding.formattedAmount = formatMoney(trx.amount.toDoubleOrNull() ?: 0.00)
-            setupAmountStyle(trx.type, binding.amountTv)
+            val trx =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    requireArguments().getSerializable(
+                        BUNDLE_IN_TRX_OBJECT_TAG,
+                        MyFinTransaction::class.java
+                    ) as MyFinTransaction
+                } else {
+                    requireArguments().getSerializable(BUNDLE_IN_TRX_OBJECT_TAG) as? MyFinTransaction
+                }
+            trx?.let {
+                binding.trxObj = trx
+                binding.formattedAmount = formatMoney(trx.amount.toDoubleOrNull() ?: 0.00)
+                setupAmountStyle(trx.type, binding.amountTv)
+            }
         }
 
         /*dialog?.setOnShowListener {
