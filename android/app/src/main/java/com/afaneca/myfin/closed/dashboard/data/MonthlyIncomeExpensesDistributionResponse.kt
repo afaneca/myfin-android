@@ -11,4 +11,4 @@ class MonthlyIncomeExpensesDistributionResponse(
     val categories: List<MyFinCategory>,
     @SerializedName("last_update_timestamp")
     val lastUpdateTimestamp: Long
-) : BaseResponse()
+) : BaseResponse() 

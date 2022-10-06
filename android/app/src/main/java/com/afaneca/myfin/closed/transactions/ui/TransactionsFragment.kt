@@ -55,7 +55,7 @@ class TransactionsFragment :
 
     private fun bindObservers() {
         viewModel.apply {
-            getTransactionsListData().observe(viewLifecycleOwner, {
+            getTransactionsListData().observe(viewLifecycleOwner) {
                 binding.loadingPb.visible(it is Resource.Loading)
                 when (it) {
                     is Resource.Success -> {
@@ -64,10 +64,11 @@ class TransactionsFragment :
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                     }
+                    else -> {}
                 }
-            })
+            }
 
-            transactionsListDataset.observe(viewLifecycleOwner, {
+            transactionsListDataset.observe(viewLifecycleOwner) {
                 if (it == null) return@observe
                 if (binding.recyclerView.adapter == null)
                     setupTransactionsRecyclerView(it)
@@ -76,12 +77,12 @@ class TransactionsFragment :
                     binding.recyclerView.adapter!!.notifyDataSetChanged()
                 }
 
-            })
+            }
 
-            clickedTransactionDetails.observe(viewLifecycleOwner, {
+            clickedTransactionDetails.observe(viewLifecycleOwner) {
                 if (it == null) return@observe
                 showTransactionDetailsBottomSheetFragment(it)
-            })
+            }
         }
     }
 

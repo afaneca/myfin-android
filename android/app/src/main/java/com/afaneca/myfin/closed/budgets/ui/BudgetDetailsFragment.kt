@@ -63,6 +63,7 @@ class BudgetDetailsFragment :
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 }
+                else -> {}
             }
         })
 

@@ -89,6 +89,7 @@ class DashboardFragment :
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                     }
+                    else -> {}
                 }
             })
             expensesDistributionChartData.observe(viewLifecycleOwner, {
