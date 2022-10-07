@@ -1,5 +1,6 @@
 package com.afaneca.myfin.closed.transactions.ui
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -75,6 +76,7 @@ constructor(
         requestTransactionsList(++_trxCurrentPage)
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun clearData() {
         _trxCurrentPage = 0
         _transactionsListData.value = null

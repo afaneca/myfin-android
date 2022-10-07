@@ -1,5 +1,6 @@
 package com.afaneca.myfin.closed.accounts.ui
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,6 +41,7 @@ class AccountsViewModel @Inject constructor(
     private val _accountsList: MutableLiveData<List<MyFinAccount>> = MutableLiveData(ArrayList())
     fun getAccountsListData() = _accountsList
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun requestAccountsList() = viewModelScope.launch {
         _accountsListResponse.value = Resource.Loading
         _accountsListResponse.value = repository.getAccountsList()
