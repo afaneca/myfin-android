@@ -9,7 +9,7 @@
         android:layout_marginVertical="@dimen/default_margin_half"
         android:background="@color/colorBackground"
         android:paddingVertical="@dimen/default_margin">
-        <!--android:background="@color/colorOnSurface"-->
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -135,14 +135,23 @@
             android:id="@+id/date_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/default_margin"
             android:singleLine="true"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/default_paragraph_smaller_text_size"
-            app:layout_constraintEnd_toStartOf="@+id/barrier_vertical_amount_start"
             app:layout_constraintStart_toStartOf="@+id/transaction_description_tv"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="30 Agosto 2021" />
 
+        <include
+            android:id="@+id/essential_include"
+            layout="@layout/include_essential_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/date_tv"
+            app:layout_constraintStart_toEndOf="@+id/date_tv"
+            app:layout_constraintTop_toTopOf="@+id/date_tv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

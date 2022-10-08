@@ -32,5 +32,7 @@ data class MyFinTransaction(
     @SerializedName("transaction_id")
     val transactionId: String,
     @SerializedName("type")
-    val type: String
+    val type: String,
+    @SerializedName("is_essential")
+    val isEssential: String,
 ) : Serializable
