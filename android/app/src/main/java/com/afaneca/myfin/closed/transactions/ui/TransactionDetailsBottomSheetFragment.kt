@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.core.view.isVisible
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.FragmentTransactionDetailsBottomSheetBinding
 import com.afaneca.myfin.utils.formatMoney
+import com.afaneca.myfin.utils.parseStringToBoolean
 import com.afaneca.myfin.utils.setupAmountStyle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -59,6 +61,7 @@ class TransactionDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.trxObj = trx
                 binding.formattedAmount = formatMoney(trx.amount.toDoubleOrNull() ?: 0.00)
                 setupAmountStyle(trx.type, binding.amountTv)
+                binding.essentialInclude.isVisible = parseStringToBoolean(trx.isEssential)
             }
         }
 

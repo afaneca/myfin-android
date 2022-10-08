@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/essential_cv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:ignore="UseCompoundDrawables">
+
+    <ImageView
+        android:layout_width="12dp"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_star"
+        app:tint="@color/colorAccent"
+        android:contentDescription="@string/generic_essential" />
+
+    <TextView
+        android:id="@+id/essential_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginVertical="2dp"
+        android:text="@string/generic_essential"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/default_paragraph_smaller_text_size"
+        android:textStyle="bold"
+        tools:ignore="SmallSp" />
+</LinearLayout>

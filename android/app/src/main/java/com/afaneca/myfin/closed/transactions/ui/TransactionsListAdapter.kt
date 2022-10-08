@@ -7,13 +7,13 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.TransactionsListItemBinding
 import com.afaneca.myfin.utils.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by me on 26/06/2021
@@ -61,6 +61,7 @@ class TransactionsListAdapter(
             transactionEntityTv.text = item.entityName ?: ""
             transactionCategoryTv.text = item.categoryName ?: ""
             categoryEntityDividerView.visible(!item.entityName.isNullOrBlank() && !item.categoryName.isNullOrBlank())
+            essentialInclude.isVisible = parseStringToBoolean(item.isEssential)
             setupAmountStyle(item.type, holder.binding)
             setupIconStyle(item.type, holder.binding.iconIv)
         }

@@ -1,15 +1,12 @@
 <resources>
     <!--<string name="app_name">MyFin</string>-->
-    <string name="title_activity_base">BaseActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
     <string name="login_btn_label">Entrar</string>
     <string name="login_username_label">Nome de Utilizador</string>
     <string name="login_password_label">Password</string>
+
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
@@ -108,4 +105,5 @@
     <string name="planned_expense">Despesa Estimada</string>
     <string name="planned_income">Receita Estimada</string>
     <string name="generic_save">Guardar</string>
+    <string name="generic_essential">Essencial</string>
 </resources>
