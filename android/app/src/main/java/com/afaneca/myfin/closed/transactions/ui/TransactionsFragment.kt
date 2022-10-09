@@ -8,6 +8,7 @@ import android.widget.Filterable
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,17 @@ class TransactionsFragment :
 
         bindObservers()
         getTransactionsList()
+        setupAddTransactionFab()
+    }
+
+    private fun setupAddTransactionFab() {
+        binding.addTransactionFab.setOnClickListener { showAddTransactionBottomSheet() }
+    }
+
+    private fun showAddTransactionBottomSheet() {
+        val action = TransactionsFragmentDirections
+            .actionTransactionsFragmentToAddTransactionBottomSheetFragment()
+        findNavController().navigate(action)
     }
 
     private fun getTransactionsList() {

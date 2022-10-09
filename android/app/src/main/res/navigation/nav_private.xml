@@ -14,7 +14,11 @@
         android:id="@+id/transactionsFragment"
         android:name="com.afaneca.myfin.closed.transactions.ui.TransactionsFragment"
         android:label="@string/transactions_label"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_transactions">
+        <action
+            android:id="@+id/action_transactionsFragment_to_addTransactionBottomSheetFragment"
+            app:destination="@id/addTransactionBottomSheetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/budgetsFragment"
         android:name="com.afaneca.myfin.closed.budgets.ui.BudgetsFragment"
@@ -50,4 +54,8 @@
             android:id="@+id/action_budgetDetailsCategoryBottomSheetFragment_to_budgetDetailsFragment"
             app:destination="@id/budgetDetailsFragment" />
     </dialog>
+    <dialog
+        android:id="@+id/addTransactionBottomSheetFragment"
+        android:name="com.afaneca.myfin.closed.transactions.ui.AddTransactionBottomSheetFragment"
+        android:label="AddTransactionBottomSheetFragment" />
 </navigation>
