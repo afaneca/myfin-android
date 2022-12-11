@@ -56,6 +56,10 @@
     </dialog>
     <dialog
         android:id="@+id/addTransactionBottomSheetFragment"
-        android:name="com.afaneca.myfin.closed.transactions.ui.AddTransactionBottomSheetFragment"
-        android:label="AddTransactionBottomSheetFragment" />
+        android:name="com.afaneca.myfin.closed.transactions.ui.addTransaction.AddTransactionBottomSheetFragment"
+        android:label="AddTransactionBottomSheetFragment">
+        <action
+            android:id="@+id/action_addTransactionBottomSheetFragment_to_transactionsFragment"
+            app:destination="@id/transactionsFragment" />
+    </dialog>
 </navigation>

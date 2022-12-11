@@ -83,7 +83,7 @@
     <!-- Transactions -->
     <string name="transactions_list_item_date_format">%s %s %s</string>
     <string name="add_transaction">Adicionar transação</string>
-    <string name="transaction_date">Data da transação</string>
+    <string name="transaction_date">Data</string>
 
     <!-- Budgets -->
     <string name="budget_details_category_percent_of_planned_amount">%.2f%% de %s</string>
@@ -91,6 +91,7 @@
     <!-- Misc -->
     <string name="generic_income">Receita</string>
     <string name="generic_expenses">Despesa</string>
+    <string name="generic_transfer">Transferência</string>
     <string name="preferences_theme_option_key_light">preferences_theme_option_light</string>
     <string name="preferences_theme_option_key_dark">preferences_theme_option_dark</string>
     <string name="preferences_theme_option_key_system">preferences_theme_option_system</string>
@@ -99,6 +100,7 @@
     <string name="account_to_label">Conta Destino</string>
     <string name="category_label">Categoria</string>
     <string name="entity_label">Entidade</string>
+    <string name="description_label">Descrição</string>
     <string name="account_status_active">Ativa</string>
     <string name="account_status_inactive">Inativa</string>
     <string name="generic_no_data_to_display_label">Nenhum dado para mostrar</string>
@@ -108,4 +110,6 @@
     <string name="planned_income">Receita Estimada</string>
     <string name="generic_save">Guardar</string>
     <string name="generic_essential">Essencial</string>
+    <string name="generic_amount">Montante</string>
+    <string name="transaction_added_success_message">Transação adicionada com sucesso!</string>
 </resources>
