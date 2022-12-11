@@ -12,4 +12,17 @@ interface TransactionsRepository {
         page: Int,
         pageSize: Int
     ): Resource<LatestTransactionsListResponse>
+
+    suspend fun addTransactionStep0(): Resource<AddTransactionStep0Response>
+    suspend fun addTransactionStep1(
+        dateTimestamp: Long,
+        amount: String,
+        type: Char,
+        accountFromId: String?,
+        accountToId: String?,
+        description: String,
+        entityId: String?,
+        categoryId: String?,
+        isEssential: Boolean
+    ): Resource<Unit>
 }

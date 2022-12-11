@@ -19,4 +19,30 @@ class LiveTransactionsRepository(
         page: Int,
         pageSize: Int
     ) = safeAPICall { api.getTransactionsListByPage(page, pageSize) }
+
+    override suspend fun addTransactionStep0() = safeAPICall { api.addTransactionStep0() }
+
+    override suspend fun addTransactionStep1(
+        dateTimestamp: Long,
+        amount: String,
+        type: Char,
+        accountFromId: String?,
+        accountToId: String?,
+        description: String,
+        entityId: String?,
+        categoryId: String?,
+        isEssential: Boolean
+    ) = safeAPICall {
+        api.addTransactionStep1(
+            amount,
+            type,
+            description,
+            entityId,
+            accountFromId,
+            accountToId,
+            categoryId,
+            dateTimestamp,
+            isEssential
+        )
+    }
 }
