@@ -16,6 +16,7 @@ import com.afaneca.myfin.base.objects.MyFinBudget
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetsBinding
 import com.afaneca.myfin.utils.parseStringToBoolean
+import com.afaneca.myfin.utils.safeNavigate
 import com.afaneca.myfin.utils.visible
 import java.util.*
 
@@ -107,7 +108,7 @@ class BudgetsFragment :
                 budget.budgetId,
                 parseStringToBoolean(budget.isOpen)
             )
-        findNavController().navigate(action)
+        findNavController().safeNavigate(action)
     }
 
 }

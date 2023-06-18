@@ -111,5 +111,6 @@
     <string name="generic_save">Guardar</string>
     <string name="generic_essential">Essencial</string>
     <string name="generic_amount">Montante</string>
+    <string name="generic_edit">Editar</string>
     <string name="transaction_added_success_message">Transação adicionada com sucesso!</string>
 </resources>

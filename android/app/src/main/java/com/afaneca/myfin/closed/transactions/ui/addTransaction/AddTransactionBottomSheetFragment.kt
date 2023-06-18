@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.afaneca.myfin.R
 import com.afaneca.myfin.closed.transact.AddTransactionViewModel
 import com.afaneca.myfin.databinding.FragmentAddTransactionBottomSheetBinding
+import com.afaneca.myfin.utils.safeNavigate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -76,7 +77,7 @@ class AddTransactionBottomSheetFragment : BottomSheetDialogFragment() {
                 val action =
                     AddTransactionBottomSheetFragmentDirections
                         .actionAddTransactionBottomSheetFragmentToTransactionsFragment()
-                findNavController().navigate(action)
+                findNavController().safeNavigate(action)
             }
             AddTransactionContract.State.Failure -> Toast.makeText(
                 requireContext(),
