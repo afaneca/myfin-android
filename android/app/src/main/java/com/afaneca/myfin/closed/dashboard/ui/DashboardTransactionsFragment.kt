@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.base.BaseFragment
@@ -15,6 +16,7 @@ import com.afaneca.myfin.closed.transactions.ui.TransactionsListAdapter
 import com.afaneca.myfin.closed.transactions.ui.TransactionsViewModel
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentDashboardTransactionsBinding
+import com.afaneca.myfin.utils.safeNavigate
 import com.afaneca.myfin.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,9 +54,11 @@ class DashboardTransactionsFragment :
                     is Resource.Success -> {
 
                     }
+
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                     }
+
                     else -> {}
                 }
             }
@@ -82,11 +86,11 @@ class DashboardTransactionsFragment :
     }
 
     private fun showTransactionDetailsBottomSheetFragment(trx: MyFinTransaction) {
-        val bottomSheetFragment = TransactionDetailsBottomSheetFragment.newInstance(trx)
-        bottomSheetFragment.show(
-            parentFragmentManager,
-            TransactionDetailsBottomSheetFragment.javaClass.name
-        )
+        val direction =
+            DashboardFragmentDirections.actionDashboardFragmentToTransactionDetailsBottomSheetFragment(
+                trx
+            )
+        findNavController().safeNavigate(direction)
     }
 
     private fun setupTransactionsRecyclerView(dataset: List<MyFinTransaction>) {

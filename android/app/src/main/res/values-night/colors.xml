@@ -7,7 +7,7 @@
     <color name="colorSecondaryVariant">#6200EE</color>
     <color name="colorOnSecondary">#6200EE</color>
 
-    <color name="colorBackground">#232931</color>
+    <color name="colorBackground">@color/darkestGray</color>
     <color name="colorOnBackground">#393e46</color>
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorOnSurface">#000000</color>
@@ -19,12 +19,14 @@
     <color name="colorAccent">#4ecca3</color>
     <!---->
 
+    <color name="colorBottomSheetValueBackground">@color/darkGray</color>
+
     <!-- MyFin Colors -->
     <color name="colorGreen">@android:color/holo_green_dark</color>
     <color name="colorOrange">@android:color/holo_orange_dark</color>
     <color name="colorRed">@android:color/holo_red_light</color>
     <color name="colorGray">#888888</color>
-    <color name="light_gray">#B3ADAD</color>
+    <color name="lightGray">#B3ADAD</color>
     <!---->
 
 </resources>

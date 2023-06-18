@@ -55,25 +55,25 @@
                     android:layout_height="wrap_content"
                     android:text='@{formattedAmount ?? "?"}'
                     android:textAlignment="center"
-                    android:textSize="@dimen/default_title_bigger_text_size"
+                    android:textSize="32sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/essential_include"
                     tools:text="19.99€" />
 
                 <TextView
+                    style="@style/BottomSheetValue"
                     android:id="@+id/origin_account_value_textview"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintBottom_toBottomOf="@id/accounts_bottom_barrier"
                     android:text='@{trxObj.accountFromName ?? @string/account_type_external_label}'
-                    android:textAlignment="center"
-                    android:textSize="@dimen/default_paragraph_bigger_text_size"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/destination_account_value_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/origin_account_label_tv"
-                    tools:text="BST - Conta Ordenado" />
+                    tools:text="BST - Conta Ordenado fdasfds afdsa fdsa fdsfdfds fdsfdsafdsafdsfdsf dsdsadsf ddsf ds 123454354" />
 
                 <TextView
                     android:id="@+id/destination_account_label_tv"
@@ -88,19 +88,19 @@
                     app:layout_constraintTop_toTopOf="@+id/origin_account_label_tv" />
 
                 <TextView
+                    style="@style/BottomSheetValue"
                     android:id="@+id/destination_account_value_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{trxObj.accountToName ?? @string/account_type_external_label}"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/default_paragraph_bigger_text_size"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintBottom_toBottomOf="@id/accounts_bottom_barrier"
                     app:layout_constraintStart_toEndOf="@+id/origin_account_value_textview"
                     app:layout_constraintStart_toStartOf="@+id/destination_account_label_tv"
                     app:layout_constraintTop_toBottomOf="@+id/destination_account_label_tv"
-                    tools:text="Conta Externa" />
+                    tools:text="Conta Externa fds fdsf dsfdsaf ds fd fds fsda ds fds fds gfdfsdgdsgf dsg" />
 
                 <TextView
                     android:id="@+id/category_label_tv"
@@ -113,7 +113,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/entity_label_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/origin_account_value_textview" />
+                    app:layout_constraintTop_toBottomOf="@+id/accounts_bottom_barrier" />
 
                 <TextView
                     android:id="@+id/entity_label_tv"
@@ -128,13 +128,11 @@
                     app:layout_constraintTop_toTopOf="@+id/category_label_tv" />
 
                 <TextView
+                    style="@style/BottomSheetValue"
                     android:id="@+id/category_value_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{trxObj.categoryName ?? @string/no_category_label}"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/default_paragraph_bigger_text_size"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/category_label_tv"
                     app:layout_constraintEnd_toStartOf="@+id/entity_value_tv"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -143,13 +141,11 @@
                     tools:text="Saúde" />
 
                 <TextView
+                    style="@style/BottomSheetValue"
                     android:id="@+id/entity_value_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{trxObj.entityName ?? @string/no_entity_label}"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/default_paragraph_bigger_text_size"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/category_value_tv"
@@ -159,9 +155,13 @@
 
                 <TextView
                     android:id="@+id/description_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/default_margin_double"
+                    android:background="@drawable/rounded_all_corners_shape"
+                    android:backgroundTint="@color/colorBottomSheetValueBackground"
+                    android:layout_marginHorizontal="@dimen/default_margin"
+                    android:paddingVertical="@dimen/default_margin_double"
                     android:text="@{trxObj.description ?? @string/no_description_label}"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -175,11 +175,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    tools:visibility="visible"
                     app:layout_constraintBottom_toTopOf="@+id/amount_tv"
                     app:layout_constraintEnd_toEndOf="@+id/amount_tv"
                     app:layout_constraintStart_toStartOf="@+id/amount_tv"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+                <ImageButton
+                    android:id="@+id/edit_iv"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_margin="@dimen/default_margin_double"
+                    android:background="@drawable/rounded_all_corners_shape"
+                    android:backgroundTint="@color/colorAccent"
+                    android:contentDescription="@string/generic_edit"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toTopOf="@+id/description_tv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_edit"
+                    app:tint="@color/white" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/accounts_bottom_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="destination_account_value_tv, origin_account_value_textview"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View

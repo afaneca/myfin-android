@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.FragmentTransactionDetailsBottomSheetBinding
@@ -24,16 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class TransactionDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentTransactionDetailsBottomSheetBinding
-
-    companion object {
-        private const val BUNDLE_IN_TRX_OBJECT_TAG = "BUNDLE_IN_TRX_OBJECT_TAG"
-
-        fun newInstance(trxObj: MyFinTransaction) = TransactionDetailsBottomSheetFragment().apply {
-            arguments = Bundle().apply {
-                putSerializable(BUNDLE_IN_TRX_OBJECT_TAG, trxObj)
-            }
-        }
-    }
+    private val args: TransactionDetailsBottomSheetFragmentArgs by navArgs()
 
 
     override fun onCreateView(
@@ -47,29 +39,13 @@ class TransactionDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (arguments != null) {
-            val trx =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    requireArguments().getSerializable(
-                        BUNDLE_IN_TRX_OBJECT_TAG,
-                        MyFinTransaction::class.java
-                    ) as MyFinTransaction
-                } else {
-                    requireArguments().getSerializable(BUNDLE_IN_TRX_OBJECT_TAG) as? MyFinTransaction
-                }
-            trx?.let {
-                binding.trxObj = trx
-                binding.formattedAmount = formatMoney(trx.amount.toDoubleOrNull() ?: 0.00)
-                setupAmountStyle(trx.type, binding.amountTv)
-                binding.essentialInclude.isVisible = parseStringToBoolean(trx.isEssential)
-            }
-        }
 
-        /*dialog?.setOnShowListener {
-            var bottomSheet: FrameLayout =
-                (dialog as BottomSheetDialog).findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)!!
-            BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
-        }*/
+        args.trx.let { trx ->
+            binding.trxObj = trx
+            binding.formattedAmount = formatMoney(trx.amount.toDoubleOrNull() ?: 0.00)
+            setupAmountStyle(trx.type, binding.amountTv)
+            binding.essentialInclude.isVisible = parseStringToBoolean(trx.isEssential)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
