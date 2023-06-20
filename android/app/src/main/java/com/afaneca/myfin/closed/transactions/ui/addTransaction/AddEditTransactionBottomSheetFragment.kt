@@ -15,9 +15,13 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.afaneca.myfin.R
+import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.closed.transact.AddTransactionViewModel
 import com.afaneca.myfin.databinding.FragmentAddTransactionBottomSheetBinding
+import com.afaneca.myfin.utils.MyFinConstants
+import com.afaneca.myfin.utils.parseStringToBoolean
 import com.afaneca.myfin.utils.safeNavigate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -28,10 +32,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class AddTransactionBottomSheetFragment : BottomSheetDialogFragment() {
+class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentAddTransactionBottomSheetBinding
     private val viewModel: AddTransactionViewModel by viewModels()
+    private val args: AddEditTransactionBottomSheetFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +50,8 @@ class AddTransactionBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.state.observe(viewLifecycleOwner, androidx.lifecycle.Observer(::observeState))
+        viewModel.triggerEvent(AddTransactionContract.Event.InitForm(args.trx))
+        if (args.trx != null) binding.addBtn.text = getString(R.string.edit_transaction)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -63,11 +70,15 @@ class AddTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         when (state) {
             is AddTransactionContract.State.InitForm -> {
                 setupForm(state.formData)
+                state.trx?.let { fillForm(it) }
             }
+
             is AddTransactionContract.State.ToggleAddButton -> binding.addBtn.isEnabled =
                 state.isToEnable
+
             is AddTransactionContract.State.ToggleEssential -> binding.essentialSwitch.isVisible =
                 state.isToShow
+
             AddTransactionContract.State.AddTransactionSuccess -> {
                 Toast.makeText(
                     requireContext(),
@@ -75,27 +86,127 @@ class AddTransactionBottomSheetFragment : BottomSheetDialogFragment() {
                     Toast.LENGTH_LONG
                 ).show()
                 val action =
-                    AddTransactionBottomSheetFragmentDirections
+                    AddEditTransactionBottomSheetFragmentDirections
                         .actionAddTransactionBottomSheetFragmentToTransactionsFragment()
                 findNavController().safeNavigate(action)
             }
+
             AddTransactionContract.State.Failure -> Toast.makeText(
                 requireContext(),
                 getString(R.string.default_error_msg),
                 Toast.LENGTH_LONG
             ).show()
+
             AddTransactionContract.State.Loading -> { /* no-op */
             }
+
             is AddTransactionContract.State.ToggleAccountFrom -> {
                 if (!state.isToEnable) binding.accountFromEt.setText("", false)
                 binding.accountFromTil.isVisible = state.isToEnable
             }
+
             is AddTransactionContract.State.ToggleAccountTo -> {
                 if (!state.isToEnable) binding.accountToEt.setText("", false)
                 binding.accountToTil.isVisible = state.isToEnable
             }
+
             null -> TODO()
         }
+    }
+
+    private fun fillForm(trx: MyFinTransaction) {
+        /* Essential */
+        val isEssential = parseStringToBoolean(trx.isEssential)
+        binding.essentialSwitch.isChecked = isEssential
+
+        /* Type */
+        binding.typeBtg.check(
+            when (trx.type) {
+                MyFinConstants.MYFIN_TRX_TYPE.INCOME.value -> R.id.type_income_btn
+                MyFinConstants.MYFIN_TRX_TYPE.EXPENSE.value -> R.id.type_expense_btn
+                else -> R.id.type_transfer_btn
+            }
+        )
+
+        viewModel.triggerEvent(
+            AddTransactionContract.Event.TypeSelected(
+                when (binding.typeBtg.checkedButtonId) {
+                    R.id.type_expense_btn -> TrxType.EXPENSE.id
+                    R.id.type_transfer_btn -> TrxType.TRANSFER.id
+                    R.id.type_income_btn -> TrxType.INCOME.id
+                    else -> {
+                        ' '
+                    }
+                }
+            )
+        )
+
+        /* Date */
+        val date = Date(trx.dateTimestamp.toLong() * 1000)
+        val printFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        binding.dateEt.setText(printFormat.format(date))
+        viewModel.triggerEvent(AddTransactionContract.Event.DateSelected(date.time))
+
+        /* Amount */
+        binding.amountEt.setText(trx.amount)
+
+        /* Origin account / Destination Account */
+        when (trx.type) {
+            MyFinConstants.MYFIN_TRX_TYPE.INCOME.value -> {
+                // Income
+                binding.accountToEt.setText(
+                    Pair(
+                        trx.accountsAccountToId,
+                        trx.accountToName
+                    ).toString(), false
+                )
+                viewModel.triggerEvent(AddTransactionContract.Event.AccountToSelected(binding.accountToEt.text.toString()))
+            }
+
+            MyFinConstants.MYFIN_TRX_TYPE.EXPENSE.value -> {
+                // Expense
+                binding.accountFromEt.setText(
+                    Pair(
+                        trx.accountsAccountFromId,
+                        trx.accountFromName
+                    ).toString(), false
+                )
+                viewModel.triggerEvent(AddTransactionContract.Event.AccountFromSelected(binding.accountFromEt.text.toString()))
+            }
+
+            else -> {
+                // Transfer
+                binding.accountFromEt.setText(
+                    Pair(
+                        trx.accountsAccountFromId,
+                        trx.accountFromName
+                    ).toString(), false
+                )
+
+                binding.accountToEt.setText(
+                    Pair(
+                        trx.accountsAccountToId,
+                        trx.accountToName
+                    ).toString(), false
+                )
+                viewModel.triggerEvent(AddTransactionContract.Event.AccountToSelected(binding.accountToEt.text.toString()))
+                viewModel.triggerEvent(AddTransactionContract.Event.AccountFromSelected(binding.accountFromEt.text.toString()))
+            }
+        }
+
+        /* Category */
+        binding.categoryEt.setText(
+            Pair(trx.categoriesCategoryId, trx.categoryName).toString(),
+            false
+        )
+        viewModel.triggerEvent(AddTransactionContract.Event.CategorySelected(binding.categoryEt.text.toString()))
+
+        /* Entity */
+        binding.entityEt.setText(Pair(trx.entityId, trx.entityName).toString(), false)
+        viewModel.triggerEvent(AddTransactionContract.Event.EntitySelected(binding.entityEt.text.toString()))
+
+        /* Description */
+        binding.descriptionEt.setText(trx.description)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -199,7 +310,7 @@ class AddTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         setupTypeSelector(formData.types)
 
         // add btn
-        binding.addBtn.setOnClickListener { viewModel.triggerEvent(AddTransactionContract.Event.AddTransactionClick) }
+        binding.addBtn.setOnClickListener { viewModel.triggerEvent(AddTransactionContract.Event.AddEditTransactionClick) }
     }
 
     private fun setupTypeSelector(types: List<AddTransactionContract.Type>) {

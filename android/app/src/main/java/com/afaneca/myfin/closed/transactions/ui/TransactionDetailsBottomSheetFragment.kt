@@ -1,19 +1,20 @@
 package com.afaneca.myfin.closed.transactions.ui
 
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.FragmentTransactionDetailsBottomSheetBinding
 import com.afaneca.myfin.utils.formatMoney
 import com.afaneca.myfin.utils.parseStringToBoolean
+import com.afaneca.myfin.utils.safeNavigate
 import com.afaneca.myfin.utils.setupAmountStyle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -45,7 +46,16 @@ class TransactionDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             binding.formattedAmount = formatMoney(trx.amount.toDoubleOrNull() ?: 0.00)
             setupAmountStyle(trx.type, binding.amountTv)
             binding.essentialInclude.isVisible = parseStringToBoolean(trx.isEssential)
+            binding.editIv.setOnClickListener { goToEditTransactionBottomSheet(trx) }
         }
+    }
+
+    private fun goToEditTransactionBottomSheet(trx: MyFinTransaction) {
+        val destination =
+            TransactionDetailsBottomSheetFragmentDirections.actionTransactionDetailsBottomSheetFragmentToAddTransactionBottomSheetFragment(
+                trx
+            )
+        findNavController().safeNavigate(destination)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
