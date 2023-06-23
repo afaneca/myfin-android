@@ -12,7 +12,13 @@ import com.afaneca.myfin.closed.transactions.ui.addTransaction.TrxType
 import com.afaneca.myfin.closed.transactions.ui.addTransaction.toUiModel
 import com.afaneca.myfin.data.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,11 +26,13 @@ class AddTransactionViewModel @Inject constructor(
     private val transactionsRepository: TransactionsRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), AddTransactionContract.ViewModel {
-    private val _state = MutableLiveData<AddTransactionContract.State>()
-    override val state: LiveData<AddTransactionContract.State>
-        get() = _state
 
-    private var isEditing: Boolean = savedStateHandle.get<Boolean>(IS_EDITING_SAVED_STATE_HANDLE_TAG) ?: false
+    private val _state =
+        MutableStateFlow(AddTransactionContract.State())
+    override val state = _state.asStateFlow()
+
+    private var isEditing: Boolean
+        get() = savedStateHandle.get<Boolean>(IS_EDITING_SAVED_STATE_HANDLE_TAG) ?: false
         set(value) = savedStateHandle.set(IS_EDITING_SAVED_STATE_HANDLE_TAG, value)
 
     private var dateSelectedInput: Long? = null
@@ -40,15 +48,24 @@ class AddTransactionViewModel @Inject constructor(
     private fun initForm(trx: MyFinTransaction? = null) {
         viewModelScope.launch {
             when (val resource = transactionsRepository.addTransactionStep0()) {
-                is Resource.Loading -> _state.postValue(AddTransactionContract.State.Loading)
-                is Resource.Failure -> _state.postValue(AddTransactionContract.State.Failure)
-                is Resource.Success -> {
-                    _state.postValue(
-                        AddTransactionContract.State.InitForm(
-                            resource.data.toUiModel(),
-                            trx
-                        )
+                is Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                is Resource.Failure -> _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = resource.errorMessage
                     )
+                }
+
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = null,
+                            formData = resource.data.toUiModel(),
+                            trx = trx,
+                        )
+                    }
+
                 }
             }
         }
@@ -60,39 +77,40 @@ class AddTransactionViewModel @Inject constructor(
                 initForm(event.trx)
                 isEditing = event.trx != null
             }
+
             is AddTransactionContract.Event.DateSelected -> {
                 dateSelectedInput = event.timestamp
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
 
             is AddTransactionContract.Event.AccountFromSelected -> {
                 accountFromSelectedInput = event.accountId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
 
             is AddTransactionContract.Event.AccountToSelected -> {
                 accountToSelectedInput = event.accountId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
 
             is AddTransactionContract.Event.CategorySelected -> {
                 categorySelectedInput = event.categoryId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
 
             is AddTransactionContract.Event.EntitySelected -> {
                 entitySelectedInput = event.entityId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
 
             is AddTransactionContract.Event.AmountInserted -> {
                 amountInput = event.amount
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
 
             is AddTransactionContract.Event.DescriptionChanged -> {
                 descriptionInput = event.description
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
 
             }
 
@@ -102,7 +120,7 @@ class AddTransactionViewModel @Inject constructor(
 
             is AddTransactionContract.Event.EssentialToggled -> {
                 isEssentialInput = event.selected
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
 
             is AddTransactionContract.Event.AddEditTransactionClick -> onAddTransactionClick()
@@ -111,12 +129,10 @@ class AddTransactionViewModel @Inject constructor(
 
     private fun onTypeSelected(typeId: Char) {
         typeSelectedInput = typeId
-        _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
-        _state.value =
-            AddTransactionContract.State.ToggleAccountFrom(typeId == TrxType.TRANSFER.id || typeId == TrxType.EXPENSE.id)
-        _state.value =
-            AddTransactionContract.State.ToggleAccountTo(typeId == TrxType.TRANSFER.id || typeId == TrxType.INCOME.id)
-        _state.value = AddTransactionContract.State.ToggleEssential(typeId == TrxType.EXPENSE.id)
+        _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
+        _state.update { it.copy(isAccountFromEnabled = typeId == TrxType.TRANSFER.id || typeId == TrxType.EXPENSE.id) }
+        _state.update { it.copy(isAccountToEnabled = typeId == TrxType.TRANSFER.id || typeId == TrxType.INCOME.id) }
+        _state.update { it.copy(isEssentialToggleVisible = typeId == TrxType.EXPENSE.id) }
     }
 
     private fun isFormValid() =
@@ -129,12 +145,12 @@ class AddTransactionViewModel @Inject constructor(
                 && !accountFromSelectedInput.isNullOrBlank())
 
     private fun onAddTransactionClick() {
-        if(isEditing){
+        if (!isEditing) {
             // at this point, we already now all the form input fields are valid
             addTransaction(
                 dateSelectedInput?.div(1000L),
-                accountFromSelectedInput,
-                accountToSelectedInput,
+                if (typeSelectedInput != TrxType.INCOME.id) accountFromSelectedInput else null,
+                if (typeSelectedInput != TrxType.EXPENSE.id) accountToSelectedInput else null,
                 categorySelectedInput,
                 entitySelectedInput,
                 amountInput,
@@ -157,7 +173,7 @@ class AddTransactionViewModel @Inject constructor(
         isEssential: Boolean
     ) {
         viewModelScope.launch {
-            when (transactionsRepository.addTransactionStep1(
+            when (val response = transactionsRepository.addTransactionStep1(
                 dateSelectedInput ?: 0L,
                 amountInput ?: "",
                 type ?: ' ',
@@ -168,11 +184,21 @@ class AddTransactionViewModel @Inject constructor(
                 categorySelectedInput,
                 isEssential
             )) {
-                is Resource.Loading -> _state.postValue(AddTransactionContract.State.Loading)
-                is Resource.Failure -> _state.postValue(AddTransactionContract.State.Failure)
-                is Resource.Success -> _state.postValue(
-                    AddTransactionContract.State.AddTransactionSuccess
-                )
+                is Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                is Resource.Failure -> _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = response.errorMessage
+                    )
+                }
+
+                is Resource.Success -> _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = null,
+                        isSuccess = true
+                    )
+                }
             }
         }
     }

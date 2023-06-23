@@ -1,35 +1,32 @@
 package com.afaneca.myfin.closed.transactions.ui.addTransaction
 
-import androidx.lifecycle.LiveData
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.closed.transactions.data.AccountResponse
 import com.afaneca.myfin.closed.transactions.data.AddTransactionStep0Response
 import com.afaneca.myfin.closed.transactions.data.CategoryResponse
 import com.afaneca.myfin.closed.transactions.data.EntityResponse
 import com.afaneca.myfin.closed.transactions.data.TypeResponse
+import kotlinx.coroutines.flow.StateFlow
 
 sealed class AddTransactionContract {
 
     interface ViewModel {
-        val state: LiveData<State>
+        val state: StateFlow<State>
 
         fun triggerEvent(event: Event)
     }
 
-    sealed class State {
-        object Loading : State()
-        object Failure : State()
-        data class InitForm(
-            val formData: AddTransactionInitialFormData,
-            val trx: MyFinTransaction? = null
-        ) : State()
-
-        data class ToggleAddButton(val isToEnable: Boolean) : State()
-        data class ToggleAccountFrom(val isToEnable: Boolean) : State()
-        data class ToggleAccountTo(val isToEnable: Boolean) : State()
-        data class ToggleEssential(val isToShow: Boolean) : State()
-        object AddTransactionSuccess : State()
-    }
+    data class State(
+        val isLoading: Boolean = false,
+        val error: String? = null,
+        val formData: AddTransactionInitialFormData? = null,
+        val trx: MyFinTransaction? = null,
+        val isAddButtonEnabled: Boolean = false,
+        val isAccountFromEnabled: Boolean = false,
+        val isAccountToEnabled: Boolean = false,
+        val isEssentialToggleVisible: Boolean = false,
+        val isSuccess: Boolean = false,
+    )
 
     sealed class Event {
         data class InitForm(val trx: MyFinTransaction? = null) : Event()
