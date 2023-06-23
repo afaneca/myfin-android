@@ -12,20 +12,19 @@ sealed class AddTransactionContract {
 
     interface ViewModel {
         val state: StateFlow<State>
+        val effect: StateFlow<Effect?>
 
         fun triggerEvent(event: Event)
     }
 
     data class State(
         val isLoading: Boolean = false,
-        val error: String? = null,
         val formData: AddTransactionInitialFormData? = null,
         val trx: MyFinTransaction? = null,
         val isAddButtonEnabled: Boolean = false,
         val isAccountFromEnabled: Boolean = false,
         val isAccountToEnabled: Boolean = false,
         val isEssentialToggleVisible: Boolean = false,
-        val isSuccess: Boolean = false,
     )
 
     sealed class Event {
@@ -40,6 +39,11 @@ sealed class AddTransactionContract {
         data class DescriptionChanged(val description: String) : Event()
         data class EssentialToggled(val selected: Boolean) : Event()
         object AddEditTransactionClick : Event()
+    }
+
+    sealed class Effect {
+        object NavigateToTransactionList : Effect()
+        data class ShowError(val errorMessage: String? = null) : Effect()
     }
 
     data class AddTransactionInitialFormData(

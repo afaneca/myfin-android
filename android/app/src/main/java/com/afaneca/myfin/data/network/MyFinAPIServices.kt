@@ -60,6 +60,21 @@ interface MyFinAPIServices {
         @Field("is_essential") isEssential: Boolean,
     ): Unit
 
+    @FormUrlEncoded
+    @PUT("trxs/")
+    suspend fun updateTransaction(
+        @Field("transaction_id") transactionId: Int,
+        @Field("new_amount") amount: String,
+        @Field("new_type") type: Char,
+        @Field("new_description") description: String? = null,
+        @Field("new_entity_id") entityId: String? = null,
+        @Field("new_account_from_id") accountFromId: String? = null,
+        @Field("new_account_to_id") accountToId: String? = null,
+        @Field("new_category_id") categoryId: String? = null,
+        @Field("new_date_timestamp") dateTimestamp: Long,
+        @Field("new_is_essential") isEssential: Boolean,
+    ) : Unit
+
     // BUDGETS
     @GET("budgets/")
     suspend fun getBudgetsList(): BudgetsListResponse

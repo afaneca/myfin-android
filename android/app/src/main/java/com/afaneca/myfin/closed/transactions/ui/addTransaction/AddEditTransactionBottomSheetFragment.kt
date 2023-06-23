@@ -55,6 +55,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeState()
+        observeEffect()
         viewModel.triggerEvent(AddTransactionContract.Event.InitForm(args.trx))
         if (args.trx != null) binding.addBtn.text = getString(R.string.edit_transaction)
     }
@@ -91,28 +92,6 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.accountToTil.isVisible = state.isAccountToEnabled
                 if (!state.isAccountToEnabled) binding.accountToEt.setText("", false)
 
-                /* Success */
-                if (state.isSuccess) {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.transaction_added_success_message),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    val action =
-                        AddEditTransactionBottomSheetFragmentDirections
-                            .actionAddTransactionBottomSheetFragmentToTransactionsFragment()
-                    findNavController().safeNavigate(action)
-                }
-
-                /* Error */
-                state.error?.let {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.default_error_msg),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-
                 /* Form */
                 state.formData?.let { data ->
                     if (!isFormInitialized) {
@@ -124,6 +103,37 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
                     }
                 }
             }.launchIn(lifecycleScope)
+    }
+
+    private fun observeEffect() {
+        viewModel.effect.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach { effect ->
+                when (effect) {
+                    is AddTransactionContract.Effect.NavigateToTransactionList -> navigateToTransactionList()
+                    is AddTransactionContract.Effect.ShowError -> showErrorToast(effect.errorMessage)
+                    else -> Unit
+                }
+            }.launchIn(lifecycleScope)
+    }
+
+    private fun navigateToTransactionList() {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.transaction_added_success_message),
+            Toast.LENGTH_LONG
+        ).show()
+        val action =
+            AddEditTransactionBottomSheetFragmentDirections
+                .actionAddTransactionBottomSheetFragmentToTransactionsFragment()
+        findNavController().safeNavigate(action)
+    }
+
+    private fun showErrorToast(errorMessage: String?) {
+        Toast.makeText(
+            requireContext(),
+            errorMessage ?: getString(R.string.default_error_msg),
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun fillForm(trx: MyFinTransaction) {
@@ -228,17 +238,17 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
                 Pair(trx.categoriesCategoryId, trx.categoryName).toString(),
                 false
             )
-            viewModel.triggerEvent(AddTransactionContract.Event.CategorySelected(binding.categoryEt.text.toString()))
+            viewModel.triggerEvent(AddTransactionContract.Event.CategorySelected(trx.categoriesCategoryId))
         }
 
         /* Entity */
         if (trx.entityId != null && trx.entityName != null) {
             binding.entityEt.setText(Pair(trx.entityId, trx.entityName).toString(), false)
-            viewModel.triggerEvent(AddTransactionContract.Event.EntitySelected(binding.entityEt.text.toString()))
+            viewModel.triggerEvent(AddTransactionContract.Event.EntitySelected(trx.entityId))
         }
 
         /* Description */
-        if (trx.description.isNullOrEmpty()) {
+        if (!trx.description.isEmpty()) {
             binding.descriptionEt.setText(trx.description)
         }
     }

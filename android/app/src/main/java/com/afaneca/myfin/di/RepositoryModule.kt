@@ -39,9 +39,7 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideTransactionsRepository(
-        service: MyFinAPIServices,
-        userData: UserDataManager
-    ): TransactionsRepository = LiveTransactionsRepository(service, userData)
+        service: MyFinAPIServices): TransactionsRepository = LiveTransactionsRepository(service)
 
     @Singleton
     @Provides

@@ -1,6 +1,5 @@
 package com.afaneca.myfin.closed.transactions.data
 
-import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
 
@@ -9,7 +8,6 @@ import com.afaneca.myfin.data.network.MyFinAPIServices
  */
 class LiveTransactionsRepository(
     private val api: MyFinAPIServices,
-    private val userData: UserDataManager
 ) : TransactionsRepository, BaseRepository() {
     override suspend fun getTransactionsList(
         trxLimit: Int
@@ -43,6 +41,32 @@ class LiveTransactionsRepository(
             categoryId,
             dateTimestamp,
             isEssential
+        )
+    }
+
+    override suspend fun updateTransaction(
+        transactionId: Int,
+        newDateTimestamp: Long,
+        newAmount: String,
+        newType: Char,
+        newAccountFromId: String?,
+        newAccountToId: String?,
+        newDescription: String,
+        newEntityId: String?,
+        newCategoryId: String?,
+        newIsEssential: Boolean
+    ) = safeAPICall {
+        api.updateTransaction(
+            transactionId,
+            newAmount,
+            newType,
+            newDescription,
+            newEntityId,
+            newAccountFromId,
+            newAccountToId,
+            newCategoryId,
+            newDateTimestamp,
+            newIsEssential
         )
     }
 }

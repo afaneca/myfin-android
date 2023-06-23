@@ -1,7 +1,5 @@
 package com.afaneca.myfin.closed.transact
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,13 +10,10 @@ import com.afaneca.myfin.closed.transactions.ui.addTransaction.TrxType
 import com.afaneca.myfin.closed.transactions.ui.addTransaction.toUiModel
 import com.afaneca.myfin.data.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +25,9 @@ class AddTransactionViewModel @Inject constructor(
     private val _state =
         MutableStateFlow(AddTransactionContract.State())
     override val state = _state.asStateFlow()
+
+    private val _effect = MutableStateFlow<AddTransactionContract.Effect?>(null)
+    override val effect = _effect.asStateFlow()
 
     private var isEditing: Boolean
         get() = savedStateHandle.get<Boolean>(IS_EDITING_SAVED_STATE_HANDLE_TAG) ?: false
@@ -49,23 +47,19 @@ class AddTransactionViewModel @Inject constructor(
         viewModelScope.launch {
             when (val resource = transactionsRepository.addTransactionStep0()) {
                 is Resource.Loading -> _state.update { it.copy(isLoading = true) }
-                is Resource.Failure -> _state.update {
-                    it.copy(
-                        isLoading = false,
-                        error = resource.errorMessage
-                    )
+                is Resource.Failure -> {
+                    _effect.update { AddTransactionContract.Effect.ShowError() }
+                    _state.update { it.copy(isLoading = false) }
                 }
 
                 is Resource.Success -> {
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = null,
                             formData = resource.data.toUiModel(),
                             trx = trx,
                         )
                     }
-
                 }
             }
         }
@@ -145,8 +139,8 @@ class AddTransactionViewModel @Inject constructor(
                 && !accountFromSelectedInput.isNullOrBlank())
 
     private fun onAddTransactionClick() {
+        // at this point, we already now all the form input fields are valid
         if (!isEditing) {
-            // at this point, we already now all the form input fields are valid
             addTransaction(
                 dateSelectedInput?.div(1000L),
                 if (typeSelectedInput != TrxType.INCOME.id) accountFromSelectedInput else null,
@@ -158,6 +152,55 @@ class AddTransactionViewModel @Inject constructor(
                 descriptionInput,
                 if (typeSelectedInput == TrxType.EXPENSE.id) isEssentialInput else false,
             )
+        } else {
+            updateTransaction(
+                dateSelectedInput?.div(1000L),
+                if (typeSelectedInput != TrxType.INCOME.id) accountFromSelectedInput else null,
+                if (typeSelectedInput != TrxType.EXPENSE.id) accountToSelectedInput else null,
+                categorySelectedInput,
+                entitySelectedInput,
+                amountInput,
+                typeSelectedInput,
+                descriptionInput,
+                if (typeSelectedInput == TrxType.EXPENSE.id) isEssentialInput else false,
+            )
+        }
+    }
+
+    private fun updateTransaction(
+        dateSelectedInput: Long?,
+        accountFromSelectedInput: String?,
+        accountToSelectedInput: String?,
+        categorySelectedInput: String?,
+        entitySelectedInput: String?,
+        amountInput: String?,
+        type: Char?,
+        description: String?,
+        isEssential: Boolean
+    ) {
+        viewModelScope.launch {
+            when (val response = transactionsRepository.updateTransaction(
+                Integer.parseInt(state.value.trx?.transactionId ?: "-1"),
+                dateSelectedInput ?: 0L,
+                amountInput ?: "",
+                type ?: ' ',
+                accountFromSelectedInput,
+                accountToSelectedInput,
+                description ?: "",
+                entitySelectedInput,
+                categorySelectedInput,
+                isEssential
+            )) {
+                is Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                is Resource.Failure -> {
+                    _effect.update { AddTransactionContract.Effect.ShowError(response.errorMessage) }
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
+                }
+
+                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList }
+            }
         }
     }
 
@@ -185,20 +228,14 @@ class AddTransactionViewModel @Inject constructor(
                 isEssential
             )) {
                 is Resource.Loading -> _state.update { it.copy(isLoading = true) }
-                is Resource.Failure -> _state.update {
-                    it.copy(
-                        isLoading = false,
-                        error = response.errorMessage
-                    )
+                is Resource.Failure -> {
+                    _effect.update { AddTransactionContract.Effect.ShowError(response.errorMessage) }
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
                 }
 
-                is Resource.Success -> _state.update {
-                    it.copy(
-                        isLoading = false,
-                        error = null,
-                        isSuccess = true
-                    )
-                }
+                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList }
             }
         }
     }
