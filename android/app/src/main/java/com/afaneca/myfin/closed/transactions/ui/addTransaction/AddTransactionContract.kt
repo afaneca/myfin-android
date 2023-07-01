@@ -1,28 +1,34 @@
 package com.afaneca.myfin.closed.transactions.ui.addTransaction
 
-import androidx.lifecycle.LiveData
-import com.afaneca.myfin.closed.transactions.data.*
+import com.afaneca.myfin.base.objects.MyFinTransaction
+import com.afaneca.myfin.closed.transactions.data.AccountResponse
+import com.afaneca.myfin.closed.transactions.data.AddTransactionStep0Response
+import com.afaneca.myfin.closed.transactions.data.CategoryResponse
+import com.afaneca.myfin.closed.transactions.data.EntityResponse
+import com.afaneca.myfin.closed.transactions.data.TypeResponse
+import kotlinx.coroutines.flow.StateFlow
 
 sealed class AddTransactionContract {
 
     interface ViewModel {
-        val state: LiveData<State>
+        val state: StateFlow<State>
+        val effect: StateFlow<Effect?>
 
         fun triggerEvent(event: Event)
     }
 
-    sealed class State {
-        object Loading : State()
-        object Failure : State()
-        data class InitForm(val formData: AddTransactionInitialFormData) : State()
-        data class ToggleAddButton(val isToEnable: Boolean) : State()
-        data class ToggleAccountFrom(val isToEnable: Boolean) : State()
-        data class ToggleAccountTo(val isToEnable: Boolean) : State()
-        data class ToggleEssential(val isToShow: Boolean) : State()
-        object AddTransactionSuccess : State()
-    }
+    data class State(
+        val isLoading: Boolean = false,
+        val formData: AddTransactionInitialFormData? = null,
+        val trx: MyFinTransaction? = null,
+        val isAddButtonEnabled: Boolean = false,
+        val isAccountFromEnabled: Boolean = false,
+        val isAccountToEnabled: Boolean = false,
+        val isEssentialToggleVisible: Boolean = false,
+    )
 
     sealed class Event {
+        data class InitForm(val trx: MyFinTransaction? = null) : Event()
         data class AmountInserted(val amount: String) : Event()
         data class DateSelected(val timestamp: Long) : Event()
         data class AccountFromSelected(val accountId: String) : Event()
@@ -32,7 +38,12 @@ sealed class AddTransactionContract {
         data class TypeSelected(val typeId: Char) : Event()
         data class DescriptionChanged(val description: String) : Event()
         data class EssentialToggled(val selected: Boolean) : Event()
-        object AddTransactionClick : Event()
+        object AddEditTransactionClick : Event()
+    }
+
+    sealed class Effect {
+        data class NavigateToTransactionList(val isEditing: Boolean) : Effect()
+        data class ShowError(val errorMessage: String? = null) : Effect()
     }
 
     data class AddTransactionInitialFormData(

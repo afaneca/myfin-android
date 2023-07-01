@@ -25,4 +25,21 @@ interface TransactionsRepository {
         categoryId: String?,
         isEssential: Boolean
     ): Resource<Unit>
+
+    suspend fun updateTransaction(
+        transactionId: Int,
+        newDateTimestamp: Long,
+        newAmount: String,
+        newType: Char,
+        newAccountFromId: String?,
+        newAccountToId: String?,
+        newDescription: String,
+        newEntityId: String?,
+        newCategoryId: String?,
+        newIsEssential: Boolean
+    ): Resource<Unit>
+
+    suspend fun removeTransaction(
+        transactionId: Int,
+    ): Resource<Unit>
 }

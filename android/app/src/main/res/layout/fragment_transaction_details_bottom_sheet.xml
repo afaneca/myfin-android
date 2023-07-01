@@ -190,10 +190,25 @@
                     android:backgroundTint="@color/colorAccent"
                     android:contentDescription="@string/generic_edit"
                     android:scaleType="fitXY"
-                    app:layout_constraintBottom_toTopOf="@+id/description_tv"
+                    app:layout_constraintBottom_toBottomOf="@+id/amount_tv"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/amount_tv"
                     app:srcCompat="@drawable/ic_edit"
+                    app:tint="@color/white" />
+
+                <ImageButton
+                    android:id="@+id/delete_iv"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_margin="@dimen/default_margin_double"
+                    android:background="@drawable/rounded_all_corners_shape"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:contentDescription="@string/generic_edit"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toBottomOf="@+id/amount_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/amount_tv"
+                    app:srcCompat="@drawable/ic_delete"
                     app:tint="@color/white" />
 
                 <androidx.constraintlayout.widget.Barrier

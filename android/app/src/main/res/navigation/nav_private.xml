@@ -64,20 +64,31 @@
     </dialog>
     <dialog
         android:id="@+id/addTransactionBottomSheetFragment"
-        android:name="com.afaneca.myfin.closed.transactions.ui.addTransaction.AddTransactionBottomSheetFragment"
+        android:name="com.afaneca.myfin.closed.transactions.ui.addTransaction.AddEditTransactionBottomSheetFragment"
         android:label="AddTransactionBottomSheetFragment"
         tools:layout="@layout/fragment_add_transaction_bottom_sheet">
+        <argument
+            android:name="trx"
+            app:nullable="true"
+            app:argType="com.afaneca.myfin.base.objects.MyFinTransaction"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_addTransactionBottomSheetFragment_to_transactionsFragment"
             app:destination="@id/transactionsFragment" />
     </dialog>
     <dialog
         android:id="@+id/transactionDetailsBottomSheetFragment"
-        android:name="com.afaneca.myfin.closed.transactions.ui.TransactionDetailsBottomSheetFragment"
+        android:name="com.afaneca.myfin.closed.transactions.ui.details.TransactionDetailsBottomSheetFragment"
         android:label="TransactionDetailsBottomSheetFragment"
         tools:layout="@layout/fragment_transaction_details_bottom_sheet">
         <argument
             android:name="trx"
             app:argType="com.afaneca.myfin.base.objects.MyFinTransaction" />
+        <action
+            android:id="@+id/action_transactionDetailsBottomSheetFragment_to_addTransactionBottomSheetFragment"
+            app:destination="@id/addTransactionBottomSheetFragment" />
+        <action
+            android:id="@+id/action_transactionDetailsBottomSheetFragment_to_transactionsFragment"
+            app:destination="@id/transactionsFragment" />
     </dialog>
 </navigation>

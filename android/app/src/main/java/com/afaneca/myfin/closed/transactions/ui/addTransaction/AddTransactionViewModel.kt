@@ -1,26 +1,34 @@
-package com.afaneca.myfin.closed.transact
+package com.afaneca.myfin.closed.transactions.ui.addTransaction
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
-import com.afaneca.myfin.closed.transactions.ui.addTransaction.AddTransactionContract
-import com.afaneca.myfin.closed.transactions.ui.addTransaction.TrxType
-import com.afaneca.myfin.closed.transactions.ui.addTransaction.toUiModel
 import com.afaneca.myfin.data.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddTransactionViewModel @Inject constructor(
-    private val transactionsRepository: TransactionsRepository
+    private val transactionsRepository: TransactionsRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), AddTransactionContract.ViewModel {
 
-    private val _state = MutableLiveData<AddTransactionContract.State>()
-    override val state: LiveData<AddTransactionContract.State>
-        get() = _state
+    private val _state =
+        MutableStateFlow(AddTransactionContract.State())
+    override val state = _state.asStateFlow()
+
+    private val _effect = MutableStateFlow<AddTransactionContract.Effect?>(null)
+    override val effect = _effect.asStateFlow()
+
+    private var isEditing: Boolean
+        get() = savedStateHandle.get<Boolean>(IS_EDITING_SAVED_STATE_HANDLE_TAG) ?: false
+        set(value) = savedStateHandle.set(IS_EDITING_SAVED_STATE_HANDLE_TAG, value)
 
     private var dateSelectedInput: Long? = null
     private var accountFromSelectedInput: String? = null
@@ -32,74 +40,90 @@ class AddTransactionViewModel @Inject constructor(
     private var typeSelectedInput: Char? = TrxType.EXPENSE.id
     private var isEssentialInput: Boolean = false
 
-    init {
-        getInitialFormData()
-    }
-
-    private fun getInitialFormData() {
+    private fun initForm(trx: MyFinTransaction? = null) {
         viewModelScope.launch {
             when (val resource = transactionsRepository.addTransactionStep0()) {
-                is Resource.Loading -> _state.postValue(AddTransactionContract.State.Loading)
-                is Resource.Failure -> _state.postValue(AddTransactionContract.State.Failure)
-                is Resource.Success -> _state.postValue(
-                    AddTransactionContract.State.InitForm(
-                        resource.data.toUiModel()
-                    )
-                )
+                is Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                is Resource.Failure -> {
+                    _effect.update { AddTransactionContract.Effect.ShowError() }
+                    _state.update { it.copy(isLoading = false) }
+                }
+
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            formData = resource.data.toUiModel(),
+                            trx = trx,
+                        )
+                    }
+                }
             }
         }
     }
 
     override fun triggerEvent(event: AddTransactionContract.Event) {
         when (event) {
+            is AddTransactionContract.Event.InitForm -> {
+                initForm(event.trx)
+                isEditing = event.trx != null
+            }
+
             is AddTransactionContract.Event.DateSelected -> {
                 dateSelectedInput = event.timestamp
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
+
             is AddTransactionContract.Event.AccountFromSelected -> {
                 accountFromSelectedInput = event.accountId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
+
             is AddTransactionContract.Event.AccountToSelected -> {
-                accountFromSelectedInput = event.accountId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                accountToSelectedInput = event.accountId
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
+
             is AddTransactionContract.Event.CategorySelected -> {
                 categorySelectedInput = event.categoryId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
+
             is AddTransactionContract.Event.EntitySelected -> {
                 entitySelectedInput = event.entityId
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
+
             is AddTransactionContract.Event.AmountInserted -> {
                 amountInput = event.amount
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
+
             is AddTransactionContract.Event.DescriptionChanged -> {
                 descriptionInput = event.description
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
 
             }
+
             is AddTransactionContract.Event.TypeSelected -> {
                 onTypeSelected(event.typeId)
             }
+
             is AddTransactionContract.Event.EssentialToggled -> {
                 isEssentialInput = event.selected
-                _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
+                _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
             }
-            is AddTransactionContract.Event.AddTransactionClick -> onAddTransactionClick()
+
+            is AddTransactionContract.Event.AddEditTransactionClick -> onAddTransactionClick()
         }
     }
 
     private fun onTypeSelected(typeId: Char) {
         typeSelectedInput = typeId
-        _state.value = AddTransactionContract.State.ToggleAddButton(isFormValid())
-        _state.value =
-            AddTransactionContract.State.ToggleAccountFrom(typeId == TrxType.TRANSFER.id || typeId == TrxType.EXPENSE.id)
-        _state.value =
-            AddTransactionContract.State.ToggleAccountTo(typeId == TrxType.TRANSFER.id || typeId == TrxType.INCOME.id)
-        _state.value = AddTransactionContract.State.ToggleEssential(typeId == TrxType.EXPENSE.id)
+        _state.update { it.copy(isAddButtonEnabled = isFormValid()) }
+        _state.update { it.copy(isAccountFromEnabled = typeId == TrxType.TRANSFER.id || typeId == TrxType.EXPENSE.id) }
+        _state.update { it.copy(isAccountToEnabled = typeId == TrxType.TRANSFER.id || typeId == TrxType.INCOME.id) }
+        _state.update { it.copy(isEssentialToggleVisible = typeId == TrxType.EXPENSE.id) }
     }
 
     private fun isFormValid() =
@@ -113,17 +137,68 @@ class AddTransactionViewModel @Inject constructor(
 
     private fun onAddTransactionClick() {
         // at this point, we already now all the form input fields are valid
-        addTransaction(
-            dateSelectedInput?.div(1000L),
-            accountFromSelectedInput,
-            accountToSelectedInput,
-            categorySelectedInput,
-            entitySelectedInput,
-            amountInput,
-            typeSelectedInput,
-            descriptionInput,
-            if (typeSelectedInput == TrxType.EXPENSE.id) isEssentialInput else false,
-        )
+        if (!isEditing) {
+            addTransaction(
+                dateSelectedInput?.div(1000L),
+                if (typeSelectedInput != TrxType.INCOME.id) accountFromSelectedInput else null,
+                if (typeSelectedInput != TrxType.EXPENSE.id) accountToSelectedInput else null,
+                categorySelectedInput,
+                entitySelectedInput,
+                amountInput,
+                typeSelectedInput,
+                descriptionInput,
+                if (typeSelectedInput == TrxType.EXPENSE.id) isEssentialInput else false,
+            )
+        } else {
+            updateTransaction(
+                dateSelectedInput?.div(1000L),
+                if (typeSelectedInput != TrxType.INCOME.id) accountFromSelectedInput else null,
+                if (typeSelectedInput != TrxType.EXPENSE.id) accountToSelectedInput else null,
+                categorySelectedInput,
+                entitySelectedInput,
+                amountInput,
+                typeSelectedInput,
+                descriptionInput,
+                if (typeSelectedInput == TrxType.EXPENSE.id) isEssentialInput else false,
+            )
+        }
+    }
+
+    private fun updateTransaction(
+        dateSelectedInput: Long?,
+        accountFromSelectedInput: String?,
+        accountToSelectedInput: String?,
+        categorySelectedInput: String?,
+        entitySelectedInput: String?,
+        amountInput: String?,
+        type: Char?,
+        description: String?,
+        isEssential: Boolean
+    ) {
+        viewModelScope.launch {
+            when (val response = transactionsRepository.updateTransaction(
+                Integer.parseInt(state.value.trx?.transactionId ?: "-1"),
+                dateSelectedInput ?: 0L,
+                amountInput ?: "",
+                type ?: ' ',
+                accountFromSelectedInput,
+                accountToSelectedInput,
+                description ?: "",
+                entitySelectedInput,
+                categorySelectedInput,
+                isEssential
+            )) {
+                is Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                is Resource.Failure -> {
+                    _effect.update { AddTransactionContract.Effect.ShowError(response.errorMessage) }
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
+                }
+
+                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList(isEditing = true) }
+            }
+        }
     }
 
     private fun addTransaction(
@@ -138,7 +213,7 @@ class AddTransactionViewModel @Inject constructor(
         isEssential: Boolean
     ) {
         viewModelScope.launch {
-            when (transactionsRepository.addTransactionStep1(
+            when (val response = transactionsRepository.addTransactionStep1(
                 dateSelectedInput ?: 0L,
                 amountInput ?: "",
                 type ?: ' ',
@@ -149,15 +224,21 @@ class AddTransactionViewModel @Inject constructor(
                 categorySelectedInput,
                 isEssential
             )) {
-                is Resource.Loading -> _state.postValue(AddTransactionContract.State.Loading)
-                is Resource.Failure -> _state.postValue(AddTransactionContract.State.Failure)
-                is Resource.Success -> _state.postValue(
-                    AddTransactionContract.State.AddTransactionSuccess
-                )
+                is Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                is Resource.Failure -> {
+                    _effect.update { AddTransactionContract.Effect.ShowError(response.errorMessage) }
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
+                }
+
+                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList(isEditing = false) }
             }
         }
     }
 
-
+    companion object {
+        private const val IS_EDITING_SAVED_STATE_HANDLE_TAG = "IS_EDITING_SAVED_STATE_HANDLE_TAG"
+    }
 }
 
