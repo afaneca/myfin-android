@@ -42,7 +42,7 @@ sealed class AddTransactionContract {
     }
 
     sealed class Effect {
-        object NavigateToTransactionList : Effect()
+        data class NavigateToTransactionList(val isEditing: Boolean) : Effect()
         data class ShowError(val errorMessage: String? = null) : Effect()
     }
 

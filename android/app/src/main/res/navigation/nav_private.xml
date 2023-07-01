@@ -78,7 +78,7 @@
     </dialog>
     <dialog
         android:id="@+id/transactionDetailsBottomSheetFragment"
-        android:name="com.afaneca.myfin.closed.transactions.ui.TransactionDetailsBottomSheetFragment"
+        android:name="com.afaneca.myfin.closed.transactions.ui.details.TransactionDetailsBottomSheetFragment"
         android:label="TransactionDetailsBottomSheetFragment"
         tools:layout="@layout/fragment_transaction_details_bottom_sheet">
         <argument
@@ -87,5 +87,8 @@
         <action
             android:id="@+id/action_transactionDetailsBottomSheetFragment_to_addTransactionBottomSheetFragment"
             app:destination="@id/addTransactionBottomSheetFragment" />
+        <action
+            android:id="@+id/action_transactionDetailsBottomSheetFragment_to_transactionsFragment"
+            app:destination="@id/transactionsFragment" />
     </dialog>
 </navigation>

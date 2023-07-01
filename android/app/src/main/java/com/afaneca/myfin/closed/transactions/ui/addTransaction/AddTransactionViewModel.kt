@@ -199,7 +199,7 @@ class AddTransactionViewModel @Inject constructor(
                     }
                 }
 
-                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList }
+                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList(isEditing = true) }
             }
         }
     }
@@ -235,7 +235,7 @@ class AddTransactionViewModel @Inject constructor(
                     }
                 }
 
-                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList }
+                is Resource.Success -> _effect.update { AddTransactionContract.Effect.NavigateToTransactionList(isEditing = false) }
             }
         }
     }

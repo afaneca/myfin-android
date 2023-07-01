@@ -69,4 +69,10 @@ class LiveTransactionsRepository(
             newIsEssential
         )
     }
+
+    override suspend fun removeTransaction(
+        transactionId: Int,
+    ) = safeAPICall {
+        api.deleteTransaction(transactionId)
+    }
 }

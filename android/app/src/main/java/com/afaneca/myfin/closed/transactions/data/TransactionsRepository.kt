@@ -38,4 +38,8 @@ interface TransactionsRepository {
         newCategoryId: String?,
         newIsEssential: Boolean
     ): Resource<Unit>
+
+    suspend fun removeTransaction(
+        transactionId: Int,
+    ): Resource<Unit>
 }

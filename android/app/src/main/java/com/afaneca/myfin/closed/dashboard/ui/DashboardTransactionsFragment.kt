@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.base.objects.MyFinTransaction
-import com.afaneca.myfin.closed.transactions.ui.TransactionDetailsBottomSheetFragment
 import com.afaneca.myfin.closed.transactions.ui.TransactionsListAdapter
 import com.afaneca.myfin.closed.transactions.ui.TransactionsViewModel
 import com.afaneca.myfin.data.network.Resource

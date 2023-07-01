@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.AdapterView.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -71,6 +72,27 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         return bottomSheetDialog
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.also {
+            val bottomSheet = dialog?.findViewById<View>(R.id.design_bottom_sheet)
+            bottomSheet?.layoutParams?.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            val behavior = BottomSheetBehavior.from<View>(bottomSheet!!)
+
+            binding.root.viewTreeObserver?.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    try {
+                        binding.root.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                        behavior.peekHeight = binding.root.height
+                        view?.requestLayout()
+                    } catch (e: Exception) {
+                    }
+                }
+            })
+        }
+    }
+
     private var isFormInitialized = false
     private fun observeState() {
         viewModel.state.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
@@ -109,17 +131,18 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.effect.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach { effect ->
                 when (effect) {
-                    is AddTransactionContract.Effect.NavigateToTransactionList -> navigateToTransactionList()
+                    is AddTransactionContract.Effect.NavigateToTransactionList -> navigateToTransactionList(effect.isEditing)
                     is AddTransactionContract.Effect.ShowError -> showErrorToast(effect.errorMessage)
                     else -> Unit
                 }
             }.launchIn(lifecycleScope)
     }
 
-    private fun navigateToTransactionList() {
+    private fun navigateToTransactionList(isEditing: Boolean) {
         Toast.makeText(
             requireContext(),
-            getString(R.string.transaction_added_success_message),
+            if(isEditing) getString(R.string.transaction_updated_success_message)
+            else getString(R.string.transaction_added_success_message),
             Toast.LENGTH_LONG
         ).show()
         val action =

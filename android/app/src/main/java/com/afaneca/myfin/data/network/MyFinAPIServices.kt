@@ -75,6 +75,13 @@ interface MyFinAPIServices {
         @Field("new_is_essential") isEssential: Boolean,
     ) : Unit
 
+
+    @FormUrlEncoded
+    @HTTP(method = "DELETE", path = "trxs/", hasBody = true)
+    suspend fun deleteTransaction(
+        @Field("transaction_id") transactionId: Int,
+    ) : Unit
+
     // BUDGETS
     @GET("budgets/")
     suspend fun getBudgetsList(): BudgetsListResponse
