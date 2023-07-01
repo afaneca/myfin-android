@@ -1,13 +1,10 @@
-package com.afaneca.myfin.closed.transact
+package com.afaneca.myfin.closed.transactions.ui.addTransaction
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
-import com.afaneca.myfin.closed.transactions.ui.addTransaction.AddTransactionContract
-import com.afaneca.myfin.closed.transactions.ui.addTransaction.TrxType
-import com.afaneca.myfin.closed.transactions.ui.addTransaction.toUiModel
 import com.afaneca.myfin.data.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -22,7 +22,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinTransaction
-import com.afaneca.myfin.closed.transact.AddTransactionViewModel
 import com.afaneca.myfin.databinding.FragmentAddTransactionBottomSheetBinding
 import com.afaneca.myfin.utils.MyFinConstants
 import com.afaneca.myfin.utils.parseStringToBoolean
