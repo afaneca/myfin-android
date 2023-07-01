@@ -199,9 +199,9 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
             MyFinConstants.MYFIN_TRX_TYPE.INCOME.value -> {
                 // Income
                 binding.accountToEt.setText(
-                    Pair(
-                        trx.accountsAccountToId,
-                        trx.accountToName
+                    IdLabelPair(
+                        trx.accountsAccountToId ?: "",
+                        trx.accountToName ?: ""
                     ).toString(), false
                 )
                 viewModel.triggerEvent(
@@ -214,9 +214,9 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
             MyFinConstants.MYFIN_TRX_TYPE.EXPENSE.value -> {
                 // Expense
                 binding.accountFromEt.setText(
-                    Pair(
-                        trx.accountsAccountFromId,
-                        trx.accountFromName
+                    IdLabelPair(
+                        trx.accountsAccountFromId ?: "",
+                        trx.accountFromName ?: ""
                     ).toString(), false
                 )
                 viewModel.triggerEvent(
@@ -229,16 +229,16 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
             else -> {
                 // Transfer
                 binding.accountFromEt.setText(
-                    Pair(
-                        trx.accountsAccountFromId,
-                        trx.accountFromName
+                    IdLabelPair(
+                        trx.accountsAccountFromId ?: "",
+                        trx.accountFromName ?: ""
                     ).toString(), false
                 )
 
                 binding.accountToEt.setText(
-                    Pair(
-                        trx.accountsAccountToId,
-                        trx.accountToName
+                    IdLabelPair(
+                        trx.accountsAccountToId ?: "",
+                        trx.accountToName ?: ""
                     ).toString(), false
                 )
                 viewModel.triggerEvent(
@@ -257,7 +257,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         /* Category */
         if (trx.categoriesCategoryId != null && trx.categoryName != null) {
             binding.categoryEt.setText(
-                Pair(trx.categoriesCategoryId, trx.categoryName).toString(),
+                IdLabelPair(trx.categoriesCategoryId, trx.categoryName).toString(),
                 false
             )
             viewModel.triggerEvent(AddTransactionContract.Event.CategorySelected(trx.categoriesCategoryId))
@@ -265,7 +265,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
         /* Entity */
         if (trx.entityId != null && trx.entityName != null) {
-            binding.entityEt.setText(Pair(trx.entityId, trx.entityName).toString(), false)
+            binding.entityEt.setText(IdLabelPair(trx.entityId, trx.entityName).toString(), false)
             viewModel.triggerEvent(AddTransactionContract.Event.EntitySelected(trx.entityId))
         }
 
@@ -294,7 +294,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
         // account inputs
         val accountsStringList =
-            formData.accounts.map { acc -> Pair(acc.accountId, acc.name).apply { } }
+            formData.accounts.map { acc -> IdLabelPair(acc.accountId, acc.name).apply { } }
         binding.accountFromEt.apply {
             setAdapter(
                 ArrayAdapter(
@@ -305,7 +305,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
             )
             onItemClickListener =
                 OnItemClickListener { parent, view, position, id ->
-                    (adapter.getItem(position) as? Pair<String, String>)?.first?.let {
+                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
                         viewModel.triggerEvent(AddTransactionContract.Event.AccountFromSelected(it))
                     }
                 }
@@ -321,14 +321,14 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
             onItemClickListener =
                 OnItemClickListener { parent, view, position, id ->
-                    (adapter.getItem(position) as? Pair<String, String>)?.first?.let {
+                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
                         viewModel.triggerEvent(AddTransactionContract.Event.AccountToSelected(it))
                     }
                 }
         }
 
         // category input
-        val categoriesStringList = formData.categories.map { cat -> Pair(cat.categoryId, cat.name) }
+        val categoriesStringList = formData.categories.map { cat -> IdLabelPair(cat.categoryId, cat.name) }
         binding.categoryEt.apply {
             setAdapter(
                 ArrayAdapter(
@@ -339,7 +339,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
             )
             onItemClickListener =
                 OnItemClickListener { _, _, position, _ ->
-                    (adapter.getItem(position) as? Pair<String, String>)?.first?.let {
+                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
                         viewModel.triggerEvent(AddTransactionContract.Event.CategorySelected(it))
                     }
                 }
@@ -347,7 +347,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
         // entity input
         val entitiesStringList =
-            formData.entities.map { entity -> Pair(entity.entityId, entity.name) }
+            formData.entities.map { entity -> IdLabelPair(entity.entityId, entity.name) }
         binding.entityEt.apply {
             setAdapter(
                 ArrayAdapter(
@@ -359,7 +359,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
             onItemClickListener =
                 OnItemClickListener { _, _, position, _ ->
-                    (adapter.getItem(position) as? Pair<String, String>)?.first?.let {
+                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
                         viewModel.triggerEvent(AddTransactionContract.Event.EntitySelected(it))
                     }
                 }
