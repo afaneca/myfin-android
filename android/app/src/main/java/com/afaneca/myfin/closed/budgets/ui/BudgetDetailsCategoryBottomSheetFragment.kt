@@ -16,6 +16,7 @@ import com.afaneca.myfin.R
 import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
 import com.afaneca.myfin.databinding.FragmentBudgetDetailsCategoryBottomSheetBinding
 import com.afaneca.myfin.utils.formatMoney
+import com.afaneca.myfin.utils.safeNavigate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -105,7 +106,7 @@ class BudgetDetailsCategoryBottomSheetFragment : BottomSheetDialogFragment() {
                 budgetId,
                 true
             )
-        findNavController().navigate(action)
+        findNavController().safeNavigate(action)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

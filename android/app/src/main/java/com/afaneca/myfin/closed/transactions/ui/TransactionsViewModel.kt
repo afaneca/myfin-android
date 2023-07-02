@@ -82,4 +82,8 @@ constructor(
         _transactionsListData.value = null
         _transactionsListDataset.value = ArrayList()
     }
+
+    fun init() {
+        clearData()
+    }
 }

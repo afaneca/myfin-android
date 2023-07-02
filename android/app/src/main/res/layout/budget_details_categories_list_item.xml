@@ -18,7 +18,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:trackColor="@color/light_gray"
+            app:trackColor="@color/lightGray"
             app:trackThickness="5dp" />
 
         <TextView
@@ -68,7 +68,7 @@
             app:layout_constraintStart_toStartOf="@+id/progressBar_pb"
             app:layout_constraintTop_toTopOf="@+id/progressBar_pb"
             app:srcCompat="@drawable/ic_sell_black_24dp"
-            app:tint="@color/light_gray" />
+            app:tint="@color/lightGray" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

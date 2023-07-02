@@ -19,12 +19,18 @@
     <color name="colorAccent">#4ecca3</color>
     <!---->
 
+    <color name="colorBottomSheetValueBackground">@color/lightestGray</color>
+
     <!-- MyFin Colors -->
     <color name="colorGreen">@android:color/holo_green_dark</color>
     <color name="colorOrange">@android:color/holo_orange_dark</color>
     <color name="colorRed">@android:color/holo_red_light</color>
     <color name="colorGray">#888888</color>
-    <color name="light_gray">#B3ADAD</color>
+    <color name="lightGray">#B3ADAD</color>
+    <color name="lightestGray">#F3F1F1</color>
+    <color name="white">#FFFFFF</color>
+    <color name="darkGray">#3E3D3D</color>
+    <color name="darkestGray">#232931</color>
     <!---->
 
     <array name="progressRainbow">

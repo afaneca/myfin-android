@@ -8,6 +8,7 @@ import android.widget.Filterable
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentTransactionsBinding
+import com.afaneca.myfin.utils.safeNavigate
 import com.afaneca.myfin.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,9 +42,20 @@ class TransactionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.init()
         bindObservers()
         getTransactionsList()
+        setupAddTransactionFab()
+    }
+
+    private fun setupAddTransactionFab() {
+        binding.addTransactionFab.setOnClickListener { showAddTransactionBottomSheet() }
+    }
+
+    private fun showAddTransactionBottomSheet() {
+        val action = TransactionsFragmentDirections
+            .actionTransactionsFragmentToAddTransactionBottomSheetFragment()
+        findNavController().safeNavigate(action)
     }
 
     private fun getTransactionsList() {
@@ -61,9 +74,11 @@ class TransactionsFragment :
                     is Resource.Success -> {
 
                     }
+
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                     }
+
                     else -> {}
                 }
             }
@@ -87,11 +102,11 @@ class TransactionsFragment :
     }
 
     private fun showTransactionDetailsBottomSheetFragment(trx: MyFinTransaction) {
-        val bottomSheetFragment = TransactionDetailsBottomSheetFragment.newInstance(trx)
-        bottomSheetFragment.show(
-            parentFragmentManager,
-            TransactionDetailsBottomSheetFragment.javaClass.name
-        )
+        val action =
+            TransactionsFragmentDirections.actionTransactionsFragmentToTransactionDetailsBottomSheetFragment(
+                trx
+            )
+        findNavController().safeNavigate(action)
     }
 
     private fun setupTransactionsRecyclerView(dataset: List<MyFinTransaction>) {

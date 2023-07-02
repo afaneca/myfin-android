@@ -1,12 +1,10 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">
-            @color/colorBackground<!--@android:color/transparent--></item>
+        <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
@@ -70,4 +68,16 @@
         <item name="android:background">@null</item>
     </style>
 
+    <!-- Bottom Sheet Label/Value -->
+    <style name="BottomSheetValue">
+        <item name="android:layout_marginVertical">@dimen/default_margin</item>
+        <item name="android:layout_marginHorizontal">@dimen/default_margin</item>
+        <item name="android:layout_marginTop">@dimen/default_margin_half</item>
+        <item name="android:background">@drawable/rounded_all_corners_shape</item>
+        <item name="android:backgroundTint">@color/colorBottomSheetValueBackground</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">@dimen/default_paragraph_bigger_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textColor">@color/white</item>-->
+    </style>
 </resources>
