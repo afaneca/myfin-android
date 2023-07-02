@@ -25,6 +25,8 @@ import com.afaneca.myfin.databinding.ActivityPrivateBinding
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_private.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -66,31 +68,31 @@ class PrivateActivity : BaseActivity() {
 
         /* Observers*/
         privateViewModel.apply {
-            getUserAccounts().observe(this@PrivateActivity) {
+            getUserAccounts().observe(this@PrivateActivity, {
                 if (it.isNullOrEmpty()) return@observe
                 privateViewModel.calculateAggregatedAccountBalances(it)
-            }
+            })
 
-            patrimonyBalance.observe(this@PrivateActivity) {
+            patrimonyBalance.observe(this@PrivateActivity, {
                 if (it.isNullOrEmpty()) return@observe
                 populateMainPatrimonyBalance(it)
                 populatePatrimonyBalance(it)
-            }
+            })
 
-            operatingFundsBalance.observe(this@PrivateActivity) {
+            operatingFundsBalance.observe(this@PrivateActivity, {
                 if (it.isNullOrEmpty()) return@observe
                 populateOperatingFundsBalance(it)
-            }
+            })
 
-            investingBalance.observe(this@PrivateActivity) {
+            investingBalance.observe(this@PrivateActivity, {
                 if (it.isNullOrEmpty()) return@observe
                 populateInvestmentsBalance(it)
-            }
+            })
 
-            debtBalance.observe(this@PrivateActivity) {
+            debtBalance.observe(this@PrivateActivity, {
                 if (it.isNullOrEmpty()) return@observe
                 populateDebtBalance(it)
-            }
+            })
         }
     }
 
