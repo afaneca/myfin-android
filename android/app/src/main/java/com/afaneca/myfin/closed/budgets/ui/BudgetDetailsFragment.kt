@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
-import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
+import com.afaneca.myfin.data.model.MyFinBudgetCategory
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetDetailsBinding
 import com.afaneca.myfin.utils.setProgressBarValueWithAnimation

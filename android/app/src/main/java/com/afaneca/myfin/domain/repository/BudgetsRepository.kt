@@ -1,6 +1,7 @@
-package com.afaneca.myfin.closed.budgets.data
+package com.afaneca.myfin.domain.repository
 
-import com.afaneca.myfin.closed.transactions.data.BudgetDetailsResponse
+import com.afaneca.myfin.data.model.BudgetDetailsResponse
+import com.afaneca.myfin.data.model.BudgetsListResponse
 import com.afaneca.myfin.data.network.Resource
 
 interface BudgetsRepository {

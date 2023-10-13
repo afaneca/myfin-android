@@ -1,5 +1,8 @@
-package com.afaneca.myfin.closed.transactions.data
+package com.afaneca.myfin.domain.repository
 
+import com.afaneca.myfin.base.objects.MyFinTransaction
+import com.afaneca.myfin.data.model.AddTransactionStep0Response
+import com.afaneca.myfin.data.model.FilteredResultsByPage
 import com.afaneca.myfin.data.network.Resource
 
 /**
@@ -7,11 +10,11 @@ import com.afaneca.myfin.data.network.Resource
  */
 interface TransactionsRepository {
 
-    suspend fun getTransactionsList(trxLimit: Int): Resource<LatestTransactionsListResponse>
-    suspend fun getTransactionsByPage(
+    suspend fun getFilteredTransactionsByPage(
         page: Int,
-        pageSize: Int
-    ): Resource<LatestTransactionsListResponse>
+        pageSize: Int,
+        query: String?
+    ): Resource<FilteredResultsByPage<MyFinTransaction>>
 
     suspend fun addTransactionStep0(): Resource<AddTransactionStep0Response>
     suspend fun addTransactionStep1(

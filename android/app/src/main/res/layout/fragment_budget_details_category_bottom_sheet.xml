@@ -8,7 +8,7 @@
 
         <variable
             name="obj"
-            type="com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory" />
+            type="com.afaneca.myfin.data.model.MyFinBudgetCategory" />
 
         <variable
             name="formattedIncomeAmount"

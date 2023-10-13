@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filterable
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -58,8 +57,8 @@ class TransactionsFragment :
         findNavController().safeNavigate(action)
     }
 
-    private fun getTransactionsList() {
-        viewModel.requestTransactions()
+    private fun getTransactionsList(query: String? = null) {
+        viewModel.requestTransactions(query)
     }
 
     private fun onMoreTransactionsAsked() {
@@ -124,11 +123,12 @@ class TransactionsFragment :
         }
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                return false
+
+                return true
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-                (binding.recyclerView.adapter as Filterable).filter.filter(p0)
+                viewModel.requestTransactions(p0)
                 return false
             }
 
@@ -139,8 +139,6 @@ class TransactionsFragment :
                 if (!recyclerView.canScrollVertically(1) && dy > 0) {
                     //scrolled to BOTTOM
                     onMoreTransactionsAsked()
-                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
-                    //scrolled to TOP
                 }
             }
         })

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
+import com.afaneca.myfin.domain.repository.BudgetsRepository
 import com.afaneca.myfin.data.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

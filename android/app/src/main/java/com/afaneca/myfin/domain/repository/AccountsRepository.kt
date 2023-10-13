@@ -1,5 +1,6 @@
-package com.afaneca.myfin.closed.accounts.data
+package com.afaneca.myfin.domain.repository
 
+import com.afaneca.myfin.data.model.AccountsListResponse
 import com.afaneca.myfin.data.network.Resource
 
 /**

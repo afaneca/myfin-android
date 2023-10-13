@@ -1,8 +1,9 @@
-package com.afaneca.myfin.closed.budgets.data
+package com.afaneca.myfin.data
 
 import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
+import com.afaneca.myfin.domain.repository.BudgetsRepository
 
 class LiveBudgetsRepository(
     private val api: MyFinAPIServices,

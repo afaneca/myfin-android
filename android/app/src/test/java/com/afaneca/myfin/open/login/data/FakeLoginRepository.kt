@@ -2,7 +2,9 @@ package com.afaneca.myfin.open.login.data
 
 import android.content.Context
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
+import com.afaneca.myfin.data.model.AttemptLoginResponse
 import com.afaneca.myfin.data.network.Resource
+import com.afaneca.myfin.domain.repository.LoginRepository
 
 /**
  * Created by me on 25/09/2021

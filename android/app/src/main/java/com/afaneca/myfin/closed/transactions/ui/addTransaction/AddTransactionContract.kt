@@ -1,11 +1,11 @@
 package com.afaneca.myfin.closed.transactions.ui.addTransaction
 
 import com.afaneca.myfin.base.objects.MyFinTransaction
-import com.afaneca.myfin.closed.transactions.data.AccountResponse
-import com.afaneca.myfin.closed.transactions.data.AddTransactionStep0Response
-import com.afaneca.myfin.closed.transactions.data.CategoryResponse
-import com.afaneca.myfin.closed.transactions.data.EntityResponse
-import com.afaneca.myfin.closed.transactions.data.TypeResponse
+import com.afaneca.myfin.data.model.AccountResponse
+import com.afaneca.myfin.data.model.AddTransactionStep0Response
+import com.afaneca.myfin.data.model.CategoryResponse
+import com.afaneca.myfin.data.model.EntityResponse
+import com.afaneca.myfin.data.model.TypeResponse
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class AddTransactionContract {

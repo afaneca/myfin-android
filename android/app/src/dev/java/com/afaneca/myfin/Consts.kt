@@ -14,6 +14,6 @@ object Consts {
 
 
     /* NETWORKING */
-    val BASE_URL: String = "https://api.myfin.afaneca.com/";
+    val BASE_URL: String = "https://pleased-pretty-magpie.ngrok-free.app/";
 
 }

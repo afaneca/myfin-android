@@ -1,4 +1,4 @@
-package com.afaneca.myfin.closed.transactions.data
+package com.afaneca.myfin.data.model
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName

@@ -13,7 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.afaneca.myfin.R
-import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
+import com.afaneca.myfin.data.model.MyFinBudgetCategory
 import com.afaneca.myfin.databinding.FragmentBudgetDetailsCategoryBottomSheetBinding
 import com.afaneca.myfin.utils.formatMoney
 import com.afaneca.myfin.utils.safeNavigate
