@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
-import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
+import com.afaneca.myfin.data.model.MyFinBudgetCategory
 import com.afaneca.myfin.databinding.BudgetDetailsCategoriesListItemBinding
 import com.afaneca.myfin.utils.formatMoney
 import com.afaneca.myfin.utils.setProgressBarValueWithAnimation

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
-import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
+import com.afaneca.myfin.domain.repository.DashboardRepository
+import com.afaneca.myfin.data.model.MonthlyIncomeExpensesDistributionResponse
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.SingleLiveEvent

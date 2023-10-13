@@ -1,7 +1,8 @@
-package com.afaneca.myfin.closed.transactions.data
+package com.afaneca.myfin.data
 
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
+import com.afaneca.myfin.domain.repository.TransactionsRepository
 
 /**
  * Created by me on 20/06/2021
@@ -9,14 +10,11 @@ import com.afaneca.myfin.data.network.MyFinAPIServices
 class LiveTransactionsRepository(
     private val api: MyFinAPIServices,
 ) : TransactionsRepository, BaseRepository() {
-    override suspend fun getTransactionsList(
-        trxLimit: Int
-    ) = safeAPICall { api.getLatestTransactionsList(trxLimit) }
-
-    override suspend fun getTransactionsByPage(
+    override suspend fun getFilteredTransactionsByPage(
         page: Int,
-        pageSize: Int
-    ) = safeAPICall { api.getTransactionsListByPage(page, pageSize) }
+        pageSize: Int,
+        query: String?
+    ) = safeAPICall { api.getTransactionsListByPage(page, pageSize, query) }
 
     override suspend fun addTransactionStep0() = safeAPICall { api.addTransactionStep0() }
 

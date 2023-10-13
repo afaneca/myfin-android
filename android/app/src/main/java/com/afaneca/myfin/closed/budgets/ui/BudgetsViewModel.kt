@@ -2,8 +2,8 @@ package com.afaneca.myfin.closed.budgets.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afaneca.myfin.closed.budgets.data.BudgetsListResponse
-import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
+import com.afaneca.myfin.data.model.BudgetsListResponse
+import com.afaneca.myfin.domain.repository.BudgetsRepository
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel

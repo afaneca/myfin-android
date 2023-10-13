@@ -1,4 +1,4 @@
-package com.afaneca.myfin.closed.accounts.data
+package com.afaneca.myfin.data.model
 
 import androidx.annotation.Keep
 import com.afaneca.myfin.base.objects.MyFinAccount

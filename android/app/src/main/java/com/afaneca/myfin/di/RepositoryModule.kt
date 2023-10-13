@@ -1,20 +1,20 @@
 package com.afaneca.myfin.di
 
-import com.afaneca.myfin.closed.accounts.data.AccountsRepository
-import com.afaneca.myfin.closed.accounts.data.LiveAccountsRepository
-import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
-import com.afaneca.myfin.closed.budgets.data.LiveBudgetsRepository
-import com.afaneca.myfin.closed.dashboard.data.DashboardRepository
-import com.afaneca.myfin.closed.dashboard.data.LiveDashboardRepository
-import com.afaneca.myfin.closed.transactions.data.LiveTransactionsRepository
-import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
-import com.afaneca.myfin.data.LivePrivateRepository
-import com.afaneca.myfin.data.PrivateRepository
+import com.afaneca.myfin.domain.repository.AccountsRepository
+import com.afaneca.myfin.data.LiveAccountsRepository
+import com.afaneca.myfin.domain.repository.BudgetsRepository
+import com.afaneca.myfin.data.LiveBudgetsRepository
+import com.afaneca.myfin.domain.repository.DashboardRepository
+import com.afaneca.myfin.data.LiveDashboardRepository
+import com.afaneca.myfin.data.LiveTransactionsRepository
+import com.afaneca.myfin.domain.repository.TransactionsRepository
+import com.afaneca.myfin.data.LiveAccountRepository
+import com.afaneca.myfin.domain.repository.AccountRepository
 import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.data.network.MyFinAPIServices
-import com.afaneca.myfin.open.login.data.LiveLoginRepository
-import com.afaneca.myfin.open.login.data.LoginRepository
+import com.afaneca.myfin.data.LiveLoginRepository
+import com.afaneca.myfin.domain.repository.LoginRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,5 +67,5 @@ class RepositoryModule {
     fun providePrivateRepository(
         db: MyFinDatabase,
         userData: UserDataManager
-    ): PrivateRepository = LivePrivateRepository(db, userData)
+    ): AccountRepository = LiveAccountRepository(db, userData)
 }

@@ -1,12 +1,13 @@
 package com.afaneca.myfin.data.network
 
-import com.afaneca.myfin.closed.accounts.data.AccountsListResponse
-import com.afaneca.myfin.closed.budgets.data.BudgetsListResponse
-import com.afaneca.myfin.closed.dashboard.data.MonthlyIncomeExpensesDistributionResponse
-import com.afaneca.myfin.closed.transactions.data.AddTransactionStep0Response
-import com.afaneca.myfin.closed.transactions.data.BudgetDetailsResponse
-import com.afaneca.myfin.closed.transactions.data.LatestTransactionsListResponse
-import com.afaneca.myfin.open.login.data.AttemptLoginResponse
+import com.afaneca.myfin.base.objects.MyFinTransaction
+import com.afaneca.myfin.data.model.AccountsListResponse
+import com.afaneca.myfin.data.model.BudgetsListResponse
+import com.afaneca.myfin.data.model.MonthlyIncomeExpensesDistributionResponse
+import com.afaneca.myfin.data.model.AddTransactionStep0Response
+import com.afaneca.myfin.data.model.BudgetDetailsResponse
+import com.afaneca.myfin.data.model.AttemptLoginResponse
+import com.afaneca.myfin.data.model.FilteredResultsByPage
 import retrofit2.http.*
 
 /**
@@ -32,16 +33,12 @@ interface MyFinAPIServices {
     ): MonthlyIncomeExpensesDistributionResponse
 
     // TRANSACTIONS
-    @GET("trxs/")
-    suspend fun getLatestTransactionsList(
-        @Query("trx_limit") trxLimit: Int,
-    ): LatestTransactionsListResponse
-
-    @GET("trxs/page/{page}")
+    @GET("trxs/filteredByPage/{page}")
     suspend fun getTransactionsListByPage(
         @Path(value = "page", encoded = true) page: Int,
         @Query("page_size") trxLimit: Int,
-    ): LatestTransactionsListResponse
+        @Query("query") query: String?
+    ): FilteredResultsByPage<MyFinTransaction>
 
     @POST("trxs/step0")
     suspend fun addTransactionStep0(): AddTransactionStep0Response
@@ -73,14 +70,14 @@ interface MyFinAPIServices {
         @Field("new_category_id") categoryId: String? = null,
         @Field("new_date_timestamp") dateTimestamp: Long,
         @Field("new_is_essential") isEssential: Boolean,
-    ) : Unit
+    ): Unit
 
 
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "trxs/", hasBody = true)
     suspend fun deleteTransaction(
         @Field("transaction_id") transactionId: Int,
-    ) : Unit
+    ): Unit
 
     // BUDGETS
     @GET("budgets/")

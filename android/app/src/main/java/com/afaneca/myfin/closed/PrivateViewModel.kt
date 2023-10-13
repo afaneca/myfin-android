@@ -3,7 +3,7 @@ package com.afaneca.myfin.closed
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.afaneca.myfin.data.PrivateRepository
+import com.afaneca.myfin.domain.repository.AccountRepository
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.utils.MyFinUtils
 import com.afaneca.myfin.utils.formatMoney
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PrivateViewModel @Inject constructor(
-    private val repository: PrivateRepository
+    private val repository: AccountRepository
 ) : ViewModel() {
 
 
