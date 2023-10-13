@@ -1,8 +1,8 @@
 package com.afaneca.myfin.data.network
 
+import com.afaneca.myfin.base.objects.MyFinBudget
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.data.model.AccountsListResponse
-import com.afaneca.myfin.data.model.BudgetsListResponse
 import com.afaneca.myfin.data.model.MonthlyIncomeExpensesDistributionResponse
 import com.afaneca.myfin.data.model.AddTransactionStep0Response
 import com.afaneca.myfin.data.model.BudgetDetailsResponse
@@ -80,8 +80,11 @@ interface MyFinAPIServices {
     ): Unit
 
     // BUDGETS
-    @GET("budgets/")
-    suspend fun getBudgetsList(): BudgetsListResponse
+    @GET("budgets/filteredByPage/{page}")
+    suspend fun getBudgetsList(
+        @Path(value = "page", encoded = true) page: Int,
+        @Query("page_size") trxLimit: Int,
+    ): FilteredResultsByPage<MyFinBudget>
 
     @GET("budgets/{id}")
     suspend fun getBudgetDetails(

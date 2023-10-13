@@ -10,9 +10,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.base.components.MyFinLinearSmoothScroller
 import com.afaneca.myfin.base.objects.MyFinBudget
+import com.afaneca.myfin.closed.transactions.ui.TransactionsListAdapter
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetsBinding
 import com.afaneca.myfin.utils.parseStringToBoolean
@@ -51,12 +53,24 @@ class BudgetsFragment :
             binding.loadingPb.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Success -> {
-                    setupBudgetsList(it.data)
+
                 }
+
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 }
+
                 else -> {}
+            }
+        }
+
+        viewModel.budgetsListDataset.observe(viewLifecycleOwner) {
+            if (it == null || it.isEmpty()) return@observe
+            if (binding.budgetsRv.adapter == null) {
+                setupBudgetsList(it)
+            } else {
+                (binding.budgetsRv.adapter!! as BudgetsListAdapter).updateDataset(it)
+                binding.budgetsRv.adapter!!.notifyDataSetChanged()
             }
         }
     }
@@ -70,11 +84,25 @@ class BudgetsFragment :
                 DividerItemDecoration.VERTICAL
             )
         )
+
+
         val snapHelper = LinearSnapHelper()
         binding.budgetsRv.clearOnScrollListeners()
         binding.budgetsRv.onFlingListener = null
         snapHelper.attachToRecyclerView(binding.budgetsRv)
-        scrollToCurrentBudgetInList(dataset)
+
+        if (!viewModel.isPaginating()) {
+            scrollToCurrentBudgetInList(dataset)
+        }
+
+        binding.budgetsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1) && dy > 0) {
+                    //scrolled to BOTTOM
+                    viewModel.requestMoreBudgets()
+                }
+            }
+        })
     }
 
     private fun scrollToCurrentBudgetInList(dataset: List<MyFinBudget>) {
@@ -99,7 +127,7 @@ class BudgetsFragment :
     }
 
     private fun getBudgetsList() {
-        viewModel.requestBudgetsList()
+        viewModel.requestBudgets()
     }
 
     override fun onBudgetClick(budget: MyFinBudget) {

@@ -7,6 +7,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.objects.MyFinBudget
+import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.BudgetsListItemBinding
 import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.formatMoney
@@ -96,4 +97,8 @@ class BudgetsListAdapter(
     }
 
     override fun getItemCount(): Int = dataset.size
+    fun updateDataset(newDataset: List<MyFinBudget>) {
+        (dataset as ArrayList<MyFinBudget>).clear()
+        dataset.addAll(newDataset)
+    }
 }
