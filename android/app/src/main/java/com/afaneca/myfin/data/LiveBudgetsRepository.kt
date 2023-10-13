@@ -9,7 +9,7 @@ class LiveBudgetsRepository(
     private val api: MyFinAPIServices,
     private val userData: UserDataManager
 ) : BudgetsRepository, BaseRepository() {
-    override suspend fun getBudgetsList() = safeAPICall { api.getBudgetsList() }
+    override suspend fun getBudgetsList(page: Int, pageSize: Int) = safeAPICall { api.getBudgetsList(page, pageSize) }
     override suspend fun getBudgetDetails(id: String) = safeAPICall { api.getBudgetDetails(id) }
     override suspend fun updateBudgetCategoryAmounts(
         budgetId: String,
