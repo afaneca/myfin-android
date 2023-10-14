@@ -48,7 +48,7 @@ class DashboardTransactionsFragment :
     private fun bindObservers() {
         viewModel.apply {
             getTransactionsListData().observe(viewLifecycleOwner) {
-                binding.loadingPb.visible(it is Resource.Loading)
+                binding.loadingPb.root.visible(it is Resource.Loading)
                 when (it) {
                     is Resource.Success -> {
 

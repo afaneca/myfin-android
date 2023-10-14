@@ -74,7 +74,7 @@ class BudgetDetailsCategoryBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun bindObservers() {
         viewModel.viewState.observe(viewLifecycleOwner) {
-            binding.loadingPb.isVisible = it is BudgetDetailsCategoryViewModel.State.Loading
+            binding.loadingPb.root.isVisible = it is BudgetDetailsCategoryViewModel.State.Loading
             binding.saveBtn.isEnabled = it !is BudgetDetailsCategoryViewModel.State.Loading
             binding.plannedExpenseTil.isEnabled =
                 it !is BudgetDetailsCategoryViewModel.State.Loading

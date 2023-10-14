@@ -61,7 +61,7 @@ class TransactionsListAdapter(
             transactionEntityTv.text = item.entityName ?: ""
             transactionCategoryTv.text = item.categoryName ?: ""
             categoryEntityDividerView.visible(!item.entityName.isNullOrBlank() && !item.categoryName.isNullOrBlank())
-            essentialInclude.isVisible = parseStringToBoolean(item.isEssential)
+            essentialInclude.root.isVisible = parseStringToBoolean(item.isEssential)
             setupAmountStyle(item.type, holder.binding)
             setupIconStyle(item.type, holder.binding.iconIv)
         }

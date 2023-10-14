@@ -22,12 +22,11 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected fun setPreferencesChangeListener() {
-        preferencesChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences, key: String ->
-                if (key.equals(getString(R.string.preferences_key_theme))) {
-                    setAppTheme(getUserThemeFromPreferences())
-                }
+        preferencesChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == getString(R.string.preferences_key_theme)) {
+                setAppTheme(getUserThemeFromPreferences())
             }
+        }
         setAppTheme(getUserThemeFromPreferences())
     }
 

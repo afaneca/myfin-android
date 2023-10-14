@@ -58,7 +58,7 @@ class TransactionDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             binding.trxObj = trx
             binding.formattedAmount = formatMoney(trx.amount.toDoubleOrNull() ?: 0.00)
             setupAmountStyle(trx.type, binding.amountTv)
-            binding.essentialInclude.isVisible = parseStringToBoolean(trx.isEssential)
+            binding.essentialInclude.root.isVisible = parseStringToBoolean(trx.isEssential)
             binding.editIv.setOnClickListener { viewModel.triggerEvent(TransactionDetailsContract.Event.EditTransactionClicked) }
             binding.deleteIv.setOnClickListener { showRemoveTransactionConfirmationDialog() }
         }

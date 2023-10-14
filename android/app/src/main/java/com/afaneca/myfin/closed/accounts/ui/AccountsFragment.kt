@@ -40,7 +40,7 @@ class AccountsFragment :
 
     private fun bindObservers() {
         viewModel.getAccountsListResponse().observe(viewLifecycleOwner) {
-            binding.loadingPb.visible(it is Resource.Loading)
+            binding.loadingPb.root.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Failure -> Toast.makeText(
                     requireContext(),

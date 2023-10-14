@@ -244,8 +244,8 @@ class GaugeSeekBar : View {
         }
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        canvas?.apply {
+    override fun onDraw(canvas: Canvas) {
+        canvas.apply {
             trackDrawable?.draw(this)
             progressDrawable?.draw(this, progress)
             thumbEntity?.draw(canvas, progress)

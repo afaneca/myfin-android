@@ -97,7 +97,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.state.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach { state ->
                 /* Loading */
-                binding.loadingPb.isVisible = state.isLoading
+                binding.loadingPb.root.isVisible = state.isLoading
 
                 /* CTA Button */
                 binding.addBtn.isEnabled = state.isAddButtonEnabled
@@ -372,15 +372,11 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
             )
         }
 
-        // type
-        setupTypeSelector(formData.types)
-
         // add btn
         binding.addBtn.setOnClickListener { viewModel.triggerEvent(AddTransactionContract.Event.AddEditTransactionClick) }
     }
 
-    private fun setupTypeSelector(types: List<AddTransactionContract.Type>) {
-        // for now, we are ignoring dynamic types
+    private fun setupTypeSelector() {
         binding.typeBtg.apply {
             addOnButtonCheckedListener { group, checkedId, isChecked ->
                 viewModel.triggerEvent(
