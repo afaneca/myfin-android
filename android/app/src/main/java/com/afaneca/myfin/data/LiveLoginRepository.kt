@@ -1,11 +1,11 @@
-package com.afaneca.myfin.open.login.data
+package com.afaneca.myfin.data
 
 import android.content.Context
-import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.BaseRepository
 import com.afaneca.myfin.data.network.MyFinAPIServices
+import com.afaneca.myfin.domain.repository.LoginRepository
 import com.afaneca.myfin.utils.MyFinConstants
 import com.afaneca.myfin.utils.PasswordStorageHelper
 import kotlinx.coroutines.Dispatchers

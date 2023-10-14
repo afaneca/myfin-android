@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
-import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
+import com.afaneca.myfin.data.model.MyFinBudgetCategory
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentBudgetDetailsBinding
 import com.afaneca.myfin.utils.setProgressBarValueWithAnimation
@@ -58,7 +58,7 @@ class BudgetDetailsFragment :
 
     private fun bindObservers() {
         viewModel.getBudgetDetailsRequest().observe(viewLifecycleOwner) {
-            binding.loadingPb.visible(it is Resource.Loading)
+            binding.loadingPb.root.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()

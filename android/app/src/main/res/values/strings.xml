@@ -1,7 +1,7 @@
 <resources>
     <!--<string name="app_name">MyFin</string>-->
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="next">Próximo</string>
+    <string name="previous">Anterior</string>
 
     <string name="login_btn_label">Entrar</string>
     <string name="login_username_label">Nome de Utilizador</string>
@@ -13,9 +13,6 @@
     <string name="action_sign_in">Iniciar Sessão</string>
     <string name="action_sign_in_short">Entrar</string>
 
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="dashboard_label">Dashboard</string>
     <string name="navigation_drawer_open">Abrir</string>
     <string name="navigation_drawer_close">Fechar</string>
@@ -94,10 +91,11 @@
     <string name="generic_income">Receita</string>
     <string name="generic_expenses">Despesa</string>
     <string name="generic_transfer">Transferência</string>
-    <string name="preferences_theme_option_key_light">preferences_theme_option_light</string>
-    <string name="preferences_theme_option_key_dark">preferences_theme_option_dark</string>
-    <string name="preferences_theme_option_key_system">preferences_theme_option_system</string>
-    <string name="preferences_key_theme">preferences_key_theme</string>
+    <string name="preferences_theme_option_key_light" translatable="false">preferences_theme_option_light</string>
+    <string name="preferences_theme_option_key_dark" translatable="false">preferences_theme_option_dark</string>
+    <string name="preferences_theme_option_key_system" translatable="false">preferences_theme_option_system</string>
+    <string name="preferences_key_theme" translatable="false">preferences_key_theme</string>
+    <string name="preferences_key_api_url" translatable="false">preferences_key_api_url</string>
     <string name="account_from_label">Conta Origem</string>
     <string name="account_to_label">Conta Destino</string>
     <string name="category_label">Categoria</string>
@@ -117,4 +115,7 @@
     <string name="transaction_added_success_message">Transação adicionada com sucesso!</string>
     <string name="transaction_updated_success_message">Transação atualizada com sucesso!</string>
     <string name="transaction_deleted_success_message">Transação removida com sucesso!</string>
+    <string name="generic_data">Dados</string>
+    <string name="preferences_api_base_url_title">URL Base da API</string>
+    <string name="keep_session_label">Manter Sessão</string>
 </resources>

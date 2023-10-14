@@ -1,10 +1,12 @@
-package com.afaneca.myfin.closed.budgets.data
+package com.afaneca.myfin.domain.repository
 
-import com.afaneca.myfin.closed.transactions.data.BudgetDetailsResponse
+import com.afaneca.myfin.base.objects.MyFinBudget
+import com.afaneca.myfin.data.model.BudgetDetailsResponse
+import com.afaneca.myfin.data.model.FilteredResultsByPage
 import com.afaneca.myfin.data.network.Resource
 
 interface BudgetsRepository {
-    suspend fun getBudgetsList(): Resource<BudgetsListResponse>
+    suspend fun getBudgetsList(page: Int, pageSize: Int): Resource<FilteredResultsByPage<MyFinBudget>>
     suspend fun getBudgetDetails(
         id: String
     ): Resource<BudgetDetailsResponse>

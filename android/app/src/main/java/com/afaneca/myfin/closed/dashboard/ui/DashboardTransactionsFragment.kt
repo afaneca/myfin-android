@@ -48,7 +48,7 @@ class DashboardTransactionsFragment :
     private fun bindObservers() {
         viewModel.apply {
             getTransactionsListData().observe(viewLifecycleOwner) {
-                binding.loadingPb.visible(it is Resource.Loading)
+                binding.loadingPb.root.visible(it is Resource.Loading)
                 when (it) {
                     is Resource.Success -> {
 
@@ -62,7 +62,7 @@ class DashboardTransactionsFragment :
                 }
             }
 
-            transactionsListDataset.observe(viewLifecycleOwner, {
+            transactionsListDataset.observe(viewLifecycleOwner) {
                 if (it == null) return@observe
                 if (binding.recyclerView.adapter == null)
                     setupTransactionsRecyclerView(it)
@@ -71,7 +71,7 @@ class DashboardTransactionsFragment :
                     binding.recyclerView.adapter!!.notifyDataSetChanged()
                 }
 
-            })
+            }
 
             clickedTransactionDetails.observe(viewLifecycleOwner, {
                 if (it == null) return@observe
@@ -81,7 +81,7 @@ class DashboardTransactionsFragment :
     }
 
     private fun getTransactionsList() {
-        viewModel.requestTransactions(5)
+        viewModel.requestTransactions(pageSize = 5)
     }
 
     private fun showTransactionDetailsBottomSheetFragment(trx: MyFinTransaction) {

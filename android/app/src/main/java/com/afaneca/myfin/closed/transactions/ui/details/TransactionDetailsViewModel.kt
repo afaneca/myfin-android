@@ -3,7 +3,7 @@ package com.afaneca.myfin.closed.transactions.ui.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afaneca.myfin.closed.transactions.data.TransactionsRepository
+import com.afaneca.myfin.domain.repository.TransactionsRepository
 import com.afaneca.myfin.data.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow

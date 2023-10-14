@@ -13,7 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.afaneca.myfin.R
-import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
+import com.afaneca.myfin.data.model.MyFinBudgetCategory
 import com.afaneca.myfin.databinding.FragmentBudgetDetailsCategoryBottomSheetBinding
 import com.afaneca.myfin.utils.formatMoney
 import com.afaneca.myfin.utils.safeNavigate
@@ -74,7 +74,7 @@ class BudgetDetailsCategoryBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun bindObservers() {
         viewModel.viewState.observe(viewLifecycleOwner) {
-            binding.loadingPb.isVisible = it is BudgetDetailsCategoryViewModel.State.Loading
+            binding.loadingPb.root.isVisible = it is BudgetDetailsCategoryViewModel.State.Loading
             binding.saveBtn.isEnabled = it !is BudgetDetailsCategoryViewModel.State.Loading
             binding.plannedExpenseTil.isEnabled =
                 it !is BudgetDetailsCategoryViewModel.State.Loading

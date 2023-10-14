@@ -1,11 +1,10 @@
 package com.afaneca.myfin.closed.transactions.ui.addTransaction
 
 import com.afaneca.myfin.base.objects.MyFinTransaction
-import com.afaneca.myfin.closed.transactions.data.AccountResponse
-import com.afaneca.myfin.closed.transactions.data.AddTransactionStep0Response
-import com.afaneca.myfin.closed.transactions.data.CategoryResponse
-import com.afaneca.myfin.closed.transactions.data.EntityResponse
-import com.afaneca.myfin.closed.transactions.data.TypeResponse
+import com.afaneca.myfin.data.model.AccountResponse
+import com.afaneca.myfin.data.model.AddTransactionStep0Response
+import com.afaneca.myfin.data.model.CategoryResponse
+import com.afaneca.myfin.data.model.EntityResponse
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class AddTransactionContract {
@@ -49,7 +48,6 @@ sealed class AddTransactionContract {
     data class AddTransactionInitialFormData(
         val entities: List<Entity>,
         val categories: List<Category>,
-        val types: List<Type>,
         val accounts: List<Account>
     )
 
@@ -79,7 +77,6 @@ sealed class AddTransactionContract {
 fun AddTransactionStep0Response.toUiModel() = AddTransactionContract.AddTransactionInitialFormData(
     entities = entities.map { it.toUiModel() },
     categories = categories.map { it.toUiModel() },
-    types = types.map { it.toUiModel() },
     accounts = accounts.map { it.toUiModel() },
 )
 
@@ -92,11 +89,6 @@ fun CategoryResponse.toUiModel() = AddTransactionContract.Category(
     categoryId = this.categoryId,
     name = this.name,
     description = this.description
-)
-
-fun TypeResponse.toUiModel() = AddTransactionContract.Type(
-    letter = this.letter,
-    name = this.name,
 )
 
 fun AccountResponse.toUiModel() = AddTransactionContract.Account(

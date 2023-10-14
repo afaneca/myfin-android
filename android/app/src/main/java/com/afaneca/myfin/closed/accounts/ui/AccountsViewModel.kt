@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.base.objects.MyFinAccount
-import com.afaneca.myfin.closed.accounts.data.AccountsListResponse
-import com.afaneca.myfin.closed.accounts.data.AccountsRepository
+import com.afaneca.myfin.data.model.AccountsListResponse
+import com.afaneca.myfin.domain.repository.AccountsRepository
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.MyFinUtils
 import com.afaneca.myfin.utils.SingleLiveEvent

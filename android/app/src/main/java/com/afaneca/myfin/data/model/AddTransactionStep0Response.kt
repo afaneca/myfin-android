@@ -1,4 +1,4 @@
-package com.afaneca.myfin.closed.transactions.data
+package com.afaneca.myfin.data.model
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
@@ -9,8 +9,6 @@ class AddTransactionStep0Response(
     val entities: List<EntityResponse>,
     @SerializedName("categories")
     val categories: List<CategoryResponse>,
-    @SerializedName("type")
-    val types: List<TypeResponse>,
     @SerializedName("accounts")
     val accounts: List<AccountResponse>,
 )
@@ -31,14 +29,6 @@ data class CategoryResponse(
     val name: String,
     @SerializedName("description")
     val description: String,
-)
-
-@Keep
-data class TypeResponse(
-    @SerializedName("letter")
-    val letter: String,
-    @SerializedName("name")
-    val name: String,
 )
 
 @Keep

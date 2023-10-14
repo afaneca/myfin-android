@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.Resource
-import com.afaneca.myfin.open.login.data.AttemptLoginResponse
-import com.afaneca.myfin.open.login.data.LoginRepository
+import com.afaneca.myfin.data.model.AttemptLoginResponse
+import com.afaneca.myfin.domain.repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

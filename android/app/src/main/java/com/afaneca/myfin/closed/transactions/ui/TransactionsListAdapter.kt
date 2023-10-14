@@ -22,7 +22,7 @@ class TransactionsListAdapter(
     private val context: Context,
     private var dataset: List<MyFinTransaction>,
     private val clickListener: TransactionsListItemClickListener,
-) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>(), Filterable {
+) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>() {
     var datasetFiltered: List<MyFinTransaction> = ArrayList()
 
     init {
@@ -61,7 +61,7 @@ class TransactionsListAdapter(
             transactionEntityTv.text = item.entityName ?: ""
             transactionCategoryTv.text = item.categoryName ?: ""
             categoryEntityDividerView.visible(!item.entityName.isNullOrBlank() && !item.categoryName.isNullOrBlank())
-            essentialInclude.isVisible = parseStringToBoolean(item.isEssential)
+            essentialInclude.root.isVisible = parseStringToBoolean(item.isEssential)
             setupAmountStyle(item.type, holder.binding)
             setupIconStyle(item.type, holder.binding.iconIv)
         }
@@ -113,37 +113,6 @@ class TransactionsListAdapter(
     }
 
     override fun getItemCount() = datasetFiltered.size
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint.toString()
-                if (charSearch.isEmpty()) {
-                    datasetFiltered = dataset
-                } else {
-                    val resultList = ArrayList<MyFinTransaction>()
-                    for (item in dataset) {
-                        if (item.toString().toLowerCase(Locale.ROOT).contains(
-                                charSearch.toLowerCase(
-                                    Locale.ROOT
-                                )
-                            )
-                        )
-                            resultList.add(item)
-                    }
-                    datasetFiltered = resultList
-                }
-                val filterResults = FilterResults()
-                filterResults.values = datasetFiltered
-                return filterResults
-            }
-
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                datasetFiltered = results?.values as List<MyFinTransaction>
-                notifyDataSetChanged()
-            }
-
-        }
-    }
 
     interface TransactionsListItemClickListener {
         fun onTransactionClick(trx: MyFinTransaction)

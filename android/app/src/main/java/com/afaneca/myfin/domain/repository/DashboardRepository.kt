@@ -1,5 +1,6 @@
-package com.afaneca.myfin.closed.dashboard.data
+package com.afaneca.myfin.domain.repository
 
+import com.afaneca.myfin.data.model.MonthlyIncomeExpensesDistributionResponse
 import com.afaneca.myfin.data.network.Resource
 
 interface DashboardRepository {

@@ -16,4 +16,5 @@
 /.idea/
 .idea
 keystore.properties
+*.jks
 

@@ -1,9 +1,9 @@
-package com.afaneca.myfin.data
+package com.afaneca.myfin.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 
-interface PrivateRepository {
+interface AccountRepository {
     fun insertAccount(
         userAccountObj: UserAccountEntity
     )

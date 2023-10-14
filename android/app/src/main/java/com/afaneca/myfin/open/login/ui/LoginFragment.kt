@@ -50,7 +50,7 @@ class LoginFragment : BaseFragment() {
 
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
             //binding.loadingPb.visibility = if (it is Resource.Loading) View.VISIBLE else View.GONE
-            binding.loadingPb.visible(it is Resource.Loading)
+            binding.loadingPb.root.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Success -> {
                     // TODO -  This should be decided by the viewmodel!

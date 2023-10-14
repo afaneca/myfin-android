@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afaneca.myfin.closed.budgets.data.BudgetsRepository
-import com.afaneca.myfin.closed.transactions.data.BudgetDetailsResponse
-import com.afaneca.myfin.closed.transactions.data.MyFinBudgetCategory
+import com.afaneca.myfin.domain.repository.BudgetsRepository
+import com.afaneca.myfin.data.model.BudgetDetailsResponse
+import com.afaneca.myfin.data.model.MyFinBudgetCategory
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.utils.DateTimeUtils
 import com.afaneca.myfin.utils.SingleLiveEvent

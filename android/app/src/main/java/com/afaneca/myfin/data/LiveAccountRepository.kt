@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.afaneca.myfin.data.db.MyFinDatabase
 import com.afaneca.myfin.data.db.accounts.UserAccountEntity
 import com.afaneca.myfin.data.network.BaseRepository
+import com.afaneca.myfin.domain.repository.AccountRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -14,12 +15,12 @@ import javax.inject.Inject
  * Created by me on 14/06/2021
  */
 
-class LivePrivateRepository
+class LiveAccountRepository
 @Inject
 constructor(
     private val db: MyFinDatabase,
     private var userData: UserDataManager
-) : PrivateRepository, BaseRepository() {
+) : AccountRepository, BaseRepository() {
 
     // CRUD
     override fun insertAccount(userAccountObj: UserAccountEntity) {

@@ -1,4 +1,4 @@
-package com.afaneca.myfin.closed.dashboard.data
+package com.afaneca.myfin.data.model
 
 import androidx.annotation.Keep
 import com.afaneca.myfin.base.objects.MyFinCategory
