@@ -61,12 +61,14 @@ android {
             dimension "env"
             applicationId application_id + ".dev"
             resValue "string", "app_name", "MyFin.dev"
+            resValue "string", "default_api_base_url", "api.myfin.afaneca.com"
         }
         prod {
             dimension "env"
             applicationId application_id
             signingConfig signingConfigs.release
             resValue "string", "app_name", "MyFin"
+            resValue "string", "default_api_base_url", "api.myfin.afaneca.com"
         }
     }
 

@@ -11,9 +11,4 @@ object Consts {
         PROD
     }
     val APP_ENVIRONMENT = Environments.DEV
-
-
-    /* NETWORKING */
-    val BASE_URL: String = "https://pleased-pretty-magpie.ngrok-free.app/";
-
 }
