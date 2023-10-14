@@ -22,7 +22,7 @@ data class MyFinTransaction(
     @SerializedName("category_name")
     val categoryName: String?,
     @SerializedName("date_timestamp")
-    val dateTimestamp: String,
+    val dateTimestamp: Int,
     @SerializedName("description")
     val description: String,
     @SerializedName("entity_id")
@@ -30,7 +30,7 @@ data class MyFinTransaction(
     @SerializedName("entity_name")
     val entityName: String?,
     @SerializedName("transaction_id")
-    val transactionId: String,
+    val transactionId: Int,
     @SerializedName("type")
     val type: String,
     @SerializedName("is_essential")

@@ -83,7 +83,7 @@ constructor(
 
             saveUsername(username)
             saveSessionToken(sessionToken)
-            saveUserAccounts(userAccounts as List<UserAccountEntity>)
+            saveUserAccounts(userAccounts)
             repository.saveIsToKeepSession(keepSession)
 
             if (keepSession) {
