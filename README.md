@@ -1,5 +1,6 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/afaneca/myfin-android?include_prereleases)
+[<img style="height: 20px;" src="https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.afaneca.myfin">](https://apt.izzysoft.de/fdroid/index/apk/com.afaneca.myfin/)
 [<img style="height: 20px;" src="https://img.shields.io/badge/Google_Play-414141?style=for-the-badge&logo=google-play&logoColor=white">](https://play.google.com/store/apps/details?id=com.afaneca.myfin)
 
 
