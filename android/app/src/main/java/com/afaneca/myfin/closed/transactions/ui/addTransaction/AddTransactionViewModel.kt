@@ -177,7 +177,7 @@ class AddTransactionViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             when (val response = transactionsRepository.updateTransaction(
-                Integer.parseInt(state.value.trx?.transactionId ?: "-1"),
+                state.value.trx?.transactionId ?: -1,
                 dateSelectedInput ?: 0L,
                 amountInput ?: "",
                 type ?: ' ',

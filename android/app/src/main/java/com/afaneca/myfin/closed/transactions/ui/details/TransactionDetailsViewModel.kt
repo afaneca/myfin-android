@@ -25,18 +25,18 @@ class TransactionDetailsViewModel @Inject constructor(
     )
     override val effect = _effect.asSharedFlow()
 
-    private var trxId: String
-        get() = savedStateHandle.get<String>(TRX_ID_SAVED_STATE_HANDLE_TAG) ?: ""
+    private var trxId: Int
+        get() = savedStateHandle.get<Int>(TRX_ID_SAVED_STATE_HANDLE_TAG) ?: -1
         set(value) = savedStateHandle.set(TRX_ID_SAVED_STATE_HANDLE_TAG, value)
 
-    fun setTransactionId(transactionId: String) {
+    fun setTransactionId(transactionId: Int) {
         trxId = transactionId
     }
 
     override fun triggerEvent(event: TransactionDetailsContract.Event) {
         when (event) {
             is TransactionDetailsContract.Event.RemoveTransactionClicked -> {
-                removeTransaction(Integer.parseInt(trxId))
+                removeTransaction(trxId)
             }
 
             is TransactionDetailsContract.Event.EditTransactionClicked -> {

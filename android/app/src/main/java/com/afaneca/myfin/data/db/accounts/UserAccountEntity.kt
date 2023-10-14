@@ -16,7 +16,7 @@ data class UserAccountEntity(
     @PrimaryKey
     @ColumnInfo(name = "account_id")
     @SerializedName("account_id")
-    val accountId: String,
+    val accountId: Int,
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
@@ -40,7 +40,7 @@ data class UserAccountEntity(
 
     @ColumnInfo(name = "exclude_from_budgets")
     @SerializedName("exclude_from_budgets")
-    val isToExcludeFromBudgets: String?,
+    val isToExcludeFromBudgets: Boolean?,
 
     @ColumnInfo(name = "balance")
     @SerializedName("balance")
@@ -48,5 +48,5 @@ data class UserAccountEntity(
 
     @ColumnInfo(name = "users_user_id")
     @SerializedName("users_user_id")
-    val usersUserId: String?
+    val usersUserId: Int?
 ) : Serializable
