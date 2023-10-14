@@ -28,7 +28,7 @@ constructor(
 ) : ViewModel(), TransactionsListAdapter.TransactionsListItemClickListener {
 
 
-    private val _transactionsListData: SingleLiveEvent<Resource<FilteredResultsByPage<MyFinTransaction>>> =
+    private val _transactionsListData: SingleLiveEvent<Resource<FilteredResultsByPage<MyFinTransaction>>?> =
         SingleLiveEvent()
 
     fun getTransactionsListData() = _transactionsListData
@@ -80,7 +80,6 @@ constructor(
         requestTransactionsList(++_trxCurrentPage, _query)
     }
 
-    @SuppressLint("NullSafeMutableLiveData")
     fun clearData() {
         _trxCurrentPage = 0
         _query = null

@@ -50,7 +50,7 @@ class BudgetsFragment :
 
     private fun bindObservers() {
         viewModel.getBudgetsListData().observe(viewLifecycleOwner) {
-            binding.loadingPb.visible(it is Resource.Loading)
+            binding.loadingPb.root.visible(it is Resource.Loading)
             when (it) {
                 is Resource.Success -> {
 

@@ -1,7 +1,7 @@
 <resources>
     <!--<string name="app_name">MyFin</string>-->
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="next">Próximo</string>
+    <string name="previous">Anterior</string>
 
     <string name="login_btn_label">Entrar</string>
     <string name="login_username_label">Nome de Utilizador</string>
@@ -13,9 +13,6 @@
     <string name="action_sign_in">Iniciar Sessão</string>
     <string name="action_sign_in_short">Entrar</string>
 
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="dashboard_label">Dashboard</string>
     <string name="navigation_drawer_open">Abrir</string>
     <string name="navigation_drawer_close">Fechar</string>
@@ -120,4 +117,5 @@
     <string name="transaction_deleted_success_message">Transação removida com sucesso!</string>
     <string name="generic_data">Dados</string>
     <string name="preferences_api_base_url_title">URL Base da API</string>
+    <string name="keep_session_label">Manter Sessão</string>
 </resources>

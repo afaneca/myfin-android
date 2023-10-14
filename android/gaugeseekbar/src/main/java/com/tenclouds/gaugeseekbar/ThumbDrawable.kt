@@ -37,6 +37,7 @@ class ThumbDrawable(thumbColor: Int) : Drawable() {
 
     override fun setAlpha(alpha: Int) {}
 
+    @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 
     override fun setColorFilter(colorFilter: ColorFilter?) {}
