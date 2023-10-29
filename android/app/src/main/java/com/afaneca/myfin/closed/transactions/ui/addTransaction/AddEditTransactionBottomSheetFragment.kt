@@ -2,8 +2,10 @@ package com.afaneca.myfin.closed.transactions.ui.addTransaction
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -21,6 +24,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.afaneca.myfin.R
+import com.afaneca.myfin.base.components.searchableSelector.SearchableListItem
+import com.afaneca.myfin.base.components.searchableSelector.SearchableSelectorContract
+import com.afaneca.myfin.base.components.searchableSelector.SearchableSelectorViewModel
 import com.afaneca.myfin.base.objects.MyFinTransaction
 import com.afaneca.myfin.databinding.FragmentAddTransactionBottomSheetBinding
 import com.afaneca.myfin.utils.MyFinConstants
@@ -31,16 +37,30 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.take
 import java.text.SimpleDateFormat
 import java.util.*
+
+
+const val BOTTOM_SHEET_CATEGORY_SELECT_ID = "BOTTOM_SHEET_CATEGORY_SELECT_ID"
+const val BOTTOM_SHEET_ENTITY_SELECT_ID = "BOTTOM_SHEET_ENTITY_SELECT_ID"
+const val BOTTOM_SHEET_ACCOUNT_FROM_SELECT_ID = "BOTTOM_SHEET_ACCOUNT_FROM_SELECT_ID"
+const val BOTTOM_SHEET_ACCOUNT_TO_SELECT_ID = "BOTTOM_SHEET_ACCOUNT_TO_SELECT_ID"
 
 @AndroidEntryPoint
 class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentAddTransactionBottomSheetBinding
     private val viewModel: AddTransactionViewModel by viewModels()
+    private val selectorViewModel: SearchableSelectorViewModel by activityViewModels()
     private val args: AddEditTransactionBottomSheetFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -56,6 +76,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         observeState()
         observeEffect()
+        observeSelectorState()
         viewModel.triggerEvent(AddTransactionContract.Event.InitForm(args.trx))
         if (args.trx != null) binding.addBtn.text = getString(R.string.edit_transaction)
     }
@@ -124,13 +145,59 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
                     }
                 }
             }.launchIn(lifecycleScope)
+
+    }
+
+    private fun observeSelectorState() {
+        selectorViewModel.subscribeToState().flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach { selectorState ->
+                when (selectorState) {
+                    is SearchableSelectorContract.State.ItemSelected -> {
+                        when (selectorState.instanceId) {
+                            BOTTOM_SHEET_CATEGORY_SELECT_ID -> {
+                                viewModel.triggerEvent(
+                                    AddTransactionContract.Event.CategorySelected(selectorState.item.id)
+                                )
+                                binding.categoryEt.setText(selectorState.item.name, false)
+                            }
+
+                            BOTTOM_SHEET_ENTITY_SELECT_ID -> {
+                                viewModel.triggerEvent(
+                                    AddTransactionContract.Event.EntitySelected(selectorState.item.id)
+                                )
+                                binding.entityEt.setText(selectorState.item.name, false)
+                            }
+
+                            BOTTOM_SHEET_ACCOUNT_FROM_SELECT_ID -> {
+                                viewModel.triggerEvent(
+                                    AddTransactionContract.Event.AccountFromSelected(selectorState.item.id)
+                                )
+                                binding.accountFromEt.setText(selectorState.item.name, false)
+                            }
+
+                            BOTTOM_SHEET_ACCOUNT_TO_SELECT_ID -> {
+                                viewModel.triggerEvent(
+                                    AddTransactionContract.Event.AccountToSelected(selectorState.item.id)
+                                )
+                                binding.accountToEt.setText(selectorState.item.name, false)
+                            }
+                        }
+                    }
+
+                    is SearchableSelectorContract.State.Init, null -> {}
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     private fun observeEffect() {
         viewModel.effect.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach { effect ->
                 when (effect) {
-                    is AddTransactionContract.Effect.NavigateToTransactionList -> navigateToTransactionList(effect.isEditing)
+                    is AddTransactionContract.Effect.NavigateToTransactionList -> navigateToTransactionList(
+                        effect.isEditing
+                    )
+
                     is AddTransactionContract.Effect.ShowError -> showErrorToast(effect.errorMessage)
                     else -> Unit
                 }
@@ -140,7 +207,7 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
     private fun navigateToTransactionList(isEditing: Boolean) {
         Toast.makeText(
             requireContext(),
-            if(isEditing) getString(R.string.transaction_updated_success_message)
+            if (isEditing) getString(R.string.transaction_updated_success_message)
             else getString(R.string.transaction_added_success_message),
             Toast.LENGTH_LONG
         ).show()
@@ -293,76 +360,65 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         // account inputs
-        val accountsStringList =
-            formData.accounts.map { acc -> IdLabelPair(acc.accountId, acc.name).apply { } }
-        binding.accountFromEt.apply {
-            setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    accountsStringList
+        binding.accountFromEt.setOnClickListener {
+            val action = AddEditTransactionBottomSheetFragmentDirections
+                .actionAddTransactionBottomSheetFragmentToSearchableSelectorBottomSheetFragment(
+                    list =
+                    formData.accounts.map {
+                        SearchableListItem(
+                            id = it.accountId,
+                            name = it.name,
+                            description = it.type
+                        )
+                    }.toTypedArray(), R.string.account_from_label, BOTTOM_SHEET_ACCOUNT_FROM_SELECT_ID
                 )
-            )
-            onItemClickListener =
-                OnItemClickListener { parent, view, position, id ->
-                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
-                        viewModel.triggerEvent(AddTransactionContract.Event.AccountFromSelected(it))
-                    }
-                }
+            findNavController().safeNavigate(action)
         }
-        binding.accountToEt.apply {
-            setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    accountsStringList
-                )
-            )
 
-            onItemClickListener =
-                OnItemClickListener { parent, view, position, id ->
-                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
-                        viewModel.triggerEvent(AddTransactionContract.Event.AccountToSelected(it))
-                    }
-                }
+        binding.accountToEt.setOnClickListener {
+            val action = AddEditTransactionBottomSheetFragmentDirections
+                .actionAddTransactionBottomSheetFragmentToSearchableSelectorBottomSheetFragment(
+                    list =
+                    formData.accounts.map {
+                        SearchableListItem(
+                            id = it.accountId,
+                            name = it.name,
+                            description = it.type
+                        )
+                    }.toTypedArray(), R.string.account_to_label, BOTTOM_SHEET_ACCOUNT_TO_SELECT_ID
+                )
+            findNavController().safeNavigate(action)
         }
 
         // category input
-        val categoriesStringList = formData.categories.map { cat -> IdLabelPair(cat.categoryId, cat.name) }
-        binding.categoryEt.apply {
-            setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    categoriesStringList
+        binding.categoryEt.setOnClickListener {
+            val action = AddEditTransactionBottomSheetFragmentDirections
+                .actionAddTransactionBottomSheetFragmentToSearchableSelectorBottomSheetFragment(
+                    list =
+                    formData.categories.map {
+                        SearchableListItem(
+                            id = it.categoryId,
+                            name = it.name,
+                            description = it.description
+                        )
+                    }.toTypedArray(), R.string.category_label, BOTTOM_SHEET_CATEGORY_SELECT_ID
                 )
-            )
-            onItemClickListener =
-                OnItemClickListener { _, _, position, _ ->
-                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
-                        viewModel.triggerEvent(AddTransactionContract.Event.CategorySelected(it))
-                    }
-                }
+            findNavController().safeNavigate(action)
         }
 
         // entity input
-        val entitiesStringList =
-            formData.entities.map { entity -> IdLabelPair(entity.entityId, entity.name) }
-        binding.entityEt.apply {
-            setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    entitiesStringList
+        binding.entityEt.setOnClickListener {
+            val action = AddEditTransactionBottomSheetFragmentDirections
+                .actionAddTransactionBottomSheetFragmentToSearchableSelectorBottomSheetFragment(
+                    list =
+                    formData.entities.map {
+                        SearchableListItem(
+                            id = it.entityId,
+                            name = it.name,
+                        )
+                    }.toTypedArray(), R.string.entity_label, BOTTOM_SHEET_ENTITY_SELECT_ID
                 )
-            )
-
-            onItemClickListener =
-                OnItemClickListener { _, _, position, _ ->
-                    (adapter.getItem(position) as? IdLabelPair)?.id?.let {
-                        viewModel.triggerEvent(AddTransactionContract.Event.EntitySelected(it))
-                    }
-                }
+            findNavController().safeNavigate(action)
         }
 
         // description
@@ -371,6 +427,9 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
                 AddTransactionContract.Event.DescriptionChanged(text.toString())
             )
         }
+
+        // type
+        setupTypeSelector()
 
         // add btn
         binding.addBtn.setOnClickListener { viewModel.triggerEvent(AddTransactionContract.Event.AddEditTransactionClick) }

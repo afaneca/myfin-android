@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<string name="app_name">MyFin</string>-->
+    <string name="next">Próximo</string>
+    <string name="previous">Anterior</string>
+
+    <string name="login_btn_label">Entrar</string>
+    <string name="login_username_label">Nome de Utilizador</string>
+    <string name="login_password_label">Password</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Iniciar Sessão</string>
+    <string name="action_sign_in_short">Entrar</string>
+
+    <string name="dashboard_label">Dashboard</string>
+    <string name="navigation_drawer_open">Abrir</string>
+    <string name="navigation_drawer_close">Fechar</string>
+    <string name="generic_exit">Sair</string>
+    <string name="generic_yes">Sim</string>
+    <string name="generic_go_back">Voltar</string>
+    <string name="confirmation_logout_message">Tem a certeza de que pretende sair?</string>
+    <string name="generic_patrimony">Património</string>
+    <string name="generic_investment">Investimento</string>
+    <string name="generic_passive">Passivo</string>
+    <string name="generic_operating_funds_shorten">F. de Maneio</string>
+    <string name="generic_cancel">Cancelar</string>
+    <string name="generic_authentication">Autenticação</string>
+    <string name="generic_last_update">Última atualização</string>
+    <string name="generic_open">Aberto</string>
+    <string name="generic_closed">Fechado</string>
+
+    <string name="biometric_auth_prompt_description">Confirme a sua identidade para avançar</string>
+    <string name="biometric_auth_prompt_subtitle">Biometria</string>
+    <string name="biometric_auth_prompt_title">@string/generic_authentication</string>
+    <string name="account_type_external_label">Conta Externa</string>
+    <string name="no_category_label">Sem Categoria</string>
+    <string name="no_entity_label">Sem Entidade</string>
+    <string name="no_description_label">Sem Descrição</string>
+
+
+    <!-- Main Menu -->
+    <string name="main_menu_dashboard">Dashboard</string>
+    <string name="main_menu_transactions">Transações</string>
+    <string name="main_menu_accounts">Contas</string>
+    <string name="main_menu_categories">Categorias</string>
+    <string name="main_menu_entities">Entidades</string>
+    <string name="main_menu_rules">Regras</string>
+    <string name="main_menu_budgets">Orçamentos</string>
+    <string name="main_menu_investments">Investimentos</string>
+    <string name="main_menu_stats">Estatísticas</string>
+    <string name="main_menu_group_administration">Gestão</string>
+
+    <!-- Labels -->
+    <string name="transactions_label">Transações</string>
+    <string name="transaction_details_label">Detalhes de transação</string>
+    <string name="budgets_label">Orçamentos</string>
+    <string name="budget_details_label">Detalhes de Orçamento</string>
+    <string name="accounts_label">Contas</string>
+    <string name="account_checking_label">Conta à Ordem</string>
+    <string name="account_savings_label">Conta Poupança</string>
+    <string name="account_investing_label">Investimento</string>
+    <string name="account_credit_label">Crédito</string>
+    <string name="account_meal_card_label">Cartão-Refeição</string>
+    <string name="account_wallet_label">Carteira</string>
+    <string name="account_other_label">Outra</string>
+
+    <!-- Preferences -->
+    <string name="preferences_theme_option_dark_theme">Tema Escuro</string>
+    <string name="preferences_theme_option_light_theme">Tema Claro</string>
+    <string name="preferences_theme_option_system_default">Automático (Sistema)</string>
+    <string name="generic_appearance">Aparência</string>
+    <string name="preferences_theme_summary">Escolha o tema da aplicação</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_monthly_overview_chart_planned_amount_label">/%s</string>
+    <string name="generic_settings">Definições</string>
+    <string name="preferences_theme_title">Tema</string>
+
+    <!-- Transactions -->
+    <string name="transactions_list_item_date_format">%s %s %s</string>
+    <string name="add_transaction">Adicionar transação</string>
+    <string name="edit_transaction">Editar transação</string>
+    <string name="transaction_date">Data</string>
+    <string name="confirmation_transaction_delete">Tem a certeza de que pretende remover esta transação?</string>
+
+    <!-- Budgets -->
+    <string name="budget_details_category_percent_of_planned_amount">%.2f%% de %s</string>
+
+    <!-- Misc -->
+    <string name="generic_income">Receita</string>
+    <string name="generic_expenses">Despesa</string>
+    <string name="generic_transfer">Transferência</string>
+    <string name="account_from_label">Conta Origem</string>
+    <string name="account_to_label">Conta Destino</string>
+    <string name="category_label">Categoria</string>
+    <string name="entity_label">Entidade</string>
+    <string name="description_label">Descrição</string>
+    <string name="account_status_active">Ativa</string>
+    <string name="account_status_inactive">Inativa</string>
+    <string name="generic_no_data_to_display_label">Nenhum dado para mostrar</string>
+    <string name="current_expense">Despesa Atual</string>
+    <string name="current_income">Receita Atual</string>
+    <string name="planned_expense">Despesa Estimada</string>
+    <string name="planned_income">Receita Estimada</string>
+    <string name="generic_save">Guardar</string>
+    <string name="generic_essential">Essencial</string>
+    <string name="generic_amount">Montante</string>
+    <string name="generic_edit">Editar</string>
+    <string name="transaction_added_success_message">Transação adicionada com sucesso!</string>
+    <string name="transaction_updated_success_message">Transação atualizada com sucesso!</string>
+    <string name="transaction_deleted_success_message">Transação removida com sucesso!</string>
+    <string name="generic_data">Dados</string>
+    <string name="preferences_api_base_url_title">URL Base da API</string>
+    <string name="keep_session_label">Manter Sessão</string>
+    <string name="monthly_overview">Overview Mensal</string>
+    <string name="monthly_distribution">Distribuição mensal</string>
+    <string name="latest_transactions">Últimas transações</string>
+    <string name="all_fem">Todas</string>
+    <string name="operating_funds">Fundo de Maneio</string>
+    <string name="debts">Créditos</string>
+    <string name="investments">Investimentos</string>
+    <string name="others_fem">Outras</string>
+</resources>

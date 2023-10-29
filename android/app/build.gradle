@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
@@ -25,8 +26,8 @@ android {
         minSdkVersion 26
         compileSdk 34
         targetSdkVersion 34
-        versionCode 13
-        versionName "2.0.1"
+        versionCode 14
+        versionName "2.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
