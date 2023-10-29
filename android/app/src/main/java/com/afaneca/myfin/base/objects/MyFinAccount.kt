@@ -56,4 +56,6 @@ data class MyFinAccount(
         result = 31 * result + usersUserId.hashCode()
         return result
     }
+
+    fun isActive() = this.status == "Ativa"
 }
