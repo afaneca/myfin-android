@@ -75,6 +75,9 @@
         <action
             android:id="@+id/action_addTransactionBottomSheetFragment_to_transactionsFragment"
             app:destination="@id/transactionsFragment" />
+        <action
+            android:id="@+id/action_addTransactionBottomSheetFragment_to_searchableSelectorBottomSheetFragment"
+            app:destination="@id/searchableSelectorBottomSheetFragment" />
     </dialog>
     <dialog
         android:id="@+id/transactionDetailsBottomSheetFragment"
@@ -90,5 +93,17 @@
         <action
             android:id="@+id/action_transactionDetailsBottomSheetFragment_to_transactionsFragment"
             app:destination="@id/transactionsFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/searchableSelectorBottomSheetFragment"
+        android:name="com.afaneca.myfin.base.components.searchableSelector.SearchableSelectorBottomSheetFragment"
+        android:label="SearchableSelectorBottomSheetFragment" >
+        <argument android:name="list" app:argType="com.afaneca.myfin.base.components.searchableSelector.SearchableListItem[]" />
+        <argument
+            android:name="title"
+            app:argType="reference" />
+        <argument
+            android:name="id"
+            app:argType="string" />
     </dialog>
 </navigation>
