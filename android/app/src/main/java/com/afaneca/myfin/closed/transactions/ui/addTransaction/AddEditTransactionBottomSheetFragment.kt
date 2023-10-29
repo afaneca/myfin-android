@@ -372,6 +372,9 @@ class AddEditTransactionBottomSheetFragment : BottomSheetDialogFragment() {
             )
         }
 
+        // type
+        setupTypeSelector()
+
         // add btn
         binding.addBtn.setOnClickListener { viewModel.triggerEvent(AddTransactionContract.Event.AddEditTransactionClick) }
     }
