@@ -62,11 +62,11 @@ class AccountsListAdapter(
             val balance = item.balance.toDoubleOrNull() ?: 0.0
             accountBalanceTv.text = formatMoney(balance)
             setupBalanceStyle(balance, accountBalanceTv)
-            accountStatusTv.text = item.status
+            accountStatusTv.text = context.getString(if(item.isActive()) R.string.account_status_active else R.string.account_status_inactive)
             accountStatusWrapperCv.backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
                     context,
-                    if (item.status.equals(context.getString(R.string.account_status_active))) R.color.colorGreen else R.color.colorRed
+                    if (item.isActive()) R.color.colorGreen else R.color.colorRed
                 )
             )
             accountStatusWrapperCv.visible(true)
