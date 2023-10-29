@@ -80,4 +80,9 @@
         <item name="android:textStyle">bold</item>
         <!--<item name="android:textColor">@color/white</item>-->
     </style>
+
+    <style name="BottomSheetDialogThemeNoFloating">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+    </style>
 </resources>

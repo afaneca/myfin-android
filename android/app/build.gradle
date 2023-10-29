@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
