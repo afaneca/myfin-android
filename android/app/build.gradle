@@ -133,7 +133,6 @@ dependencies {
 
     // Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation project(':gaugeseekbar')
 
     // Room DB
     implementation("androidx.room:room-runtime:$room_version")
