@@ -31,5 +31,7 @@ data class MyFinCategory(
     @SerializedName("planned_amount_credit")
     val plannedAmountCredit: String,
     @SerializedName("planned_amount_debit")
-    val plannedAmountDebit: String
+    val plannedAmountDebit: String,
+    @SerializedName("exclude_from_budgets")
+    val excludeFromBudgets: Int,
 )

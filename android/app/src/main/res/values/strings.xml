@@ -129,4 +129,6 @@
     <string name="debts">Debts</string>
     <string name="investments">Investments</string>
     <string name="others_fem">Others</string>
+    <string name="dashboard_monthly_overview_amount_left">left in monthly expenses</string>
+    <string name="dashboard_monthly_overview_of_spent_label">of %s spent</string>
 </resources>

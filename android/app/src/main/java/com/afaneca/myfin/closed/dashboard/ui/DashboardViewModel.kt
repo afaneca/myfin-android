@@ -70,35 +70,36 @@ class DashboardViewModel @Inject constructor(
         val expensesMap: MutableMap<String, Double> = mutableMapOf()
 
         for (cat in response.categories) {
-            plannedAmount += cat.plannedAmountDebit.toDoubleOrNull() ?: 0.00
-            currentAmount += cat.currentAmountDebit.toDoubleOrNull() ?: 0.00
+            if(cat.excludeFromBudgets != 1){
+                plannedAmount += cat.plannedAmountDebit.toDoubleOrNull() ?: 0.00
+                currentAmount += cat.currentAmountDebit.toDoubleOrNull() ?: 0.00
+            }
+
 
             if (cat.currentAmountDebit != "0" && cat.currentAmountDebit != "0.00") {
-                expensesMap.put(
-                    cat.name,
-                    cat.currentAmountDebit.toDoubleOrNull() ?: 0.00
-                )
+                expensesMap[cat.name] = cat.currentAmountDebit.toDoubleOrNull() ?: 0.00
             }
             if (cat.currentAmountCredit != "0" && cat.currentAmountCredit != "0.00") {
-                incomeMap.put(
-                    cat.name,
-                    cat.currentAmountCredit.toDoubleOrNull() ?: 0.00
-                )
+                incomeMap[cat.name] = cat.currentAmountCredit.toDoubleOrNull() ?: 0.00
             }
         }
         _expensesDistributionChartData.postValue(expensesMap)
         _incomeDistributionChartData.postValue(incomeMap)
 
         return MonthlyOverviewChartData(
-            formatMoney(currentAmount),
-            formatMoney(plannedAmount),
-            currentAmount / plannedAmount
+            currentAmount = formatMoney(currentAmount),
+            plannedAmount = formatMoney(plannedAmount),
+            amountLeft = formatMoney(plannedAmount - currentAmount),
+            overBudget = currentAmount > plannedAmount,
+            progressValue = currentAmount / plannedAmount
         )
     }
 
     data class MonthlyOverviewChartData(
         val currentAmount: String,
         val plannedAmount: String,
-        val progressValue: Double
+        val amountLeft: String,
+        val overBudget: Boolean,
+        val progressValue: Double,
     )
 }
