@@ -1,5 +1,6 @@
 package com.afaneca.myfin.data.db.accounts
 
+import androidx.annotation.Keep
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -10,6 +11,7 @@ import java.io.Serializable
 /**
  * Created by me on 14/06/2021
  */
+@Keep
 @Entity
 data class UserAccountEntity(
 
