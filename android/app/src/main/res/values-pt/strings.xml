@@ -122,4 +122,6 @@
     <string name="debts">Créditos</string>
     <string name="investments">Investimentos</string>
     <string name="others_fem">Outras</string>
+    <string name="dashboard_monthly_overview_amount_left">por gastar este mês</string>
+<string name="dashboard_monthly_overview_of_spent_label">de %s já foram gastos</string>
 </resources>

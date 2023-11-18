@@ -23,36 +23,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.tenclouds.gaugeseekbar.GaugeSeekBar
-                android:id="@+id/monthly_overview_pchart"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="16dp"
-                app:interactive="false"
-                app:layout_constraintDimensionRatio="1.3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:progress="0.5"
-                app:progressGradient="@array/progressRainbow"
-                app:progressWidth="25dp"
-                app:showProgress="true"
-                app:startAngleDegrees="90"
-                app:thumbColor="@color/default_thumb_color"
-                app:thumbRadius="18dp"
-                app:trackWidth="25dp" />
-
             <TextView
                 android:id="@+id/progressTextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/monthly_overview"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@id/monthly_overview_pchart"
-                app:layout_constraintLeft_toLeftOf="@id/monthly_overview_pchart"
-                app:layout_constraintRight_toRightOf="@id/monthly_overview_pchart"
-                app:layout_constraintTop_toTopOf="@id/monthly_overview_pchart" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/monthlyOverview_cv"
+                app:layout_constraintLeft_toLeftOf="@id/monthlyOverview_cv"
+                app:layout_constraintRight_toRightOf="@id/monthlyOverview_cv"
+                app:layout_constraintTop_toTopOf="@+id/monthlyOverview_cv" />
 
             <TextView
                 android:id="@+id/progressTextSubtitle"
@@ -66,46 +47,100 @@
                 app:layout_constraintTop_toBottomOf="@+id/progressTextTitle"
                 tools:text="917,27 €/1 849,04 €" />
 
-            <TextView
-                android:id="@+id/chart_current_amount_tv"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/monthlyOverview_cv"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/chart_planned_amount_tv"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/monthly_overview_pchart"
-                app:layout_constraintTop_toBottomOf="@+id/progressTextSubtitle"
-                tools:text="917,27 €" />
+                android:background="@null"
+                android:backgroundTint="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/default_margin"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/chart_planned_amount_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/chart_current_amount_tv"
-                app:layout_constraintEnd_toStartOf="@+id/monthly_overview_pchart"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/chart_current_amount_tv"
-                tools:text="/1 849,04 €" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/monthlyOverview_cl"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_purple"
+                    android:paddingHorizontal="@dimen/default_margin_double"
+                    android:paddingVertical="@dimen/default_margin_triple">
+
+                    <TextView
+                        android:id="@+id/expensesLeft_tv"
+                        style="@style/TextAppearance.Material3.HeadlineMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="1,812€"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/leftInMonth_tv"
+                        style="@style/TextAppearance.Material3.BodyMedium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_margin_half"
+                        android:text="@string/dashboard_monthly_overview_amount_left"
+                        android:textColor="@color/white"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/expensesLeft_tv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/expensesLeft_tv" />
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/expenses_lpi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_margin_double"
+                        tools:progress="70"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/leftInMonth_tv"
+                        app:indicatorColor="@color/white"
+                        app:trackCornerRadius="10dp"
+                        app:trackThickness="15dp" />
+                    <TextView
+                        android:id="@+id/currentExpenses_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="738€"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="@dimen/default_margin"
+                        app:layout_constraintStart_toStartOf="@id/expenses_lpi"
+                        app:layout_constraintTop_toBottomOf="@id/expenses_lpi"
+                        />
+                    <TextView
+                        android:id="@+id/ofPlannedExpenses_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text=" of 2.500€ spent"
+                        android:textColor="@color/white"
+                        app:layout_constraintBaseline_toBaselineOf="@id/currentExpenses_tv"
+                        app:layout_constraintLeft_toRightOf="@id/currentExpenses_tv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/distribution_charts_label_tv"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin_triple"
                 android:text="@string/monthly_distribution"
+                android:layout_marginTop="@dimen/default_margin_biggest"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chart_planned_amount_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/monthlyOverview_cv" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/amount_distribution_piechart"
                 android:layout_width="0dp"
                 android:layout_height="250dp"
-                android:layout_marginTop="4dp"
                 android:fillViewport="true"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -114,8 +149,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/distribution_charts_label_tv" />
 
             <com.google.android.material.tabs.TabLayout
-                style="@style/DefaultTabLayout"
                 android:id="@+id/amount_distribution_piechart_tab_layout"
+                style="@style/DefaultTabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
@@ -162,11 +197,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin_half"
+                android:scrollbars="none"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/latest_transactions_tv"
                 tools:background="@color/red"
-                android:scrollbars="none"
                 tools:layout="@layout/fragment_transactions"
                 tools:layout_height="100dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
