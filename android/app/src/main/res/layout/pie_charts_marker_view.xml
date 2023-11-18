@@ -29,7 +29,7 @@
     <TextView
         android:id="@+id/label_tv"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="1dp"
         android:textAlignment="center"
         android:textColor="@android:color/white"

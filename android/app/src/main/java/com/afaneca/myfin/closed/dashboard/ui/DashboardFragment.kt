@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
@@ -86,9 +88,11 @@ class DashboardFragment :
                         setupMonthlyDistributionCharts()
                         setupExpensesDistributionPieChart()
                     }
+
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                     }
+
                     else -> {}
                 }
             })
@@ -110,7 +114,13 @@ class DashboardFragment :
 
             monthlyOverviewChartData.observe(viewLifecycleOwner, {
                 if (it == null) return@observe
-                setupMonthlyOverviewChart(it.progressValue, it.currentAmount, it.plannedAmount)
+                setupMonthlyOverview(
+                    it.progressValue,
+                    it.currentAmount,
+                    it.plannedAmount,
+                    it.amountLeft,
+                    it.overBudget
+                )
             })
 
             lastUpdateTimestampFormatted.observe(viewLifecycleOwner, {
@@ -145,17 +155,27 @@ class DashboardFragment :
         )
     }
 
-    private fun setupMonthlyOverviewChart(
+    private fun setupMonthlyOverview(
         progressValue: Double,
         currentAmountFormatted: String,
-        plannedAmountFormatted: String
+        plannedAmountFormatted: String,
+        amountLeftFormatted: String,
+        overBudget: Boolean
     ) {
-        binding.monthlyOverviewPchart.setProgress(progressValue.toFloat())
-        binding.chartCurrentAmountTv.text = currentAmountFormatted
-        binding.chartPlannedAmountTv.text = String.format(
-            getString(R.string.dashboard_monthly_overview_chart_planned_amount_label),
-            plannedAmountFormatted
+
+        binding.expensesLpi.progress = (progressValue * 100).toInt()
+        binding.expensesLeftTv.text = amountLeftFormatted
+        binding.currentExpensesTv.text = currentAmountFormatted
+        binding.ofPlannedExpensesTv.text = String.format(
+            " %s",
+            getString(
+                R.string.dashboard_monthly_overview_of_spent_label,
+                plannedAmountFormatted
+            )
         )
 
+        if(overBudget){
+            binding.monthlyOverviewCl.background = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_red_pink)
+        }
     }
 }
