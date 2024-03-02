@@ -20,14 +20,19 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     ext.application_id = "com.afaneca.myfin"
 
+    // semantic versioning
+    def versionMajor = 2
+    def versionMinor = 2
+    def versionPatch = 1
+    def versionBuild = 0
 
     defaultConfig {
         applicationId "$application_id"
         minSdkVersion 26
         compileSdk 34
         targetSdkVersion 34
-        versionCode 16
-        versionName "2.2.0"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
