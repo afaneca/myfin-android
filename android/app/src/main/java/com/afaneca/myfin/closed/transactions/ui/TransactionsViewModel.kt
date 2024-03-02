@@ -66,7 +66,7 @@ constructor(
         _clickedTransactionDetails.postValue(trx)
     }
 
-    fun requestTransactions(query: String? = null, pageSize: Int = TRX_PAGE_SIZE) {
+    fun requestTransactions(query: String? = "", pageSize: Int = TRX_PAGE_SIZE) {
         clearData()
         _query = query;
         requestTransactionsList(_trxCurrentPage, query, pageSize)
