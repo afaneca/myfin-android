@@ -2,6 +2,10 @@ package com.afaneca.myfin.closed.preferences
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.afaneca.myfin.R
@@ -12,6 +16,7 @@ class PreferencesActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_preferences)
 
         if (savedInstanceState == null) {
@@ -28,6 +33,7 @@ class PreferencesActivity : BaseActivity() {
         }
 
         setupToolbar()
+        setupEdgeToEdge()
         setPreferencesChangeListener()
     }
 
@@ -39,6 +45,15 @@ class PreferencesActivity : BaseActivity() {
 
     override fun onStop() {
         super.onStop()
+    }
+
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.rootWrapper)) { v, windowInsets ->
+            val insets =
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(left = insets.left, top = insets.top, right = insets.right, bottom = insets.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun setupToolbar() {
