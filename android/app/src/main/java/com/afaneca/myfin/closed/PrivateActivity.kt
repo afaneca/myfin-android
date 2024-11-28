@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +25,6 @@ import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseActivity
 import com.afaneca.myfin.closed.preferences.PreferencesActivity
 import com.afaneca.myfin.databinding.ActivityPrivateBinding
-
 import com.afaneca.myfin.open.login.ui.LoginActivity
 import com.afaneca.myfin.utils.startNewActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +53,7 @@ class PrivateActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         binding =
             DataBindingUtil.setContentView(
                 this,
@@ -91,6 +95,16 @@ class PrivateActivity : BaseActivity() {
                 if (it.isNullOrEmpty()) return@observe
                 populateDebtBalance(it)
             })
+        }
+        setupEdgeToEdge()
+    }
+
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.flWrapper) { v, windowInsets ->
+            val insets =
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(left = insets.left, top = insets.top, right = insets.right, bottom = insets.bottom)
+            WindowInsetsCompat.CONSUMED
         }
     }
 
