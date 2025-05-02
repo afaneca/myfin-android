@@ -19,8 +19,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import net.sqlcipher.database.SQLiteDatabase
-import net.sqlcipher.database.SupportFactory
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.security.SecureRandom
 import javax.inject.Singleton
 
@@ -48,15 +47,14 @@ object AppModule {
             context,
             MyFinDatabase::class.java,
             "${BuildConfig.APPLICATION_ID}_db"
-        ).fallbackToDestructiveMigration()
+        )
+            .fallbackToDestructiveMigration()
             .openHelperFactory(
-                SupportFactory(
-                    SQLiteDatabase.getBytes(
-                        getDBEncryptionPassphrase(
-                            context,
-                            userDataManager
-                        ).toCharArray()
-                    )
+                SupportOpenHelperFactory(
+                    getDBEncryptionPassphrase(
+                        context,
+                        userDataManager
+                    ).toByteArray(Charsets.UTF_8)
                 )
             )
             .build()

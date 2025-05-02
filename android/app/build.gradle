@@ -146,7 +146,8 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
     // SQLCipher - to encrypt room db
-    implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
+    implementation "net.zetetic:sqlcipher-android:$sqlcipher_version"
+    implementation 'androidx.sqlite:sqlite-ktx:2.5.0'
 
     // Biometrics
     implementation 'com.mikhaellopez:biometric:1.1.0'
