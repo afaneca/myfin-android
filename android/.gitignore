@@ -13,8 +13,11 @@
 .externalNativeBuild
 .cxx
 /.idea/
-/.idea/
 .idea
 keystore.properties
 *.jks
+.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
 
