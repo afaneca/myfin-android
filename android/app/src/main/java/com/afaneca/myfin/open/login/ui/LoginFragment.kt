@@ -1,16 +1,23 @@
 package com.afaneca.myfin.open.login.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.afaneca.myfin.Consts
+import com.afaneca.myfin.R
 import com.afaneca.myfin.base.BaseFragment
 import com.afaneca.myfin.closed.PrivateActivity
+import com.afaneca.myfin.closed.preferences.PreferencesActivity
 import com.afaneca.myfin.data.network.Resource
 import com.afaneca.myfin.databinding.FragmentLoginBinding
 import com.afaneca.myfin.utils.BiometricsHelper
@@ -38,8 +45,47 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupEdgeToEdge()
+        setupToolbar()
         bindObservers()
         bindListeners()
+    }
+
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.container) { v, windowInsets ->
+            val insets =
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(
+                left = insets.left,
+                top = insets.top,
+                right = insets.right,
+                /*bottom = insets.bottom*/
+            )
+            binding.loginFormWrapperCl.updatePadding(
+                bottom = insets.bottom
+            )
+
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun setupToolbar(): Toolbar {
+        binding.toolbar.let {
+            it.inflateMenu(R.menu.menu_toolbar)
+            it.setOnMenuItemClickListener { menu ->
+                when (menu.itemId) {
+                    R.id.item_preferences -> {
+                        Intent(requireActivity(), PreferencesActivity::class.java).also { intent ->
+                            startActivity(intent)
+                        }
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            return it
+        }
     }
 
     private fun bindObservers() {
@@ -60,6 +106,7 @@ class LoginFragment : BaseFragment() {
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 }
+
                 else -> {}
             }
         })
