@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
-        android:title="@string/generic_appearance">
+    <PreferenceCategory android:title="@string/generic_appearance">
         <!--android:summary="@string/preferences_theme_summary"-->
         <ListPreference
             android:defaultValue="@string/preferences_theme_option_key_system"
@@ -11,19 +10,18 @@
             android:entryValues="@array/preferences_theme_options_array"
             android:icon="@drawable/ic_lightbulb_24dp"
             android:key="@string/preferences_key_theme"
-            app:useSimpleSummaryProvider="true"
-            android:title="@string/preferences_theme_title" />
+            android:title="@string/preferences_theme_title"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/generic_data">
+    <PreferenceCategory android:title="@string/generic_data">
         <EditTextPreference
             android:defaultValue="@string/default_api_base_url"
             android:dialogIcon="@drawable/entity_primary"
             android:icon="@drawable/entity_primary"
+            android:inputType="textUri"
             android:key="@string/preferences_key_api_url"
-            app:useSimpleSummaryProvider="true"
             android:title="@string/preferences_api_base_url_title"
-            />
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
