@@ -131,4 +131,6 @@
     <string name="others_fem">Others</string>
     <string name="dashboard_monthly_overview_amount_left">left in monthly expenses</string>
     <string name="dashboard_monthly_overview_of_spent_label">of %s spent</string>
+
+    <string name="error_invalid_url">Please enter a valid URL</string>
 </resources>

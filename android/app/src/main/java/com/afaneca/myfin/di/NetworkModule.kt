@@ -3,7 +3,6 @@ package com.afaneca.myfin.di
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.afaneca.myfin.BuildConfig
-import com.afaneca.myfin.Consts
 import com.afaneca.myfin.R
 import com.afaneca.myfin.data.UserDataManager
 import com.afaneca.myfin.data.network.MyFinAPIServices
@@ -12,11 +11,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -41,18 +40,25 @@ object NetworkModule {
                         // Dynamically set the base url for api calls based on saved user preferences
                         var request = chain.request()
                         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-                        val host: String = preferences.getString(
+                        val urlPref: String = preferences.getString(
                             context.getString(R.string.preferences_key_api_url),
                             context.getString(R.string.default_api_base_url)
                         )!!
 
-                        val newUrl = request.url.newBuilder()
-                            .host(host)
-                            .build()
+                        val urlString = if (urlPref.startsWith("http")) urlPref else "https://$urlPref"
+                        val parsedUrl = urlString.toHttpUrlOrNull()
 
-                        request = request.newBuilder()
-                            .url(newUrl)
-                            .build()
+                        parsedUrl?.let {
+                            val newUrl = request.url.newBuilder()
+                                .scheme(it.scheme)
+                                .host(it.host)
+                                .port(it.port)
+                                .build()
+
+                            request = request.newBuilder()
+                                .url(newUrl)
+                                .build()
+                        }
 
                         chain.proceed(request)
                     }
