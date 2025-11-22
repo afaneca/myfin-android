@@ -1,0 +1,214 @@
+package com.afaneca.myfin.ui.main
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import com.afaneca.myfin.R
+import com.afaneca.myfin.ui.common.GlobalLoadingOverlay
+import com.afaneca.myfin.ui.common.MFModalNavigationDrawer
+import com.afaneca.myfin.ui.common.MFNavDisplay
+import com.afaneca.myfin.ui.common.nav.Navigator
+import com.afaneca.myfin.ui.common.nav.rememberNavigationState
+import com.afaneca.myfin.ui.common.nav.toEntries
+import com.afaneca.myfin.ui.dashboard.DashboardScreen
+import com.afaneca.myfin.ui.login.LoginScreen
+import com.afaneca.myfin.ui.main.MainContract.LocalLoadingState
+import com.afaneca.myfin.ui.settings.SettingsScreen
+import com.afaneca.myfin.ui.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
+
+sealed interface AppRoute : NavKey {
+    @Serializable
+    data object Login : AppRoute
+
+    @Serializable
+    data object Onboarding : AppRoute
+
+    @Serializable
+    data object Settings : AppRoute
+
+    @Serializable
+    data object Home : AppRoute
+
+    @Serializable
+    data object Transactions : AppRoute
+}
+
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            val viewModel: MainViewModel = hiltViewModel()
+            val lifecycleOwner = LocalLifecycleOwner.current
+            val uiState by viewModel.mainState.collectAsStateWithLifecycle()
+            val navigationState = rememberNavigationState(
+                startRoute = AppRoute.Login,
+                topLevelRoutes = setOf(
+                    AppRoute.Login,
+                    AppRoute.Home,
+                ),
+            )
+
+            val navigator = remember { Navigator(navigationState) }
+
+            val isPrivateRoute = !listOf(
+                AppRoute.Login,
+                AppRoute.Settings,
+                AppRoute.Onboarding,
+            ).contains(navigationState.topLevelRoute)
+
+            val drawerState = rememberDrawerState(DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
+
+            LaunchedEffect(Unit) {
+                viewModel.triggerEvent(MainContract.Event.Init)
+
+                viewModel.effect.flowWithLifecycle(
+                    lifecycleOwner.lifecycle,
+                    Lifecycle.State.STARTED,
+                )
+                    .collect { effect ->
+                        when (effect) {
+                            MainContract.Effect.OpenNavigationDrawer -> {
+                                drawerState.open()
+                            }
+                        }
+                    }
+            }
+
+            fun openNavigationDrawer() {
+                viewModel.triggerEvent(MainContract.Event.NavDrawerIconClicked)
+            }
+
+            AppTheme(
+                dynamicColor = uiState.useDynamicTheme,
+            ) {
+
+                CompositionLocalProvider(
+                    LocalLoadingState provides MainContract.LoadingState(
+                        isLoading = uiState.isLoading,
+                        setLoading = { viewModel.triggerEvent(MainContract.Event.UpdateLoading(it)) },
+                    ),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        MFModalNavigationDrawer(
+                            drawerState = drawerState,
+                            gesturesEnabled = isPrivateRoute,
+                            balanceDigest = uiState.balanceDigest,
+                            itemContent = {
+                                NavigationDrawerItem(
+                                    icon = {Icon(painter = painterResource(R.drawable.dashboard_24), contentDescription = stringResource(R.string.dashboard))},
+                                    label = { Text(stringResource(R.string.dashboard)) },
+                                    selected = navigationState.topLevelRoute == AppRoute.Home,
+                                    onClick = {
+                                        navigator.navigate(AppRoute.Home)
+                                        scope.launch { drawerState.close() }
+                                    },
+                                )
+                                NavigationDrawerItem(
+                                    icon = {Icon(painter = painterResource(R.drawable.list_alt_24), contentDescription = stringResource(R.string.transactions))},
+                                    label = { Text(stringResource(R.string.transactions)) },
+                                    selected = navigationState.topLevelRoute == AppRoute.Transactions,
+                                    onClick = {
+                                        navigator.navigate(AppRoute.Home)
+                                        scope.launch { drawerState.close() }
+                                    },
+                                )
+                                NavigationDrawerItem(
+                                    icon = {Icon(painter = painterResource(R.drawable.list_alt_24), contentDescription = stringResource(R.string.logout))},
+                                    label = { Text(stringResource(R.string.logout)) },
+                                    selected = navigationState.topLevelRoute == AppRoute.Transactions,
+                                    onClick = {
+                                        navigator.navigate(AppRoute.Home)
+                                        scope.launch { drawerState.close() }
+                                    },
+                                )
+                            },
+                        ){
+                            val entryProvider = entryProvider {
+                                publicNav(navigator = navigator)
+                                privateNav(
+                                    openNavigationDrawer = { openNavigationDrawer() },
+                                    goToSettings = { navigator.navigate(AppRoute.Settings)}
+                                )
+                            }
+
+                            MFNavDisplay(
+                                entries = navigationState.toEntries(entryProvider),
+                                onBack = {
+                                    if (drawerState.isOpen) {
+                                        scope.launch { drawerState.close() }
+                                        return@MFNavDisplay
+                                    }
+                                    navigator.goBack()
+                                },
+                            )
+                        }
+
+                        GlobalLoadingOverlay(isLoading = uiState.isLoading)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun EntryProviderScope<NavKey>.publicNav(navigator: Navigator) {
+        entry<AppRoute.Login> { key ->
+            LoginScreen(
+                goToHome = {
+                    navigator.navigate(route = AppRoute.Home, removeCurrentFromBackStack = false)
+                },
+                showError = {},
+                goToSettings = { navigator.navigate(AppRoute.Settings) },
+            )
+        }
+
+        entry<AppRoute.Settings> { key ->
+            SettingsScreen()
+        }
+    }
+
+    private fun EntryProviderScope<NavKey>.privateNav(
+        openNavigationDrawer: () -> Unit,
+        goToSettings: () -> Unit,
+    ) {
+        entry<AppRoute.Home> { key ->
+            DashboardScreen(
+                openNavigationDrawer = openNavigationDrawer,
+                goToSettings = goToSettings,
+            )
+        }
+    }
+}

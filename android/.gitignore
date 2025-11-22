@@ -12,12 +12,6 @@
 /captures
 .externalNativeBuild
 .cxx
-/.idea/
-.idea
+local.properties
 keystore.properties
 *.jks
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
-

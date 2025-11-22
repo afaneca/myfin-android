@@ -1,19 +1,12 @@
 package com.afaneca.myfin.data.network
 
-import com.afaneca.myfin.base.objects.MyFinBudget
-import com.afaneca.myfin.base.objects.MyFinTransaction
-import com.afaneca.myfin.data.model.AccountsListResponse
-import com.afaneca.myfin.data.model.MonthlyIncomeExpensesDistributionResponse
-import com.afaneca.myfin.data.model.AddTransactionStep0Response
-import com.afaneca.myfin.data.model.BudgetDetailsResponse
-import com.afaneca.myfin.data.model.AttemptLoginResponse
-import com.afaneca.myfin.data.model.FilteredResultsByPage
+import com.afaneca.myfin.data.model.AttemptLoginResponseDto
 import retrofit2.http.*
 
 /**
  * Created by me on 09/12/2020
  */
-interface MyFinAPIServices {
+interface MyFinApiServices {
 
     // AUTH
     @FormUrlEncoded
@@ -23,10 +16,10 @@ interface MyFinAPIServices {
         username: String,
         @Field("password")
         password: String
-    ): AttemptLoginResponse
+    ): AttemptLoginResponseDto
 
     // STATS
-    @GET("stats/dashboard/month-expenses-income-distribution")
+    /*@GET("stats/dashboard/month-expenses-income-distribution")
     suspend fun getMonthlyExpensesIncomeDistribution(
         @Query("month") month: Int,
         @Query("year") year: Int
@@ -102,5 +95,5 @@ interface MyFinAPIServices {
 
     // ACCOUNTS
     @GET("accounts/")
-    suspend fun getAccountsList(): AccountsListResponse
+    suspend fun getAccountsList(): AccountsListResponse*/
 }
