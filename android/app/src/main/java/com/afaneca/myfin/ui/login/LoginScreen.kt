@@ -1,6 +1,5 @@
 package com.afaneca.myfin.ui.login
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -93,7 +92,7 @@ fun LoginScreen(
                 .consumeWindowInsets(padding),
             onUsernameUpdated = ::onUsernameUpdated,
             onPasswordUpdated = ::onPasswordUpdated,
-            onLoginButtonClick = ::onLoginButtonClick,
+            onLoginButtonClicked = ::onLoginButtonClick,
         )
     }
 }

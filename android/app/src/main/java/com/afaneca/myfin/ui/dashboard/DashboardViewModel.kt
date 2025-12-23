@@ -24,6 +24,22 @@ class DashboardViewModel @Inject constructor() : ViewModel(), DashboardContract.
             DashboardContract.Event.NavigationIconClicked -> {
                 _effect.tryEmit(DashboardContract.Effect.OpenNavigationDrawer)
             }
+
+            DashboardContract.Event.ToolbarSettingsClicked -> {
+                _effect.tryEmit(DashboardContract.Effect.GoToSettings)
+            }
+
+            DashboardContract.Event.TransactionsShortcutClicked -> {
+                _effect.tryEmit(DashboardContract.Effect.GoToTransactions)
+            }
+
+            DashboardContract.Event.AccountsShortcutClicked -> {
+                _effect.tryEmit(DashboardContract.Effect.GoToAccounts)
+            }
+
+            DashboardContract.Event.BudgetsShortcutClicked -> {
+                _effect.tryEmit(DashboardContract.Effect.GoToBudgets)
+            }
         }
     }
 }

@@ -28,4 +28,11 @@
     <string name="debt">Passivo</string>
     <string name="last_update">Última atualização</string>
     <string name="logout">Sair</string>
+    <string name="no_entity">Sem entidade</string>
+    <string name="no_category">Sem categoria</string>
+    <string name="no_description">Sem descrição</string>
+    <string name="no_transactions">Sem transações</string>
+    <string name="shortcut_add_transaction">Adicionar uma transação</string>
+    <string name="shortcut_budgets">Acompanhar orçamentos</string>
+    <string name="shortcut_accounts">Consultar contas</string>
 </resources>

@@ -41,10 +41,12 @@ import com.afaneca.myfin.ui.login.LoginScreen
 import com.afaneca.myfin.ui.main.MainContract.LocalLoadingState
 import com.afaneca.myfin.ui.settings.SettingsScreen
 import com.afaneca.myfin.ui.theme.AppTheme
+import com.afaneca.myfin.ui.transactions.list.TransactionListScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-
 
 sealed interface AppRoute : NavKey {
     @Serializable
@@ -78,6 +80,7 @@ class MainActivity : ComponentActivity() {
                 topLevelRoutes = setOf(
                     AppRoute.Login,
                     AppRoute.Home,
+                    AppRoute.Transactions,
                 ),
             )
 
@@ -99,13 +102,13 @@ class MainActivity : ComponentActivity() {
                     lifecycleOwner.lifecycle,
                     Lifecycle.State.STARTED,
                 )
-                    .collect { effect ->
+                    .onEach { effect ->
                         when (effect) {
                             MainContract.Effect.OpenNavigationDrawer -> {
                                 drawerState.open()
                             }
                         }
-                    }
+                    }.launchIn(this)
             }
 
             fun openNavigationDrawer() {
@@ -129,7 +132,12 @@ class MainActivity : ComponentActivity() {
                             balanceDigest = uiState.balanceDigest,
                             itemContent = {
                                 NavigationDrawerItem(
-                                    icon = {Icon(painter = painterResource(R.drawable.dashboard_24), contentDescription = stringResource(R.string.dashboard))},
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.dashboard_24),
+                                            contentDescription = stringResource(R.string.dashboard),
+                                        )
+                                    },
                                     label = { Text(stringResource(R.string.dashboard)) },
                                     selected = navigationState.topLevelRoute == AppRoute.Home,
                                     onClick = {
@@ -138,30 +146,43 @@ class MainActivity : ComponentActivity() {
                                     },
                                 )
                                 NavigationDrawerItem(
-                                    icon = {Icon(painter = painterResource(R.drawable.list_alt_24), contentDescription = stringResource(R.string.transactions))},
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.list_alt_24),
+                                            contentDescription = stringResource(R.string.transactions),
+                                        )
+                                    },
                                     label = { Text(stringResource(R.string.transactions)) },
                                     selected = navigationState.topLevelRoute == AppRoute.Transactions,
                                     onClick = {
-                                        navigator.navigate(AppRoute.Home)
+                                        navigator.navigate(AppRoute.Transactions)
                                         scope.launch { drawerState.close() }
                                     },
                                 )
                                 NavigationDrawerItem(
-                                    icon = {Icon(painter = painterResource(R.drawable.list_alt_24), contentDescription = stringResource(R.string.logout))},
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.list_alt_24),
+                                            contentDescription = stringResource(R.string.logout),
+                                        )
+                                    },
                                     label = { Text(stringResource(R.string.logout)) },
-                                    selected = navigationState.topLevelRoute == AppRoute.Transactions,
+                                    selected = false,
                                     onClick = {
                                         navigator.navigate(AppRoute.Home)
                                         scope.launch { drawerState.close() }
                                     },
                                 )
                             },
-                        ){
+                        ) {
                             val entryProvider = entryProvider {
                                 publicNav(navigator = navigator)
                                 privateNav(
                                     openNavigationDrawer = { openNavigationDrawer() },
-                                    goToSettings = { navigator.navigate(AppRoute.Settings)}
+                                    goToSettings = { navigator.navigate(AppRoute.Settings) },
+                                    goToTransactions = { navigator.navigate(AppRoute.Transactions) },
+                                    goToAccounts = { /* TODO */ },
+                                    goToBudgets = { /* TODO */ },
                                 )
                             }
 
@@ -203,9 +224,21 @@ class MainActivity : ComponentActivity() {
     private fun EntryProviderScope<NavKey>.privateNav(
         openNavigationDrawer: () -> Unit,
         goToSettings: () -> Unit,
+        goToTransactions: () -> Unit,
+        goToAccounts: () -> Unit,
+        goToBudgets: () -> Unit,
     ) {
         entry<AppRoute.Home> { key ->
             DashboardScreen(
+                openNavigationDrawer = openNavigationDrawer,
+                goToSettings = goToSettings,
+                goToTransactions = goToTransactions,
+                goToAccounts = goToAccounts,
+                goToBudgets = goToBudgets,
+            )
+        }
+        entry<AppRoute.Transactions> { key ->
+            TransactionListScreen(
                 openNavigationDrawer = openNavigationDrawer,
                 goToSettings = goToSettings,
             )

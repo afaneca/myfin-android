@@ -1,6 +1,8 @@
 package com.afaneca.myfin.data.network
 
 import com.afaneca.myfin.data.model.AttemptLoginResponseDto
+import com.afaneca.myfin.data.model.FilteredResultsByPageDto
+import com.afaneca.myfin.data.model.TransactionDto
 import retrofit2.http.*
 
 /**
@@ -8,15 +10,25 @@ import retrofit2.http.*
  */
 interface MyFinApiServices {
 
-    // AUTH
+    /*region Auth*/
     @FormUrlEncoded
     @POST("auth/")
     suspend fun attemptLogin(
         @Field("username")
         username: String,
         @Field("password")
-        password: String
+        password: String,
     ): AttemptLoginResponseDto
+    /*endregion*/
+
+    /*region Transactions*/
+    @GET("trxs/filteredByPage/{page}")
+    suspend fun getTransactionsListByPage(
+        @Path(value = "page", encoded = true) page: Int,
+        @Query("page_size") pageSize: Int,
+        @Query("query") query: String?
+    ): FilteredResultsByPageDto<TransactionDto>
+    /*endregion*/
 
     // STATS
     /*@GET("stats/dashboard/month-expenses-income-distribution")

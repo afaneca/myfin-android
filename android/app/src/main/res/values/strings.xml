@@ -28,4 +28,11 @@
     <string name="debt">Debt</string>
     <string name="last_update">Last Update</string>
     <string name="logout">Logout</string>
+    <string name="no_entity">No entity</string>
+    <string name="no_category">No category</string>
+    <string name="no_description">No description</string>
+    <string name="no_transactions">No transactions</string>
+    <string name="shortcut_add_transaction">Add a transaction</string>
+    <string name="shortcut_budgets">Track my budgets</string>
+    <string name="shortcut_accounts">Consult my accounts</string>
 </resources>

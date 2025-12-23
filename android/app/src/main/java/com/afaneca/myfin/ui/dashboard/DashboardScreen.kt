@@ -24,6 +24,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.afaneca.myfin.R
 import com.afaneca.myfin.ui.common.MFScaffold
 import com.afaneca.myfin.ui.common.MFScaffoldWithNavDrawer
+import com.afaneca.myfin.ui.transactions.list.TransactionListContract
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -32,6 +33,9 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
     openNavigationDrawer: () -> Unit,
     goToSettings: () -> Unit,
+    goToTransactions: () -> Unit,
+    goToAccounts : () -> Unit,
+    goToBudgets: () -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -40,6 +44,22 @@ fun DashboardScreen(
 
     fun onNavigationIconClicked() {
         viewModel.triggerEvent(DashboardContract.Event.NavigationIconClicked)
+    }
+
+    fun onToolbarSettingsClicked() {
+        viewModel.triggerEvent(DashboardContract.Event.ToolbarSettingsClicked)
+    }
+
+    fun onAddTransactionShortcutClicked(){
+        viewModel.triggerEvent(DashboardContract.Event.TransactionsShortcutClicked)
+    }
+
+    fun onAccountsShortcutClicked(){
+        viewModel.triggerEvent(DashboardContract.Event.AccountsShortcutClicked)
+    }
+
+    fun onBudgetsShortcutClicked(){
+        viewModel.triggerEvent(DashboardContract.Event.BudgetsShortcutClicked)
     }
 
     suspend fun showGenericError(@StringRes errorMessage: Int? = null) {
@@ -57,6 +77,10 @@ fun DashboardScreen(
                 when (effect) {
                     is DashboardContract.Effect.ShowGenericError -> showGenericError(effect.errorMessage)
                     DashboardContract.Effect.OpenNavigationDrawer -> openNavigationDrawer()
+                    DashboardContract.Effect.GoToSettings -> goToSettings()
+                    DashboardContract.Effect.GoToAccounts -> goToAccounts()
+                    DashboardContract.Effect.GoToBudgets -> goToBudgets()
+                    DashboardContract.Effect.GoToTransactions -> goToTransactions()
                 }
             }.launchIn(this)
     }
@@ -65,7 +89,7 @@ fun DashboardScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         onNavigationIconClicked = { onNavigationIconClicked() },
         actions = {
-            IconButton(onClick = goToSettings) {
+            IconButton(onClick = { onToolbarSettingsClicked() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.settings_24),
                     contentDescription = stringResource(R.string.settings),
@@ -78,6 +102,9 @@ fun DashboardScreen(
             modifier = Modifier
                 .padding(padding)
                 .consumeWindowInsets(padding),
+            onAddTransactionShortcutClicked = ::onAddTransactionShortcutClicked,
+            onAccountsShortcutClicked = ::onAccountsShortcutClicked,
+            onBudgetsShortcutClicked = ::onBudgetsShortcutClicked,
         )
     }
 }

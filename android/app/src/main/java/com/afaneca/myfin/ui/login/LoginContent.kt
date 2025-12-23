@@ -36,7 +36,7 @@ fun LoginContent(
     modifier: Modifier = Modifier,
     onUsernameUpdated: (String) -> Unit,
     onPasswordUpdated: (String) -> Unit,
-    onLoginButtonClick: () -> Unit,
+    onLoginButtonClicked: () -> Unit,
 ) {
     val loadingState = LocalLoadingState.current
 
@@ -81,7 +81,7 @@ fun LoginContent(
                 modifier = Modifier.padding(vertical = LocalSpacing.current.default),
                 text = stringResource(R.string.action_sign_in),
                 isEnabled = uiState.isLoginButtonEnabled,
-            ) { onLoginButtonClick() }
+            ) { onLoginButtonClicked() }
             Spacer(modifier = Modifier.weight(1f))
         }
     }
@@ -96,7 +96,7 @@ fun LoginPreview() {
             modifier = Modifier,
             onUsernameUpdated = {},
             onPasswordUpdated = {},
-            onLoginButtonClick = {},
+            onLoginButtonClicked = {},
         )
     }
 }

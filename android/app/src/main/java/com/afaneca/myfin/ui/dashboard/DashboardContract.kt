@@ -2,6 +2,7 @@ package com.afaneca.myfin.ui.dashboard
 
 
 import androidx.annotation.StringRes
+import com.afaneca.myfin.ui.transactions.list.TransactionListContract
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -27,6 +28,10 @@ object DashboardContract {
     sealed interface Event {
         data object Init : Event
         data object NavigationIconClicked : Event
+        data object ToolbarSettingsClicked : Event
+        data object TransactionsShortcutClicked : Event
+        data object AccountsShortcutClicked : Event
+        data object BudgetsShortcutClicked : Event
     }
 
     /**
@@ -34,6 +39,10 @@ object DashboardContract {
      */
     sealed interface Effect {
         data object OpenNavigationDrawer : Effect
+        data object GoToSettings : Effect
+        data object GoToTransactions : Effect
+        data object GoToAccounts : Effect
+        data object GoToBudgets : Effect
         data class ShowGenericError(@StringRes val errorMessage: Int? = null) : Effect
     }
 }
