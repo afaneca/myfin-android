@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.data.repository.SettingsRepository
 import com.afaneca.myfin.domain.model.BalanceDigest
+import com.afaneca.myfin.domain.usecase.LogoutUseCase
 import com.afaneca.myfin.domain.usecase.ObserveBalanceDigestUseCase
 import com.afaneca.myfin.domain.usecase.ObserveUseDynamicThemeUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     observeUseDynamicThemeUseCase: ObserveUseDynamicThemeUseCase,
     observeBalanceDigestUseCase: ObserveBalanceDigestUseCase,
+    private val logoutUseCase: LogoutUseCase,
 ) : ViewModel(), MainContract.ViewModel {
     private val useDynamicTheme: StateFlow<Boolean> =
         observeUseDynamicThemeUseCase().stateIn(
@@ -62,11 +64,22 @@ class MainViewModel @Inject constructor(
             is MainContract.Event.UpdateLoading -> {
                 _mainState.update { it.copy(isLoading = event.isLoading) }
             }
+
+            MainContract.Event.LogoutClicked -> logout()
         }
+    }
+
+    private fun logout() = viewModelScope.launch {
+        _mainState.update { it.copy(isLoading = true) }
+        logoutUseCase(Unit)
+        _mainState.update { it.copy(isLoading = false) }
+        _effect.tryEmit(MainContract.Effect.GoToLogin)
     }
 
     private fun init() {
         if (mainState.value.isInitialized) return
         _mainState.update { it.copy(isInitialized = true) }
     }
+
+
 }

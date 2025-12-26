@@ -65,6 +65,9 @@ class NavigationState(
         } else {
             listOf(startRoute, topLevelRoute)
         }
+
+    val currentRoute: NavKey
+        get() = backStacks[topLevelRoute]?.lastOrNull() ?: topLevelRoute
 }
 
 /**

@@ -57,4 +57,8 @@ class DataStorePersistentDataSource @Inject constructor(
         .map { preferences ->
             preferences[PreferencesKeys.USE_DYNAMIC_THEME] ?: defaultUseDynamicTheme
         }
+
+    override fun clearUserData() {
+        // No-op - no user data to clear
+    }
 }

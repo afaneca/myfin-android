@@ -17,6 +17,7 @@ interface TransientDataSource {
     fun observeBalanceDigest(): Flow<BalanceDigest>
     fun setSessionData(data: SessionData)
     fun getSessionData(): SessionData?
+    fun clearUserData()
 }
 
 @Singleton
@@ -38,6 +39,11 @@ class InMemoryDataSource @Inject constructor() : TransientDataSource {
 
     override fun getSessionData(): SessionData? {
         return sessionData
+    }
+
+    override fun clearUserData() {
+        _balanceDigest.value = BalanceDigest()
+        sessionData = null
     }
 }
 

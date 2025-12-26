@@ -16,6 +16,9 @@ class Navigator(val state: NavigationState) {
         }
         if (!forceAdd && route in state.backStacks.keys) {
             // This is a top level route, just switch to it.
+            if(state.backStacks[route]?.isEmpty() == true){
+                state.backStacks[route]?.add(route)
+            }
             state.topLevelRoute = route
         } else {
             state.backStacks[state.topLevelRoute]?.add(route)

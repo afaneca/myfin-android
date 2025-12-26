@@ -2,6 +2,7 @@ package com.afaneca.myfin.data.repository
 
 import com.afaneca.myfin.data.model.toDomain
 import com.afaneca.myfin.data.source.NetworkDataSource
+import com.afaneca.myfin.data.source.PersistentDataSource
 import com.afaneca.myfin.data.source.TransientDataSource
 import com.afaneca.myfin.domain.error.DomainError
 import com.afaneca.myfin.domain.model.LoginResult
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val networkDataSource: NetworkDataSource,
     private val transientDataSource: TransientDataSource,
+    private val persisDataSource: PersistentDataSource,
 ) : AuthGateway {
 
     override suspend fun login(username: String, password: String): Result<LoginResult, DomainError> {
@@ -35,5 +37,10 @@ class AuthRepository @Inject constructor(
 
     override fun getUsername(): String? {
         return transientDataSource.getSessionData()?.username
+    }
+
+    override fun logout() {
+        transientDataSource.clearUserData()
+        persisDataSource.clearUserData()
     }
 }

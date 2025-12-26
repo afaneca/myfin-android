@@ -13,6 +13,8 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -80,7 +82,6 @@ class MainActivity : ComponentActivity() {
                 topLevelRoutes = setOf(
                     AppRoute.Login,
                     AppRoute.Home,
-                    AppRoute.Transactions,
                 ),
             )
 
@@ -106,6 +107,13 @@ class MainActivity : ComponentActivity() {
                         when (effect) {
                             MainContract.Effect.OpenNavigationDrawer -> {
                                 drawerState.open()
+                            }
+
+                            MainContract.Effect.GoToLogin -> {
+                                navigator.navigate(
+                                    route = AppRoute.Login,
+                                    removeCurrentFromBackStack = true,
+                                )
                             }
                         }
                     }.launchIn(this)
@@ -139,7 +147,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     label = { Text(stringResource(R.string.dashboard)) },
-                                    selected = navigationState.topLevelRoute == AppRoute.Home,
+                                    selected = navigationState.currentRoute == AppRoute.Home,
                                     onClick = {
                                         navigator.navigate(AppRoute.Home)
                                         scope.launch { drawerState.close() }
@@ -153,7 +161,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     label = { Text(stringResource(R.string.transactions)) },
-                                    selected = navigationState.topLevelRoute == AppRoute.Transactions,
+                                    selected = navigationState.currentRoute == AppRoute.Transactions,
                                     onClick = {
                                         navigator.navigate(AppRoute.Transactions)
                                         scope.launch { drawerState.close() }
@@ -162,16 +170,20 @@ class MainActivity : ComponentActivity() {
                                 NavigationDrawerItem(
                                     icon = {
                                         Icon(
-                                            painter = painterResource(R.drawable.list_alt_24),
+                                            painter = painterResource(R.drawable.logout_24),
                                             contentDescription = stringResource(R.string.logout),
                                         )
                                     },
                                     label = { Text(stringResource(R.string.logout)) },
                                     selected = false,
                                     onClick = {
-                                        navigator.navigate(AppRoute.Home)
+                                        viewModel.triggerEvent(MainContract.Event.LogoutClicked)
                                         scope.launch { drawerState.close() }
                                     },
+                                    colors = NavigationDrawerItemDefaults.colors(
+                                        unselectedTextColor = MaterialTheme.colorScheme.error,
+                                        unselectedIconColor = MaterialTheme.colorScheme.error,
+                                    ),
                                 )
                             },
                         ) {
@@ -193,7 +205,9 @@ class MainActivity : ComponentActivity() {
                                         scope.launch { drawerState.close() }
                                         return@MFNavDisplay
                                     }
-                                    navigator.goBack()
+                                    if (!navigator.goBack()) {
+                                        finish()
+                                    }
                                 },
                             )
                         }
@@ -209,7 +223,7 @@ class MainActivity : ComponentActivity() {
         entry<AppRoute.Login> { key ->
             LoginScreen(
                 goToHome = {
-                    navigator.navigate(route = AppRoute.Home, removeCurrentFromBackStack = false)
+                    navigator.navigate(route = AppRoute.Home, removeCurrentFromBackStack = true)
                 },
                 showError = {},
                 goToSettings = { navigator.navigate(AppRoute.Settings) },

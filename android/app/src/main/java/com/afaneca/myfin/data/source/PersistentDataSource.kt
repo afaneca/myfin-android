@@ -9,4 +9,6 @@ interface PersistentDataSource {
     suspend fun getUseDynamicTheme(): Boolean
     suspend fun setUseDynamicTheme(enabled: Boolean)
     fun observeUseDynamicTheme(): Flow<Boolean>
+
+    fun clearUserData()
 }

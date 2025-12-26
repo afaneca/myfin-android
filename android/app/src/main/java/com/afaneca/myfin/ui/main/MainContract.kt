@@ -38,6 +38,7 @@ object MainContract {
         data object Init : Event
         data object NavDrawerIconClicked : Event
         data class UpdateLoading(val isLoading: Boolean) : Event
+        data object LogoutClicked : Event
     }
 
     /**
@@ -45,5 +46,6 @@ object MainContract {
      */
     sealed interface Effect {
         data object OpenNavigationDrawer : Effect
+        data object GoToLogin : Effect
     }
 }
