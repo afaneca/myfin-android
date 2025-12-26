@@ -2,7 +2,6 @@ package com.afaneca.myfin.ui.transactions.list
 
 import androidx.annotation.StringRes
 import com.afaneca.myfin.domain.model.Transaction
-import com.afaneca.myfin.ui.dashboard.DashboardContract
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -28,6 +27,7 @@ object TransactionListContract {
         val canRequestMoreItems: Boolean = false,
         val items: List<Transaction>? = null,
         val groupedItems: Map<String, List<Transaction>>? = null,
+        val selectedTransaction: Transaction? = null,
     )
 
     /**
@@ -41,6 +41,7 @@ object TransactionListContract {
         data class QueryInputUpdated(val query: String) : Event
         data object EndOfListReached : Event
         data class TransactionClicked(val transaction: Transaction) : Event
+        data object DismissTransactionDetails : Event
     }
 
     /**
@@ -50,6 +51,5 @@ object TransactionListContract {
         data object OpenNavigationDrawer : Effect
         data object GoToSettings : Effect
         data class ShowGenericError(@StringRes val errorMessage: Int? = null) : Effect
-        data class GoToTransactionDetails(val transaction: Transaction) : Effect
     }
 }

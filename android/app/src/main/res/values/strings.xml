@@ -35,4 +35,15 @@
     <string name="shortcut_add_transaction">Add a transaction</string>
     <string name="shortcut_budgets">Track my budgets</string>
     <string name="shortcut_accounts">Consult my accounts</string>
+    <string name="essential">Essential</string>
+    <string name="description">Description</string>
+    <string name="transactions_sender_account">Sender account</string>
+    <string name="transactions_destination_account">Destination account</string>
+    <string name="account_external">External account</string>
+    <string name="category">Category</string>
+    <string name="entity">Entity</string>
+    <string name="date">Date</string>
+    <string name="details">Details</string>
+    <string name="amount">Amount</string>
+    <string name="delete">Delete</string>
 </resources>

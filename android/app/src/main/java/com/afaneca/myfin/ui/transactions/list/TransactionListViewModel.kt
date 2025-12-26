@@ -73,7 +73,7 @@ class TransactionListViewModel @Inject constructor(
             }
 
             is TransactionListContract.Event.TransactionClicked -> {
-                _effect.tryEmit(GoToTransactionDetails(event.transaction))
+                _mainState.update { it.copy(selectedTransaction = event.transaction) }
             }
 
             TransactionListContract.Event.NavigationIconClicked -> {
@@ -82,6 +82,10 @@ class TransactionListViewModel @Inject constructor(
 
             TransactionListContract.Event.ToolbarSettingsClicked -> {
                 _effect.tryEmit(GoToSettings)
+            }
+
+            TransactionListContract.Event.DismissTransactionDetails -> {
+                _mainState.update { it.copy(selectedTransaction = null) }
             }
         }
     }
