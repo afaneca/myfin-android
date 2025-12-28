@@ -15,7 +15,7 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val networkDataSource: NetworkDataSource,
     private val transientDataSource: TransientDataSource,
-    private val persisDataSource: PersistentDataSource,
+    private val persistentDataSource: PersistentDataSource,
 ) : AuthGateway {
 
     override suspend fun login(username: String, password: String): Result<LoginResult, DomainError> {
@@ -26,6 +26,7 @@ class AuthRepository @Inject constructor(
                 sessionKey = it.sessionKey,
                 currency = it.currency,
             ))
+            persistentDataSource.setSavedUser(username)
         }
 
         return data
@@ -39,8 +40,12 @@ class AuthRepository @Inject constructor(
         return transientDataSource.getSessionData()?.username
     }
 
-    override fun logout() {
+    override suspend fun getSavedUsername(): String? {
+        return persistentDataSource.getSavedUser()
+    }
+
+    override suspend fun logout() {
         transientDataSource.clearUserData()
-        persisDataSource.clearUserData()
+        persistentDataSource.clearUserData()
     }
 }

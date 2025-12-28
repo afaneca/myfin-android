@@ -1,6 +1,7 @@
 package com.afaneca.myfin.ui.login
 
 
+import androidx.fragment.app.FragmentActivity
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -21,6 +22,8 @@ object LoginContract {
         val usernameInput: String? = null,
         val passwordInput: String? = null,
         val isLoginButtonEnabled: Boolean = false,
+        val isBiometricEnabled: Boolean = false, // Current user has biometric credentials saved
+        val isFirstLogin: Boolean = false,
     )
 
     /**
@@ -29,6 +32,7 @@ object LoginContract {
     sealed interface Event {
         data object Init : Event
         data object LoginClicked : Event
+        data class BiometricLoginClicked(val activity: FragmentActivity) : Event
         data class UsernameUpdated(val input: String) : Event
         data class PasswordUpdated(val input: String) : Event
     }
@@ -38,7 +42,10 @@ object LoginContract {
      */
     sealed interface Effect {
         data object GoToHome : Effect
+        data class GoToBiometricSetup(val username: String, val password: String) : Effect
         data object ShowGenericError : Effect
         data object ShowInvalidCredentialsError : Effect
+        data object ShowBiometricError : Effect
+        data object ShowBiometricKeyInvalidatedError : Effect
     }
 }

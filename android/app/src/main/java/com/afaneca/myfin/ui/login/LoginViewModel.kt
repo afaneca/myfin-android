@@ -1,7 +1,11 @@
 package com.afaneca.myfin.ui.login
 
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.afaneca.myfin.data.biometric.BiometricAuthManager
+import com.afaneca.myfin.domain.usecase.BiometricLoginUseCase
+import com.afaneca.myfin.domain.usecase.CheckLoginStatusUseCase
 import com.afaneca.myfin.domain.usecase.LoginUseCase
 import com.afaneca.myfin.domain.common.Result
 import com.afaneca.myfin.ui.common.EffectMutableSharedFlow
@@ -16,6 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
+    private val checkLoginStatusUseCase: CheckLoginStatusUseCase,
+    private val biometricLoginUseCase: BiometricLoginUseCase,
 ) : ViewModel(), LoginContract.ViewModel {
 
     private val _mainState = MutableStateFlow(LoginContract.MainState())
@@ -24,17 +30,16 @@ class LoginViewModel @Inject constructor(
     private val _effect = EffectMutableSharedFlow<LoginContract.Effect>()
     override val effect = _effect.asSharedFlow()
 
+    private var savedUsername: String? = null
+    private var canUseBiometric: Boolean = false
+
     override fun triggerEvent(event: LoginContract.Event) {
         when (event) {
-            LoginContract.Event.Init -> {
-                // TODO - check if there's a saved user
-                // TODO - remove mock login data!
-                _mainState.update { it.copy(isInitialized = true, isLoading = false, usernameInput = "demo", passwordInput = "demo", isLoginButtonEnabled = true) }
-            }
+            LoginContract.Event.Init -> init()
 
-            LoginContract.Event.LoginClicked -> {
-                attemptLogin()
-            }
+            LoginContract.Event.LoginClicked -> attemptLogin()
+
+            is LoginContract.Event.BiometricLoginClicked -> performBiometricLogin(event.activity)
 
             is LoginContract.Event.PasswordUpdated -> {
                 _mainState.update {
@@ -54,9 +59,37 @@ class LoginViewModel @Inject constructor(
                         isLoginButtonEnabled = isInputValid(
                             usernameInput = event.input,
                         ),
+                        // biometrics can never be enabled if current user input is not the saved username
+                        isBiometricEnabled = if (!it.isBiometricEnabled) false else event.input == savedUsername,
                     )
                 }
             }
+        }
+    }
+
+    private fun init() = viewModelScope.launch {
+        val statusResult = checkLoginStatusUseCase(Unit)
+        val (savedUsername, canUseBiometric, isBiometricEnabled) = when (statusResult) {
+            is Result.Success -> {
+                Triple(
+                    statusResult.data.savedUsername,
+                    statusResult.data.biometricStatus.canUseBiometric,
+                    statusResult.data.biometricStatus.isEnabled,
+                )
+            }
+
+            is Result.Error -> Triple(null, false, false)
+        }
+        this@LoginViewModel.savedUsername = savedUsername
+        this@LoginViewModel.canUseBiometric = canUseBiometric
+
+        _mainState.update {
+            it.copy(
+                isInitialized = true,
+                isLoading = false,
+                isBiometricEnabled = isBiometricEnabled,
+                usernameInput = savedUsername,
+            )
         }
     }
 
@@ -69,16 +102,68 @@ class LoginViewModel @Inject constructor(
 
     private fun attemptLogin() = viewModelScope.launch {
         _mainState.update { it.copy(isLoading = true) }
-        val params = LoginUseCase.LoginParams(
-            mainState.value.usernameInput ?: "",
-            mainState.value.passwordInput ?: "",
-        )
+        val username = mainState.value.usernameInput ?: ""
+        val password = mainState.value.passwordInput ?: ""
+        val params = LoginUseCase.LoginParams(username, password)
         val result = loginUseCase(params)
         _mainState.update { it.copy(isLoading = false) }
         when (result) {
             is Result.Error -> handleLoginError(error = result.error)
             is Result.Success -> {
+                // Check if this is first login (biometric not enabled yet)
+                // Use state value which reflects whether current username has biometric enabled
+                val isBiometricEnabled = mainState.value.isBiometricEnabled
+
+                if (!isBiometricEnabled && canUseBiometric) {
+                    // First login - redirect to biometric setup
+                    _mainState.update { it.copy(isFirstLogin = true) }
+                    _effect.tryEmit(LoginContract.Effect.GoToBiometricSetup(username, password))
+                } else {
+                    // Not first login or biometric not available - go directly to home
+                    _effect.tryEmit(LoginContract.Effect.GoToHome)
+                }
+            }
+        }
+    }
+
+    private fun performBiometricLogin(activity: FragmentActivity) = viewModelScope.launch {
+        _mainState.update { it.copy(isLoading = true) }
+
+        val result = biometricLoginUseCase(BiometricLoginUseCase.Params(activity))
+
+        _mainState.update { it.copy(isLoading = false) }
+
+        when (result) {
+            is Result.Success -> {
                 _effect.tryEmit(LoginContract.Effect.GoToHome)
+            }
+
+            is Result.Error -> {
+                when (result.error) {
+                    BiometricLoginUseCase.FeatureError.Cancelled -> {
+                        // User cancelled, do nothing
+                    }
+
+                    is BiometricLoginUseCase.FeatureError.AuthenticationFailed -> {
+                        // Check if key was invalidated
+                        if (result.error.errorCode == BiometricAuthManager.ERROR_KEY_INVALIDATED) {
+                            _effect.tryEmit(LoginContract.Effect.ShowBiometricKeyInvalidatedError)
+                        } else {
+                            _effect.tryEmit(LoginContract.Effect.ShowBiometricError)
+                        }
+                    }
+
+                    BiometricLoginUseCase.FeatureError.InvalidCredentials -> {
+                        _effect.tryEmit(LoginContract.Effect.ShowInvalidCredentialsError)
+                    }
+
+                    BiometricLoginUseCase.FeatureError.CredentialsNotFound,
+                    BiometricLoginUseCase.FeatureError.LoginFailed,
+                    BiometricLoginUseCase.FeatureError.UnexpectedError,
+                        -> {
+                        _effect.tryEmit(LoginContract.Effect.ShowBiometricError)
+                    }
+                }
             }
         }
     }

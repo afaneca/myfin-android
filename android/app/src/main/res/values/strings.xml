@@ -46,4 +46,16 @@
     <string name="details">Details</string>
     <string name="amount">Amount</string>
     <string name="delete">Delete</string>
+    <string name="biometric_setup_title">Enable Biometric Authentication</string>
+    <string name="biometric_setup_subtitle">Scan your fingerprint to confirm</string>
+    <string name="biometric_login_title">Login with Biometric</string>
+    <string name="biometric_login_subtitle">Scan your fingerprint to login</string>
+    <string name="biometric_setup_prompt_title">Secure Your Login</string>
+    <string name="biometric_setup_prompt_description">Would you like to enable biometric authentication for faster and more secure login?</string>
+    <string name="biometric_enable">Enable</string>
+    <string name="biometric_skip">Skip</string>
+    <string name="biometric_not_available">Biometric authentication is not available on this device</string>
+    <string name="biometric_not_enrolled">Please enroll biometric authentication in your device settings first</string>
+    <string name="biometric_error">Biometric authentication failed</string>
+    <string name="biometric_key_invalidated">Biometric credentials were invalidated. Please login again to re-enable biometric authentication</string>
 </resources>

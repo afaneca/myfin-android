@@ -1,14 +1,11 @@
 package com.afaneca.myfin.ui.main
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.DrawerValue
@@ -23,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -41,6 +39,7 @@ import com.afaneca.myfin.ui.common.nav.toEntries
 import com.afaneca.myfin.ui.dashboard.DashboardScreen
 import com.afaneca.myfin.ui.login.LoginScreen
 import com.afaneca.myfin.ui.main.MainContract.LocalLoadingState
+import com.afaneca.myfin.ui.login.biometric.BiometricSetupScreen
 import com.afaneca.myfin.ui.settings.SettingsScreen
 import com.afaneca.myfin.ui.theme.AppTheme
 import com.afaneca.myfin.ui.transactions.list.TransactionListScreen
@@ -53,6 +52,9 @@ import kotlinx.serialization.Serializable
 sealed interface AppRoute : NavKey {
     @Serializable
     data object Login : AppRoute
+
+    @Serializable
+    data class BiometricSetup(val username: String, val password: String) : AppRoute
 
     @Serializable
     data object Onboarding : AppRoute
@@ -68,7 +70,7 @@ sealed interface AppRoute : NavKey {
 }
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,16 +84,16 @@ class MainActivity : ComponentActivity() {
                 topLevelRoutes = setOf(
                     AppRoute.Login,
                     AppRoute.Home,
+                    AppRoute.Transactions,
                 ),
             )
 
             val navigator = remember { Navigator(navigationState) }
 
-            val isPrivateRoute = !listOf(
-                AppRoute.Login,
-                AppRoute.Settings,
-                AppRoute.Onboarding,
-            ).contains(navigationState.topLevelRoute)
+            val isPrivateRoute = when (navigationState.topLevelRoute) {
+                AppRoute.Login, AppRoute.Settings, AppRoute.Onboarding, is AppRoute.BiometricSetup -> false
+                else -> true
+            }
 
             val drawerState = rememberDrawerState(DrawerValue.Closed)
             val scope = rememberCoroutineScope()
@@ -225,8 +227,24 @@ class MainActivity : ComponentActivity() {
                 goToHome = {
                     navigator.navigate(route = AppRoute.Home, removeCurrentFromBackStack = true)
                 },
+                goToBiometricSetup = { username, password ->
+                    navigator.navigate(
+                        route = AppRoute.BiometricSetup(username, password),
+                        removeCurrentFromBackStack = true,
+                    )
+                },
                 showError = {},
                 goToSettings = { navigator.navigate(AppRoute.Settings) },
+            )
+        }
+
+        entry<AppRoute.BiometricSetup> { key ->
+            BiometricSetupScreen(
+                username = key.username,
+                password = key.password,
+                goToHome = {
+                    navigator.navigate(route = AppRoute.Home, removeCurrentFromBackStack = true)
+                },
             )
         }
 

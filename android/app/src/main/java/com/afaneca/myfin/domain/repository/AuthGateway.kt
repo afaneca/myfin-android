@@ -8,5 +8,6 @@ interface AuthGateway {
     suspend fun login(username: String, password: String): Result<LoginResult, DomainError>
     fun getSessionKey(): String?
     fun getUsername(): String?
-    fun logout()
+    suspend fun getSavedUsername(): String?
+    suspend fun logout()
 }

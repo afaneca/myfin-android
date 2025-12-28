@@ -9,6 +9,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -16,8 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.afaneca.myfin.R
 import com.afaneca.myfin.ui.theme.AppTheme
 import com.afaneca.myfin.ui.theme.LocalSpacing
 
@@ -74,7 +77,7 @@ class MFSecondaryButton {
             OutlinedButton(
                 modifier = modifier
                     .fillMaxWidth()
-                    .height(LocalSpacing.current.larger3), // Corrected to use larger2
+                    .height(LocalSpacing.current.larger3),
                 shape = MaterialTheme.shapes.large,
                 enabled = isEnabled,
                 onClick = onDebounceClick(
@@ -108,6 +111,25 @@ class MFSecondaryButton {
     }
 }
 
+@Composable
+fun MFTextButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    TextButton(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(LocalSpacing.current.larger3),
+        shape = MaterialTheme.shapes.large,
+        onClick = onClick,
+        enabled = isEnabled,
+    ) {
+        Text(text)
+    }
+}
+
 @Preview
 @Composable
 fun MFButtonPreview() {
@@ -116,6 +138,7 @@ fun MFButtonPreview() {
             MFPrimaryButton(text = "My Button") {}
             MFSecondaryButton(text = "My Secondary Button") {}
             MFSecondaryButton.Negative(text = "My Negative Button") {}
+            MFTextButton(text = "My Text Button") {}
         }
     }
 }

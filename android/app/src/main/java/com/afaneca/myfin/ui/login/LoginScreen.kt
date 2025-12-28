@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -21,13 +22,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.afaneca.myfin.R
 import com.afaneca.myfin.ui.common.MFScaffold
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     goToHome: () -> Unit,
+    goToBiometricSetup: (username: String, password: String) -> Unit,
     goToSettings: () -> Unit,
-    showError: (message: String?) -> Unit,
+    showError: (message: String?) -> Unit = {},
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -47,6 +52,7 @@ fun LoginScreen(
     }
 
     suspend fun showInvalidCredentialsError() {
+        Timber.d("Invalid credentials")
         snackbarHostState.showSnackbar(
             message = context.getString(R.string.error_invalid_credentials),
             withDismissAction = true
@@ -60,17 +66,36 @@ fun LoginScreen(
         )
     }
 
+    suspend fun showBiometricError() {
+        snackbarHostState.showSnackbar(
+            message = context.getString(R.string.biometric_error),
+            withDismissAction = true
+        )
+    }
+
+    suspend fun showBiometricKeyInvalidatedError() {
+        snackbarHostState.showSnackbar(
+            message = context.getString(R.string.biometric_key_invalidated),
+            withDismissAction = true,
+            duration = androidx.compose.material3.SnackbarDuration.Long
+        )
+    }
+
     LaunchedEffect(Unit) {
         viewModel.triggerEvent(LoginContract.Event.Init)
 
         viewModel.effect.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .collect { effect ->
+            .onEach { effect ->
                 when (effect) {
                     LoginContract.Effect.GoToHome -> goToHome()
+                    is LoginContract.Effect.GoToBiometricSetup ->
+                        goToBiometricSetup(effect.username, effect.password)
                     LoginContract.Effect.ShowGenericError -> showGenericError()
                     LoginContract.Effect.ShowInvalidCredentialsError -> showInvalidCredentialsError()
+                    LoginContract.Effect.ShowBiometricError -> showBiometricError()
+                    LoginContract.Effect.ShowBiometricKeyInvalidatedError -> showBiometricKeyInvalidatedError()
                 }
-            }
+            }.launchIn(this)
     }
 
     MFScaffold(
@@ -93,6 +118,11 @@ fun LoginScreen(
             onUsernameUpdated = ::onUsernameUpdated,
             onPasswordUpdated = ::onPasswordUpdated,
             onLoginButtonClicked = ::onLoginButtonClick,
+            onBiometricLoginClicked = {
+                if (context is FragmentActivity) {
+                    viewModel.triggerEvent(LoginContract.Event.BiometricLoginClicked(context))
+                }
+            },
         )
     }
 }

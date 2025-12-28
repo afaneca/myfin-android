@@ -46,4 +46,16 @@
     <string name="details">Detalhes</string>
     <string name="amount">Montante</string>
     <string name="delete">Remover</string>
+    <string name="biometric_setup_title">Ativar Autenticação Biométrica</string>
+    <string name="biometric_setup_subtitle">Digitalize a sua impressão digital para confirmar</string>
+    <string name="biometric_login_title">Entrar com Biometria</string>
+    <string name="biometric_login_subtitle">Digitalize a sua impressão digital para entrar</string>
+    <string name="biometric_setup_prompt_title">Proteja o seu Login</string>
+    <string name="biometric_setup_prompt_description">Gostaria de ativar a autenticação biométrica para um login mais rápido e seguro?</string>
+    <string name="biometric_enable">Ativar</string>
+    <string name="biometric_skip">Ignorar</string>
+    <string name="biometric_not_available">Autenticação biométrica não disponível neste dispositivo</string>
+    <string name="biometric_not_enrolled">Por favor, configure a autenticação biométrica nas definições do dispositivo primeiro</string>
+    <string name="biometric_error">Falha na autenticação biométrica</string>
+    <string name="biometric_key_invalidated">As credenciais biométricas foram invalidadas. Por favor, inicie sessão novamente para reativar a autenticação biométrica</string>
 </resources>
