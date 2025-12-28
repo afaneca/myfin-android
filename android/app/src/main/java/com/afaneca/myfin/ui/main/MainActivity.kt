@@ -151,7 +151,9 @@ class MainActivity : FragmentActivity() {
                                     label = { Text(stringResource(R.string.dashboard)) },
                                     selected = navigationState.currentRoute == AppRoute.Home,
                                     onClick = {
-                                        navigator.navigate(AppRoute.Home)
+                                        navigator.navigate(
+                                            route = AppRoute.Home,
+                                        )
                                         scope.launch { drawerState.close() }
                                     },
                                 )

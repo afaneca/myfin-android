@@ -200,7 +200,7 @@ fun TransactionListItem(
     // Define content and icon colors based on transaction type
     val amountContentColor = when (transaction.type) {
         TransactionType.INCOME -> MaterialTheme.colorScheme.tertiary
-        TransactionType.EXPENSE -> MaterialTheme.colorScheme.error
+        /*TransactionType.EXPENSE -> MaterialTheme.colorScheme.error*/
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
     val iconColor = when (transaction.type) {
@@ -210,12 +210,12 @@ fun TransactionListItem(
     }
 
     val amountBorder = when (transaction.type) {
-        TransactionType.INCOME, TransactionType.EXPENSE -> BorderStroke(
+        TransactionType.INCOME/*, TransactionType.EXPENSE*/ -> BorderStroke(
             1.dp,
             amountContentColor.copy(alpha = 0.5f),
         )
 
-        TransactionType.TRANSFER -> BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+        else -> BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     }
 
     ListItem(
