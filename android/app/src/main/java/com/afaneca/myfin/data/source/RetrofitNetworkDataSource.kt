@@ -14,13 +14,14 @@ import javax.inject.Inject
  */
 class RetrofitNetworkDataSource @Inject constructor(
     private val apiServices: MyFinApiServices,
+    private val transientDataSource: TransientDataSource,
 ) : NetworkDataSource {
 
     override suspend fun attemptLogin(
         username: String,
         password: String,
     ): Result<AttemptLoginResponseDto, DomainError> {
-        return safeApiCall {
+        return safeApiCall(transientDataSource) {
             apiServices.attemptLogin(username, password)
         }
     }
@@ -30,7 +31,7 @@ class RetrofitNetworkDataSource @Inject constructor(
         pageSize: Int,
         query: String?,
     ): Result<FilteredResultsByPageDto<TransactionDto>, DomainError> {
-        return safeApiCall {
+        return safeApiCall(transientDataSource) {
             apiServices.getTransactionsListByPage(page, pageSize, query)
         }
     }

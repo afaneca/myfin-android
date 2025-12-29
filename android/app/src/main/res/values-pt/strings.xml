@@ -58,4 +58,5 @@
     <string name="biometric_not_enrolled">Por favor, configure a autenticação biométrica nas definições do dispositivo primeiro</string>
     <string name="biometric_error">Falha na autenticação biométrica</string>
     <string name="biometric_key_invalidated">As credenciais biométricas foram invalidadas. Por favor, inicie sessão novamente para reativar a autenticação biométrica</string>
+    <string name="session_invalid_error">Sessão inválida. Por favor, inicie sessão novamente.</string>
 </resources>

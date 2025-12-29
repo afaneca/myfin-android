@@ -27,6 +27,8 @@ class AuthRepository @Inject constructor(
                 currency = it.currency,
             ))
             persistentDataSource.setSavedUser(username)
+            // Mark user as authenticated after successful login
+            transientDataSource.setAuthenticated()
         }
 
         return data

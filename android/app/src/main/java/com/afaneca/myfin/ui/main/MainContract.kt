@@ -47,5 +47,6 @@ object MainContract {
     sealed interface Effect {
         data object OpenNavigationDrawer : Effect
         data object GoToLogin : Effect
+        data object ShowUnauthorizedError : Effect
     }
 }

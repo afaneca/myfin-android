@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.domain.model.BalanceDigest
 import com.afaneca.myfin.domain.usecase.HasSessionDataUseCase
 import com.afaneca.myfin.domain.usecase.LogoutUseCase
+import com.afaneca.myfin.domain.usecase.ObserveAuthenticatedUseCase
 import com.afaneca.myfin.domain.usecase.ObserveBalanceDigestUseCase
 import com.afaneca.myfin.domain.usecase.ObserveUseDynamicThemeUseCase
 import com.afaneca.myfin.ui.common.EffectMutableSharedFlow
@@ -26,6 +27,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     observeUseDynamicThemeUseCase: ObserveUseDynamicThemeUseCase,
     observeBalanceDigestUseCase: ObserveBalanceDigestUseCase,
+    observeAuthenticatedUseCase: ObserveAuthenticatedUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val hasSessionDataUseCase: HasSessionDataUseCase,
 ) : ViewModel(), MainContract.ViewModel {
@@ -39,6 +41,11 @@ class MainViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = BalanceDigest(),
+    )
+    private val isAuthenticated: StateFlow<Boolean> = observeAuthenticatedUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = false,
     )
 
     private val _mainState = MutableStateFlow(MainContract.MainState())
@@ -57,6 +64,17 @@ class MainViewModel @Inject constructor(
     private val _effect = EffectMutableSharedFlow<MainContract.Effect>()
     override val effect = _effect.asSharedFlow()
 
+    init {
+        // Observe authentication state changes (triggered by 401 errors)
+        viewModelScope.launch {
+            isAuthenticated.collect { authenticated ->
+                if (!authenticated) {
+                    handleUnauthorized()
+                }
+            }
+        }
+    }
+
     override fun triggerEvent(event: MainContract.Event) {
         when (event) {
             MainContract.Event.Init -> init()
@@ -70,6 +88,11 @@ class MainViewModel @Inject constructor(
 
             MainContract.Event.LogoutClicked -> logout()
         }
+    }
+
+    private fun handleUnauthorized() {
+        _effect.tryEmit(MainContract.Effect.ShowUnauthorizedError)
+        _effect.tryEmit(MainContract.Effect.GoToLogin)
     }
 
     private fun logout() = viewModelScope.launch {

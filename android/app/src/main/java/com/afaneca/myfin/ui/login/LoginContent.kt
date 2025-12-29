@@ -99,14 +99,15 @@ fun LoginContent(
                 enabled = uiState.isLoading.not(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             )
+            Spacer(modifier = Modifier.height(LocalSpacing.current.default))
             // Biometric login button (if enabled)
             AnimatedVisibility(
                 visible = uiState.isBiometricEnabled,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
             ) {
+                Spacer(modifier = Modifier.height(LocalSpacing.current.default))
                 Column {
-                    Spacer(modifier = Modifier.height(LocalSpacing.current.default))
                     IconButton(
                         onClick = onBiometricLoginClicked,
                         enabled = !uiState.isLoading,

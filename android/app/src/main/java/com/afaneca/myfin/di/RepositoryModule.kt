@@ -2,11 +2,13 @@ package com.afaneca.myfin.di
 
 import com.afaneca.myfin.data.repository.AccountRepository
 import com.afaneca.myfin.data.repository.AuthRepository
+import com.afaneca.myfin.data.repository.AuthenticationRepository
 import com.afaneca.myfin.data.repository.BiometricRepository
 import com.afaneca.myfin.data.repository.SettingsRepository
 import com.afaneca.myfin.data.repository.TransactionRepository
 import com.afaneca.myfin.domain.repository.AccountGateway
 import com.afaneca.myfin.domain.repository.AuthGateway
+import com.afaneca.myfin.domain.repository.AuthenticationGateway
 import com.afaneca.myfin.domain.repository.BiometricGateway
 import com.afaneca.myfin.domain.repository.SettingsGateway
 import com.afaneca.myfin.domain.repository.TransactionGateway
@@ -22,6 +24,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindAuthRepository(authRepositoryImpl: AuthRepository): AuthGateway
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthenticationRepository(authenticationRepositoryImpl: AuthenticationRepository): AuthenticationGateway
 
     @Binds
     @Singleton

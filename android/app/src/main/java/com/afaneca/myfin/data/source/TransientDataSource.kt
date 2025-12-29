@@ -17,12 +17,16 @@ interface TransientDataSource {
     fun observeBalanceDigest(): Flow<BalanceDigest>
     fun setSessionData(data: SessionData)
     fun getSessionData(): SessionData?
+    fun observeIsAuthenticated(): Flow<Boolean>
+    fun setUnauthenticated()
+    fun setAuthenticated()
     fun clearUserData()
 }
 
 @Singleton
 class InMemoryDataSource @Inject constructor() : TransientDataSource {
     private val _balanceDigest = MutableStateFlow(BalanceDigest())
+    private val _isAuthenticated = MutableStateFlow(false)
     private var sessionData: SessionData? = null
 
     override fun setBalanceDigest(balanceDigest: BalanceDigest) {
@@ -41,8 +45,21 @@ class InMemoryDataSource @Inject constructor() : TransientDataSource {
         return sessionData
     }
 
+    override fun observeIsAuthenticated(): Flow<Boolean> {
+        return _isAuthenticated.asStateFlow()
+    }
+
+    override fun setUnauthenticated() {
+        _isAuthenticated.value = false
+    }
+
+    override fun setAuthenticated() {
+        _isAuthenticated.value = true
+    }
+
     override fun clearUserData() {
         _balanceDigest.value = BalanceDigest()
+        _isAuthenticated.value = false
         sessionData = null
     }
 }
