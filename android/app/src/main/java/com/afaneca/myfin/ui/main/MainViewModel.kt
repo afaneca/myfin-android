@@ -1,23 +1,25 @@
 package com.afaneca.myfin.ui.main
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afaneca.myfin.data.repository.SettingsRepository
 import com.afaneca.myfin.domain.model.BalanceDigest
+import com.afaneca.myfin.domain.usecase.HasSessionDataUseCase
 import com.afaneca.myfin.domain.usecase.LogoutUseCase
 import com.afaneca.myfin.domain.usecase.ObserveBalanceDigestUseCase
 import com.afaneca.myfin.domain.usecase.ObserveUseDynamicThemeUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
 import com.afaneca.myfin.ui.common.EffectMutableSharedFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +27,7 @@ class MainViewModel @Inject constructor(
     observeUseDynamicThemeUseCase: ObserveUseDynamicThemeUseCase,
     observeBalanceDigestUseCase: ObserveBalanceDigestUseCase,
     private val logoutUseCase: LogoutUseCase,
+    private val hasSessionDataUseCase: HasSessionDataUseCase,
 ) : ViewModel(), MainContract.ViewModel {
     private val useDynamicTheme: StateFlow<Boolean> =
         observeUseDynamicThemeUseCase().stateIn(
@@ -78,6 +81,17 @@ class MainViewModel @Inject constructor(
 
     private fun init() {
         if (mainState.value.isInitialized) return
+
+        // Check for process death - session data lost
+        if (!hasSessionDataUseCase()) {
+            _mainState.update { it.copy(isLoading = true) }
+            Handler(Looper.getMainLooper()).post {
+                _effect.tryEmit(MainContract.Effect.GoToLogin)
+                _mainState.update { it.copy(isLoading = false) }
+            }
+            return
+        }
+
         _mainState.update { it.copy(isInitialized = true) }
     }
 

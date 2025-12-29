@@ -25,6 +25,7 @@ import com.afaneca.myfin.R
 import com.afaneca.myfin.ui.common.MFScaffold
 import com.afaneca.myfin.ui.common.MFScaffoldWithNavDrawer
 import com.afaneca.myfin.ui.transactions.list.TransactionListContract
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -71,9 +72,12 @@ fun DashboardScreen(
 
     LaunchedEffect(Unit) {
         viewModel.triggerEvent(DashboardContract.Event.Init)
+    }
 
-        viewModel.effect.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { effect ->
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.effect
+            .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .collect { effect ->
                 when (effect) {
                     is DashboardContract.Effect.ShowGenericError -> showGenericError(effect.errorMessage)
                     DashboardContract.Effect.OpenNavigationDrawer -> openNavigationDrawer()
@@ -82,7 +86,7 @@ fun DashboardScreen(
                     DashboardContract.Effect.GoToBudgets -> goToBudgets()
                     DashboardContract.Effect.GoToTransactions -> goToTransactions()
                 }
-            }.launchIn(this)
+            }
     }
 
     MFScaffoldWithNavDrawer(title = stringResource(R.string.app_name),

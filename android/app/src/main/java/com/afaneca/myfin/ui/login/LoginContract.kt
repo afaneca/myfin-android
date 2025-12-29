@@ -1,9 +1,10 @@
 package com.afaneca.myfin.ui.login
 
-
+import android.os.Parcelable
 import androidx.fragment.app.FragmentActivity
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.parcelize.Parcelize
 
 object LoginContract {
     interface ViewModel {
@@ -16,6 +17,7 @@ object LoginContract {
     /**
      * Persistent view state. Single object per logical section (might contain other objects inside it for better organization).
      */
+    @Parcelize
     data class MainState(
         val isInitialized: Boolean = false,
         val isLoading: Boolean = false,
@@ -24,7 +26,7 @@ object LoginContract {
         val isLoginButtonEnabled: Boolean = false,
         val isBiometricEnabled: Boolean = false, // Current user has biometric credentials saved
         val isFirstLogin: Boolean = false,
-    )
+    ) : Parcelable
 
     /**
      * UI interactions, such as button clicks, data input, etc...

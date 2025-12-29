@@ -83,9 +83,12 @@ fun LoginScreen(
 
     LaunchedEffect(Unit) {
         viewModel.triggerEvent(LoginContract.Event.Init)
+    }
 
-        viewModel.effect.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { effect ->
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.effect
+            .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .collect { effect ->
                 when (effect) {
                     LoginContract.Effect.GoToHome -> goToHome()
                     is LoginContract.Effect.GoToBiometricSetup ->
@@ -95,7 +98,7 @@ fun LoginScreen(
                     LoginContract.Effect.ShowBiometricError -> showBiometricError()
                     LoginContract.Effect.ShowBiometricKeyInvalidatedError -> showBiometricKeyInvalidatedError()
                 }
-            }.launchIn(this)
+            }
     }
 
     MFScaffold(

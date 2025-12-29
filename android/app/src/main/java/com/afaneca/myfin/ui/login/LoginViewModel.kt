@@ -1,6 +1,7 @@
 package com.afaneca.myfin.ui.login
 
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afaneca.myfin.data.biometric.BiometricAuthManager
@@ -11,27 +12,45 @@ import com.afaneca.myfin.domain.common.Result
 import com.afaneca.myfin.ui.common.EffectMutableSharedFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val KEY_MAIN_STATE = "mainState"
+private const val KEY_SAVED_USERNAME = "savedUsername"
+private const val KEY_CAN_USE_BIOMETRIC = "canUseBiometric"
+
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val loginUseCase: LoginUseCase,
     private val checkLoginStatusUseCase: CheckLoginStatusUseCase,
     private val biometricLoginUseCase: BiometricLoginUseCase,
 ) : ViewModel(), LoginContract.ViewModel {
 
-    private val _mainState = MutableStateFlow(LoginContract.MainState())
+    private val _mainState: MutableStateFlow<LoginContract.MainState> =
+        savedStateHandle.getMutableStateFlow(
+            KEY_MAIN_STATE, LoginContract.MainState(),
+        )
     override val mainState = _mainState.asStateFlow()
 
     private val _effect = EffectMutableSharedFlow<LoginContract.Effect>()
     override val effect = _effect.asSharedFlow()
 
-    private var savedUsername: String? = null
-    private var canUseBiometric: Boolean = false
+    private var savedUsername: String?
+        get() = savedStateHandle[KEY_SAVED_USERNAME]
+        set(value) {
+            savedStateHandle[KEY_SAVED_USERNAME] = value
+        }
+
+    private var canUseBiometric: Boolean
+        get() = savedStateHandle[KEY_CAN_USE_BIOMETRIC] ?: false
+        set(value) {
+            savedStateHandle[KEY_CAN_USE_BIOMETRIC] = value
+        }
 
     override fun triggerEvent(event: LoginContract.Event) {
         when (event) {

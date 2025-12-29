@@ -44,8 +44,6 @@ import com.afaneca.myfin.ui.settings.SettingsScreen
 import com.afaneca.myfin.ui.theme.AppTheme
 import com.afaneca.myfin.ui.transactions.list.TransactionListScreen
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -80,7 +78,7 @@ class MainActivity : FragmentActivity() {
             val lifecycleOwner = LocalLifecycleOwner.current
             val uiState by viewModel.mainState.collectAsStateWithLifecycle()
             val navigationState = rememberNavigationState(
-                startRoute = AppRoute.Login,
+                initialStartRoute = AppRoute.Login,
                 topLevelRoutes = setOf(
                     AppRoute.Login,
                     AppRoute.Home,
@@ -100,25 +98,26 @@ class MainActivity : FragmentActivity() {
 
             LaunchedEffect(Unit) {
                 viewModel.triggerEvent(MainContract.Event.Init)
+            }
 
-                viewModel.effect.flowWithLifecycle(
-                    lifecycleOwner.lifecycle,
-                    Lifecycle.State.STARTED,
-                )
-                    .onEach { effect ->
+            LaunchedEffect(lifecycleOwner) {
+                viewModel.effect
+                    .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                    .collect { effect ->
                         when (effect) {
                             MainContract.Effect.OpenNavigationDrawer -> {
-                                drawerState.open()
+                                scope.launch { drawerState.open() }
                             }
 
                             MainContract.Effect.GoToLogin -> {
+                                navigationState.startRoute = AppRoute.Login
                                 navigator.navigate(
                                     route = AppRoute.Login,
                                     removeCurrentFromBackStack = true,
                                 )
                             }
                         }
-                    }.launchIn(this)
+                    }
             }
 
             fun openNavigationDrawer() {
@@ -192,7 +191,22 @@ class MainActivity : FragmentActivity() {
                             },
                         ) {
                             val entryProvider = entryProvider {
-                                publicNav(navigator = navigator)
+                                publicNav(
+                                    goToHome = {
+                                        navigationState.startRoute = AppRoute.Home
+                                        navigator.navigate(
+                                            route = AppRoute.Home,
+                                            removeCurrentFromBackStack = true,
+                                        )
+                                    },
+                                    goToBiometricSetup = { username, password ->
+                                        navigator.navigate(
+                                            route = AppRoute.BiometricSetup(username, password),
+                                            removeCurrentFromBackStack = true,
+                                        )
+                                    },
+                                    goToSettings = { navigator.navigate(AppRoute.Settings) },
+                                )
                                 privateNav(
                                     openNavigationDrawer = { openNavigationDrawer() },
                                     goToSettings = { navigator.navigate(AppRoute.Settings) },
@@ -223,20 +237,17 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    private fun EntryProviderScope<NavKey>.publicNav(navigator: Navigator) {
+    private fun EntryProviderScope<NavKey>.publicNav(
+        goToHome: () -> Unit,
+        goToBiometricSetup: (username: String, password: String) -> Unit,
+        goToSettings: () -> Unit,
+    ) {
         entry<AppRoute.Login> { key ->
             LoginScreen(
-                goToHome = {
-                    navigator.navigate(route = AppRoute.Home, removeCurrentFromBackStack = true)
-                },
-                goToBiometricSetup = { username, password ->
-                    navigator.navigate(
-                        route = AppRoute.BiometricSetup(username, password),
-                        removeCurrentFromBackStack = true,
-                    )
-                },
+                goToHome = goToHome,
+                goToBiometricSetup = goToBiometricSetup,
+                goToSettings = goToSettings,
                 showError = {},
-                goToSettings = { navigator.navigate(AppRoute.Settings) },
             )
         }
 
@@ -244,9 +255,7 @@ class MainActivity : FragmentActivity() {
             BiometricSetupScreen(
                 username = key.username,
                 password = key.password,
-                goToHome = {
-                    navigator.navigate(route = AppRoute.Home, removeCurrentFromBackStack = true)
-                },
+                goToHome = goToHome,
             )
         }
 

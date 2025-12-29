@@ -1,10 +1,12 @@
 import java.util.Properties
 import java.io.FileInputStream
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
@@ -62,9 +64,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         buildConfig = true
         compose = true
@@ -84,6 +83,15 @@ android {
             resValue("string", "default_api_base_url", "https://api.demo.myfinbudget.com")
             signingConfig = signingConfigs.getByName("release")
         }
+    }
+}
+
+kotlin {
+    // Ensure the toolchain uses Java 11
+    jvmToolchain(11)
+    compilerOptions {
+        // Set the JVM target using the enum-based DSL
+        jvmTarget.set(JvmTarget.JVM_11)
     }
 }
 

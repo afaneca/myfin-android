@@ -28,6 +28,7 @@ import com.afaneca.myfin.R
 import com.afaneca.myfin.domain.model.Transaction
 import com.afaneca.myfin.ui.common.MFScaffoldWithNavDrawer
 import com.afaneca.myfin.ui.transactions.details.TransactionDetailsBottomSheet
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -83,15 +84,18 @@ fun TransactionListScreen(
 
     LaunchedEffect(Unit) {
         viewModel.triggerEvent(TransactionListContract.Event.Init)
+    }
 
-        viewModel.effect.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { effect ->
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.effect
+            .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .collect { effect ->
                 when (effect) {
                     TransactionListContract.Effect.OpenNavigationDrawer -> openNavigationDrawer()
                     is TransactionListContract.Effect.ShowGenericError -> showGenericError(effect.errorMessage)
                     TransactionListContract.Effect.GoToSettings -> goToSettings()
                 }
-            }.launchIn(this)
+            }
     }
 
     LaunchedEffect(uiState.selectedTransaction) {

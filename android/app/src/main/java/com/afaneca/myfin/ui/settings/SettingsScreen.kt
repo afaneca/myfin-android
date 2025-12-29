@@ -22,6 +22,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.afaneca.myfin.R
 import com.afaneca.myfin.ui.common.MFScaffold
 import com.afaneca.myfin.ui.common.MFScaffoldWithBackNav
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -63,9 +64,12 @@ fun SettingsScreen(
 
     LaunchedEffect(Unit) {
         viewModel.triggerEvent(SettingsContract.Event.Init)
+    }
 
-        viewModel.effect.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { effect ->
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.effect
+            .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .collect { effect ->
                 when (effect) {
                     SettingsContract.Effect.GoBack -> {
                         dispatcher?.onBackPressed()
@@ -73,7 +77,7 @@ fun SettingsScreen(
                     is SettingsContract.Effect.ShowGenericError -> showGenericError(effect.errorMessage)
                     SettingsContract.Effect.ShowInvalidUrlError -> showInvalidUrlError()
                 }
-            }.launchIn(this)
+            }
     }
 
     MFScaffoldWithBackNav(

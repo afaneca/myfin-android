@@ -18,38 +18,35 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
-import kotlinx.serialization.builtins.ListSerializer
 
 /**
  * Create a navigation state that persists config changes and process death.
  */
 @Composable
 fun rememberNavigationState(
-    startRoute: NavKey,
+    initialStartRoute: NavKey,
     topLevelRoutes: Set<NavKey>
 ): NavigationState {
-
-    val topLevelRoute = rememberSerializable(
-        startRoute, topLevelRoutes,
+    val startRoute = rememberSerializable(
+        initialStartRoute, topLevelRoutes,
         serializer = MutableStateSerializer(NavKeySerializer())
     ) {
-        mutableStateOf(startRoute)
+        mutableStateOf(initialStartRoute)
     }
 
-    val topLevelHistory = rememberSerializable(
-        startRoute, topLevelRoutes,
-        serializer = MutableStateSerializer(ListSerializer(NavKeySerializer()))
+    val topLevelRoute = rememberSerializable(
+        initialStartRoute, topLevelRoutes,
+        serializer = MutableStateSerializer(NavKeySerializer())
     ) {
-        mutableStateOf(listOf(startRoute))
+        mutableStateOf(startRoute.value)
     }
 
     val backStacks = topLevelRoutes.associateWith { key -> rememberNavBackStack(key) }
 
-    return remember(startRoute, topLevelRoutes) {
+    return remember(initialStartRoute, topLevelRoutes) {
         NavigationState(
             startRoute = startRoute,
             topLevelRoute = topLevelRoute,
-            topLevelHistory = topLevelHistory,
             backStacks = backStacks
         )
     }
@@ -60,20 +57,22 @@ fun rememberNavigationState(
  *
  * @param startRoute - the start route. The user will exit the app through this route.
  * @param topLevelRoute - the current top level route
- * @param topLevelHistory - the history of top level routes visited, for back navigation between top-level routes
  * @param backStacks - the back stacks for each top level route
  */
 class NavigationState(
-    val startRoute: NavKey,
+    startRoute: MutableState<NavKey>,
     topLevelRoute: MutableState<NavKey>,
-    topLevelHistory: MutableState<List<NavKey>>,
     val backStacks: Map<NavKey, NavBackStack<NavKey>>
 ) {
+    var startRoute: NavKey by startRoute
     var topLevelRoute: NavKey by topLevelRoute
-    var topLevelHistory: List<NavKey> by topLevelHistory
 
     val stacksInUse: List<NavKey>
-        get() = topLevelHistory
+        get() = if (topLevelRoute == startRoute) {
+            listOf(startRoute)
+        } else {
+            listOf(startRoute, topLevelRoute)
+        }
 
     val currentRoute: NavKey
         get() = backStacks[topLevelRoute]?.lastOrNull() ?: topLevelRoute

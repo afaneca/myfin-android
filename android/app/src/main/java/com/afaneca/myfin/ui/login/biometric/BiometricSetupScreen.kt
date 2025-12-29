@@ -62,8 +62,11 @@ fun BiometricSetupScreen(
 
     LaunchedEffect(Unit) {
         viewModel.triggerEvent(BiometricSetupContract.Event.Init(username, password))
+    }
 
-        viewModel.effect.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.effect
+            .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .collect { effect ->
                 when (effect) {
                     BiometricSetupContract.Effect.GoToHome -> goToHome()
