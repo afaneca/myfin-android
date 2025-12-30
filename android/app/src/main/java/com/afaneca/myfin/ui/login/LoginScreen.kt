@@ -82,7 +82,9 @@ fun LoginScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.triggerEvent(LoginContract.Event.Init)
+        (context as? FragmentActivity)?.let { ctx ->
+            viewModel.triggerEvent(LoginContract.Event.Init(ctx))
+        }
     }
 
     LaunchedEffect(lifecycleOwner) {

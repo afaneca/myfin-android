@@ -1,5 +1,7 @@
 package com.afaneca.myfin.ui.login
 
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,9 +12,9 @@ import com.afaneca.myfin.domain.usecase.CheckLoginStatusUseCase
 import com.afaneca.myfin.domain.usecase.LoginUseCase
 import com.afaneca.myfin.domain.common.Result
 import com.afaneca.myfin.ui.common.EffectMutableSharedFlow
+import com.afaneca.myfin.ui.main.MainContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -54,7 +56,7 @@ class LoginViewModel @Inject constructor(
 
     override fun triggerEvent(event: LoginContract.Event) {
         when (event) {
-            LoginContract.Event.Init -> init()
+            is LoginContract.Event.Init -> init(event.activity)
 
             LoginContract.Event.LoginClicked -> attemptLogin()
 
@@ -86,7 +88,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun init() = viewModelScope.launch {
+    private fun init(context: FragmentActivity) = viewModelScope.launch {
         val statusResult = checkLoginStatusUseCase(Unit)
         val (savedUsername, canUseBiometric, isBiometricEnabled) = when (statusResult) {
             is Result.Success -> {
@@ -109,6 +111,12 @@ class LoginViewModel @Inject constructor(
                 isBiometricEnabled = isBiometricEnabled,
                 usernameInput = savedUsername,
             )
+        }
+
+        if (isBiometricEnabled) {
+            Handler(Looper.getMainLooper()).post {
+                performBiometricLogin(context)
+            }
         }
     }
 

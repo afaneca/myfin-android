@@ -32,7 +32,7 @@ object LoginContract {
      * UI interactions, such as button clicks, data input, etc...
      */
     sealed interface Event {
-        data object Init : Event
+        data class Init(val activity: FragmentActivity) : Event
         data object LoginClicked : Event
         data class BiometricLoginClicked(val activity: FragmentActivity) : Event
         data class UsernameUpdated(val input: String) : Event
