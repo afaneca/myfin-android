@@ -123,6 +123,7 @@ dependencies {
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.biometric)
     implementation(libs.timber)
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
