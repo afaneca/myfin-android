@@ -1,6 +1,8 @@
 package com.afaneca.myfin.data.source
 
+import com.afaneca.myfin.data.model.AddTransactionStep0ResponseDto
 import com.afaneca.myfin.data.model.AttemptLoginResponseDto
+import com.afaneca.myfin.data.model.AutoCatResponseDto
 import com.afaneca.myfin.data.network.MyFinApiServices
 import com.afaneca.myfin.data.common.safeApiCall
 import com.afaneca.myfin.data.model.FilteredResultsByPageDto
@@ -33,6 +35,54 @@ class RetrofitNetworkDataSource @Inject constructor(
     ): Result<FilteredResultsByPageDto<TransactionDto>, DomainError> {
         return safeApiCall(transientDataSource) {
             apiServices.getTransactionsListByPage(page, pageSize, query)
+        }
+    }
+
+    override suspend fun addTransactionStep0(): Result<AddTransactionStep0ResponseDto, DomainError> {
+        return safeApiCall(transientDataSource) {
+            apiServices.addTransactionStep0()
+        }
+    }
+
+    override suspend fun createTransaction(
+        amount: String,
+        type: String,
+        description: String?,
+        entityId: Int?,
+        accountFromId: Int?,
+        accountToId: Int?,
+        categoryId: Int?,
+        dateTimestamp: Long,
+        isEssential: Boolean,
+    ): Result<Unit, DomainError> {
+        return safeApiCall(transientDataSource) {
+            apiServices.createTransaction(
+                amount = amount,
+                type = type,
+                description = description,
+                entityId = entityId,
+                accountFromId = accountFromId,
+                accountToId = accountToId,
+                categoryId = categoryId,
+                dateTimestamp = dateTimestamp,
+                isEssential = isEssential,
+            )
+        }
+    }
+
+    override suspend fun autoCategorizeTransaction(
+        description: String,
+        amount: String,
+        accountFromId: Int,
+        accountToId: Int,
+    ): Result<AutoCatResponseDto, DomainError> {
+        return safeApiCall(transientDataSource) {
+            apiServices.autoCategorizeTransaction(
+                description = description,
+                amount = amount,
+                accountFromId = accountFromId,
+                accountToId = accountToId,
+            )
         }
     }
 }

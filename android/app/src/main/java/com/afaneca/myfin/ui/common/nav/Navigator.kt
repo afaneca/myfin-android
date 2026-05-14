@@ -1,6 +1,8 @@
 package com.afaneca.myfin.ui.common.nav
 
 import androidx.navigation3.runtime.NavKey
+import kotlin.collections.last
+import kotlin.collections.removeLastOrNull
 
 /**
  * Handles navigation events (forward and back) by updating the navigation state.

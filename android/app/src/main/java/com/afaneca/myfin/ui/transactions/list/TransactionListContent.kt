@@ -16,8 +16,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -26,8 +28,10 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -58,6 +62,8 @@ fun TransactionListContent(
     onEndOfListReached: () -> Unit,
     onClearQueryClicked: () -> Unit,
     onTransactionClicked: (Transaction) -> Unit,
+    onAddTransactionClicked: () -> Unit,
+    onRefresh: () -> Unit,
 ) {
     val loadingState = LocalLoadingState.current
 
@@ -71,123 +77,146 @@ fun TransactionListContent(
     LaunchedEffect(uiState.isLoading) {
         loadingState.setLoading(uiState.isLoading)
     }
-    Column(
-        modifier = modifier
+
+    Box(
+        modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = LocalSpacing.current.large),
     ) {
-        // Search bar
-        SearchBar(
-            modifier = Modifier.fillMaxWidth(),
-            inputField = {
-                SearchBarDefaults.InputField(
-                    query = uiState.query,
-                    onQueryChange = { query ->
-                        onQueryUpdated(query)
-                    },
-                    expanded = false,
-                    onExpandedChange = {},
-                    placeholder = {
-                        Text("Search")
-                    },
-                    onSearch = {},
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(R.drawable.search_24),
-                            contentDescription = null,
-                        )
-                    },
-                    trailingIcon = {
-                        if (!uiState.query.isEmpty()) {
+        PullToRefreshBox(
+            isRefreshing = uiState.isRefreshing,
+            onRefresh = onRefresh,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Column(
+                modifier = modifier
+                    .fillMaxSize(),
+            ) {
+            // Search bar
+            SearchBar(
+                modifier = Modifier.fillMaxWidth(),
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = uiState.query,
+                        onQueryChange = { query ->
+                            onQueryUpdated(query)
+                        },
+                        expanded = false,
+                        onExpandedChange = {},
+                        placeholder = {
+                            Text("Search")
+                        },
+                        onSearch = {},
+                        leadingIcon = {
                             Icon(
-                                modifier = Modifier.clickable { onClearQueryClicked() },
-                                painter = painterResource(R.drawable.close_24),
+                                painter = painterResource(R.drawable.search_24),
                                 contentDescription = null,
                             )
-                        }
-                    },
-
-                    )
-            },
-            expanded = false,
-            onExpandedChange = { },
-        ) {}
-        if (uiState.groupedItems.isNullOrEmpty()) {
-            EmptyView()
-        } else {
-            Spacer(modifier = Modifier.height(LocalSpacing.current.small))
-            uiState.groupedItems.let { groupedList ->
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = listState,
-                ) {
-                    groupedList.forEach { (date, transactionList) ->
-                        stickyHeader(contentType = String) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(color = MaterialTheme.colorScheme.background),
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(
-                                            vertical = LocalSpacing.current.small,
-                                            horizontal = LocalSpacing.current.default,
-                                        ),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    text = date,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        },
+                        trailingIcon = {
+                            if (!uiState.query.isEmpty()) {
+                                Icon(
+                                    modifier = Modifier.clickable { onClearQueryClicked() },
+                                    painter = painterResource(R.drawable.close_24),
+                                    contentDescription = null,
                                 )
                             }
-                        }
+                        },
 
-                        items(
-                            items = transactionList,
-                            key = { trx -> trx.transactionId },
-                        ) { transaction ->
-                            val isFirst = transactionList.first() == transaction
-                            val isLast = transactionList.last() == transaction
-                            if (isFirst) Spacer(modifier = Modifier.height(LocalSpacing.current.small))
-                            Column {
-                                Surface(
+                        )
+                },
+                expanded = false,
+                onExpandedChange = { },
+            ) {}
+            if (uiState.groupedItems.isNullOrEmpty()) {
+                EmptyView()
+            } else {
+                Spacer(modifier = Modifier.height(LocalSpacing.current.small))
+                uiState.groupedItems.let { groupedList ->
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = listState,
+                    ) {
+                        groupedList.forEach { (date, transactionList) ->
+                            stickyHeader(contentType = String) {
+                                Column(
                                     modifier = Modifier
-                                        .fillMaxWidth(),
-                                    tonalElevation = 1.dp,
-                                    shadowElevation = 0.dp,
-                                    shape = when {
-                                        transactionList.size == 1 -> MaterialTheme.shapes.medium
-                                        isFirst -> MaterialTheme.shapes.medium.copy(
-                                            bottomStart = CornerSize(0.dp),
-                                            bottomEnd = CornerSize(0.dp),
-                                        )
-
-                                        isLast -> MaterialTheme.shapes.medium.copy(
-                                            topStart = CornerSize(0.dp),
-                                            topEnd = CornerSize(0.dp),
-                                        )
-
-                                        else -> RectangleShape
-                                    },
+                                        .fillMaxWidth()
+                                        .background(color = MaterialTheme.colorScheme.background),
                                 ) {
-                                    TransactionListItem(transaction, onTransactionClicked)
+                                    Text(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(
+                                                vertical = LocalSpacing.current.small,
+                                                horizontal = LocalSpacing.current.default,
+                                            ),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        text = date,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
                                 }
+                            }
 
-                                if (!isLast) {
-                                    HorizontalDivider(color = MaterialTheme.colorScheme.background)
-                                } else {
-                                    Spacer(modifier = Modifier.height(LocalSpacing.current.small))
+                            items(
+                                items = transactionList,
+                                key = { trx -> trx.transactionId },
+                            ) { transaction ->
+                                val isFirst = transactionList.first() == transaction
+                                val isLast = transactionList.last() == transaction
+                                if (isFirst) Spacer(modifier = Modifier.height(LocalSpacing.current.small))
+                                Column {
+                                    Surface(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        tonalElevation = 1.dp,
+                                        shadowElevation = 0.dp,
+                                        shape = when {
+                                            transactionList.size == 1 -> MaterialTheme.shapes.medium
+                                            isFirst -> MaterialTheme.shapes.medium.copy(
+                                                bottomStart = CornerSize(0.dp),
+                                                bottomEnd = CornerSize(0.dp),
+                                            )
+
+                                            isLast -> MaterialTheme.shapes.medium.copy(
+                                                topStart = CornerSize(0.dp),
+                                                topEnd = CornerSize(0.dp),
+                                            )
+
+                                            else -> RectangleShape
+                                        },
+                                    ) {
+                                        TransactionListItem(transaction, onTransactionClicked)
+                                    }
+
+                                    if (!isLast) {
+                                        HorizontalDivider(color = MaterialTheme.colorScheme.background)
+                                    } else {
+                                        Spacer(modifier = Modifier.height(LocalSpacing.current.small))
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                if (uiState.isLoadingAdditionalPage) {
-                    LinearProgressIndicator(
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                    if (uiState.isLoadingAdditionalPage) {
+                        LinearProgressIndicator(
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             }
+        } // end Column
+        } // end PullToRefreshBox
+        FloatingActionButton(
+            onClick = onAddTransactionClicked,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(vertical = LocalSpacing.current.larger3),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.add_24),
+                contentDescription = stringResource(R.string.add_transaction),
+            )
         }
     }
 }
@@ -408,6 +437,8 @@ fun TransactionListPreview() {
             onEndOfListReached = {},
             onTransactionClicked = {},
             onClearQueryClicked = {},
+            onAddTransactionClicked = {},
+            onRefresh = {},
         )
     }
 }

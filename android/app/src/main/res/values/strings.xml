@@ -59,4 +59,14 @@
     <string name="biometric_error">Biometric authentication failed</string>
     <string name="biometric_key_invalidated">Biometric credentials were invalidated. Please login again to re-enable biometric authentication</string>
     <string name="session_invalid_error">Session is invalid. Please log in again.</string>
+    <string name="add_transaction">Add transaction</string>
+    <string name="accounts">Accounts</string>
+    <string name="essential_description">Mark as a recurring essential expense</string>
+    <string name="transaction_type_income">Income</string>
+    <string name="transaction_type_expense">Expense</string>
+    <string name="transaction_type_transfer">Transfer</string>
+    <string name="select_date">Select date</string>
+    <string name="auto_categorize">Auto categorize</string>
+    <string name="auto_categorize_loading">Auto categorizing&#8230;</string>
+    <string name="error_invalid_amount">Enter a valid amount</string>
 </resources>

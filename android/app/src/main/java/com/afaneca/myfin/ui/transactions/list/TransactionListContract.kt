@@ -21,6 +21,7 @@ object TransactionListContract {
     data class MainState(
         val isInitialized: Boolean = false,
         val isLoading: Boolean = false,
+        val isRefreshing: Boolean = false,
         val isLoadingAdditionalPage: Boolean = false,
         val page: Int = 0,
         val query: String = "",
@@ -35,6 +36,7 @@ object TransactionListContract {
      */
     sealed interface Event {
         data object Init : Event
+        data object Refresh : Event
         data object NavigationIconClicked : Event
         data object ToolbarSettingsClicked : Event
         data object ClearQueryClicked : Event
@@ -42,6 +44,8 @@ object TransactionListContract {
         data object EndOfListReached : Event
         data class TransactionClicked(val transaction: Transaction) : Event
         data object DismissTransactionDetails : Event
+        data object AddTransactionClicked : Event
+        data class EditTransactionClicked(val transaction: Transaction) : Event
     }
 
     /**
@@ -50,6 +54,8 @@ object TransactionListContract {
     sealed interface Effect {
         data object OpenNavigationDrawer : Effect
         data object GoToSettings : Effect
+        data object GoToAddTransaction : Effect
+        data class GoToEditTransaction(val transaction: Transaction) : Effect
         data class ShowGenericError(@StringRes val errorMessage: Int? = null) : Effect
     }
 }

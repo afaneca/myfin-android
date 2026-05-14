@@ -1,6 +1,8 @@
 package com.afaneca.myfin.data.network
 
+import com.afaneca.myfin.data.model.AddTransactionStep0ResponseDto
 import com.afaneca.myfin.data.model.AttemptLoginResponseDto
+import com.afaneca.myfin.data.model.AutoCatResponseDto
 import com.afaneca.myfin.data.model.FilteredResultsByPageDto
 import com.afaneca.myfin.data.model.TransactionDto
 import retrofit2.http.*
@@ -26,8 +28,34 @@ interface MyFinApiServices {
     suspend fun getTransactionsListByPage(
         @Path(value = "page", encoded = true) page: Int,
         @Query("page_size") pageSize: Int,
-        @Query("query") query: String?
+        @Query("query") query: String?,
     ): FilteredResultsByPageDto<TransactionDto>
+
+    @POST("trxs/step0")
+    suspend fun addTransactionStep0(): AddTransactionStep0ResponseDto
+
+    @FormUrlEncoded
+    @POST("trxs/step1")
+    suspend fun createTransaction(
+        @Field("amount") amount: String,
+        @Field("type") type: String,
+        @Field("description") description: String?,
+        @Field("entity_id") entityId: Int?,
+        @Field("account_from_id") accountFromId: Int?,
+        @Field("account_to_id") accountToId: Int?,
+        @Field("category_id") categoryId: Int?,
+        @Field("date_timestamp") dateTimestamp: Long,
+        @Field("is_essential") isEssential: Boolean,
+    )
+
+    @FormUrlEncoded
+    @POST("trxs/auto-cat-trx")
+    suspend fun autoCategorizeTransaction(
+        @Field("description") description: String,
+        @Field("amount") amount: String,
+        @Field("account_from_id") accountFromId: Int,
+        @Field("account_to_id") accountToId: Int,
+    ): AutoCatResponseDto
     /*endregion*/
 
     // STATS

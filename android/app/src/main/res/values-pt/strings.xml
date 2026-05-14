@@ -59,4 +59,12 @@
     <string name="biometric_error">Falha na autenticação biométrica</string>
     <string name="biometric_key_invalidated">As credenciais biométricas foram invalidadas. Por favor, inicie sessão novamente para reativar a autenticação biométrica</string>
     <string name="session_invalid_error">Sessão inválida. Por favor, inicie sessão novamente.</string>
+    <string name="add_transaction">Adicionar transação</string>
+    <string name="transaction_type_income">Receita</string>
+    <string name="transaction_type_expense">Despesa</string>
+    <string name="transaction_type_transfer">Transferência</string>
+    <string name="select_date">Selecionar data</string>
+    <string name="auto_categorize">Categorizar automaticamente</string>
+    <string name="auto_categorize_loading">A categorizar automaticamente…</string>
+    <string name="error_invalid_amount">Introduza um montante válido</string>
 </resources>

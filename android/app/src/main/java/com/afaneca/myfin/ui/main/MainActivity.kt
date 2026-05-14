@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItemDefaults
@@ -34,10 +35,13 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.scene.SinglePaneSceneStrategy
 import com.afaneca.myfin.R
+import com.afaneca.myfin.domain.model.Transaction
+import com.afaneca.myfin.ui.common.nav.BottomSheetSceneStrategy
 import com.afaneca.myfin.ui.common.GlobalLoadingOverlay
 import com.afaneca.myfin.ui.common.MFModalNavigationDrawer
-import com.afaneca.myfin.ui.common.MFNavDisplay
+import com.afaneca.myfin.ui.common.nav.MFNavDisplay
 import com.afaneca.myfin.ui.common.nav.Navigator
 import com.afaneca.myfin.ui.common.nav.rememberNavigationState
 import com.afaneca.myfin.ui.common.nav.toEntries
@@ -47,6 +51,7 @@ import com.afaneca.myfin.ui.main.MainContract.LocalLoadingState
 import com.afaneca.myfin.ui.login.biometric.BiometricSetupScreen
 import com.afaneca.myfin.ui.settings.SettingsScreen
 import com.afaneca.myfin.ui.theme.AppTheme
+import com.afaneca.myfin.ui.transactions.add.AddTransactionScreen
 import com.afaneca.myfin.ui.transactions.list.TransactionListScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -70,6 +75,9 @@ sealed interface AppRoute : NavKey {
 
     @Serializable
     data object Transactions : AppRoute
+
+    @Serializable
+    data object AddTransaction : AppRoute
 }
 
 @AndroidEntryPoint
@@ -102,6 +110,7 @@ class MainActivity : FragmentActivity() {
             val drawerState = rememberDrawerState(DrawerValue.Closed)
             val scope = rememberCoroutineScope()
             val snackbarHostState = remember { SnackbarHostState() }
+            val sceneStrategy = remember { BottomSheetSceneStrategy<NavKey>() then SinglePaneSceneStrategy() }
 
             LaunchedEffect(Unit) {
                 viewModel.triggerEvent(MainContract.Event.Init)
@@ -127,7 +136,7 @@ class MainActivity : FragmentActivity() {
                             MainContract.Effect.ShowUnauthorizedError -> {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(
-                                        getString(R.string.session_invalid_error)
+                                        getString(R.string.session_invalid_error),
                                     )
                                 }
                             }
@@ -228,6 +237,9 @@ class MainActivity : FragmentActivity() {
                                     goToTransactions = { navigator.navigate(AppRoute.Transactions) },
                                     goToAccounts = { /* TODO */ },
                                     goToBudgets = { /* TODO */ },
+                                    goToAddTransaction = { navigator.navigate(AppRoute.AddTransaction) },
+                                    goToEditTransaction = { /* TODO */ },
+                                    goBack = { navigator.goBack() },
                                 )
                             }
 
@@ -242,6 +254,7 @@ class MainActivity : FragmentActivity() {
                                         finish()
                                     }
                                 },
+                                sceneStrategy = sceneStrategy,
                             )
                         }
 
@@ -286,12 +299,16 @@ class MainActivity : FragmentActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     private fun EntryProviderScope<NavKey>.privateNav(
         openNavigationDrawer: () -> Unit,
         goToSettings: () -> Unit,
         goToTransactions: () -> Unit,
         goToAccounts: () -> Unit,
         goToBudgets: () -> Unit,
+        goToAddTransaction: () -> Unit,
+        goToEditTransaction: (Transaction) -> Unit,
+        goBack: () -> Unit,
     ) {
         entry<AppRoute.Home> { key ->
             DashboardScreen(
@@ -306,6 +323,16 @@ class MainActivity : FragmentActivity() {
             TransactionListScreen(
                 openNavigationDrawer = openNavigationDrawer,
                 goToSettings = goToSettings,
+                goToAddTransaction = goToAddTransaction,
+                goToEditTransaction = goToEditTransaction,
+            )
+        }
+
+        entry<AppRoute.AddTransaction>(
+            metadata = BottomSheetSceneStrategy.bottomSheet(),
+        ) { key ->
+            AddTransactionScreen(
+                goBackToList = { goBack() },
             )
         }
     }

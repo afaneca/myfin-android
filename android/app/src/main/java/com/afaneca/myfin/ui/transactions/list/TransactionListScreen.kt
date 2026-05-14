@@ -39,6 +39,8 @@ fun TransactionListScreen(
     viewModel: TransactionListViewModel = hiltViewModel(),
     openNavigationDrawer: () -> Unit,
     goToSettings: () -> Unit,
+    goToAddTransaction: () -> Unit,
+    goToEditTransaction: (Transaction) -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -82,6 +84,14 @@ fun TransactionListScreen(
         viewModel.triggerEvent(TransactionListContract.Event.DismissTransactionDetails)
     }
 
+    fun onAddTransactionClicked() {
+        viewModel.triggerEvent(TransactionListContract.Event.AddTransactionClicked)
+    }
+
+    fun onRefresh() {
+        viewModel.triggerEvent(TransactionListContract.Event.Refresh)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.triggerEvent(TransactionListContract.Event.Init)
     }
@@ -94,6 +104,10 @@ fun TransactionListScreen(
                     TransactionListContract.Effect.OpenNavigationDrawer -> openNavigationDrawer()
                     is TransactionListContract.Effect.ShowGenericError -> showGenericError(effect.errorMessage)
                     TransactionListContract.Effect.GoToSettings -> goToSettings()
+                    TransactionListContract.Effect.GoToAddTransaction -> goToAddTransaction()
+                    is TransactionListContract.Effect.GoToEditTransaction -> goToEditTransaction(
+                        effect.transaction,
+                    )
                 }
             }
     }
@@ -130,6 +144,8 @@ fun TransactionListScreen(
             onEndOfListReached = ::onEndOfListReached,
             onClearQueryClicked = ::onClearQueryClicked,
             onTransactionClicked = ::onTransactionClicked,
+            onAddTransactionClicked = ::onAddTransactionClicked,
+            onRefresh = ::onRefresh,
         )
 
         uiState.selectedTransaction?.let {
@@ -138,7 +154,7 @@ fun TransactionListScreen(
                 sheetState = sheetState,
                 onDismiss = ::onDismissTransactionDetails,
                 onEditClicked = { /* TODO */ },
-                onRemoveClicked = { /* TODO */ }
+                onRemoveClicked = { /* TODO */ },
             )
         }
     }

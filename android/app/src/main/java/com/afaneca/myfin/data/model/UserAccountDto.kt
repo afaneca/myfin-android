@@ -1,7 +1,10 @@
 package com.afaneca.myfin.data.model
 
+import com.afaneca.myfin.domain.model.AccountType
+import com.afaneca.myfin.domain.model.UserAccount
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.math.BigDecimal
 
 @JsonClass(generateAdapter = true)
 data class UserAccountDto(
@@ -23,4 +26,15 @@ data class UserAccountDto(
     val balance: String?,
     @Json(name = "users_user_id")
     val usersUserId: Int?
+)
+
+fun UserAccountDto.toDomain(): UserAccount = UserAccount(
+    id = accountId ?: 0,
+    name = name.orEmpty(),
+    balance = balance?.toBigDecimalOrNull() ?: BigDecimal.ZERO,
+    type = AccountType.fromString(type),
+    description = description,
+    status = status,
+    colorGradient = color_gradient,
+    isToExcludeFromBudgets = isToExcludeFromBudgets ?: false,
 )

@@ -34,13 +34,13 @@ class TransactionListViewModel @Inject constructor(
             state.copy(
                 groupedItems = state.items?.groupBy { transaction ->
                     transaction.dateTimestamp.toDisplayDate("dd MMM yyyy")
-                }
+                },
             )
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = TransactionListContract.MainState()
+            initialValue = TransactionListContract.MainState(),
         )
 
     private val _effect = EffectMutableSharedFlow<TransactionListContract.Effect>()
@@ -55,6 +55,7 @@ class TransactionListViewModel @Inject constructor(
     override fun triggerEvent(event: TransactionListContract.Event) {
         when (event) {
             TransactionListContract.Event.Init -> init()
+            TransactionListContract.Event.Refresh -> refresh()
             TransactionListContract.Event.ClearQueryClicked -> {
                 _mainState.update { it.copy(query = "") }
                 _queryDebouncedFlow.value = ""
@@ -86,6 +87,14 @@ class TransactionListViewModel @Inject constructor(
             TransactionListContract.Event.DismissTransactionDetails -> {
                 _mainState.update { it.copy(selectedTransaction = null) }
             }
+
+            TransactionListContract.Event.AddTransactionClicked -> {
+                _effect.tryEmit(GoToAddTransaction)
+            }
+
+            is TransactionListContract.Event.EditTransactionClicked -> {
+                _effect.tryEmit(GoToEditTransaction(event.transaction))
+            }
         }
     }
 
@@ -95,7 +104,7 @@ class TransactionListViewModel @Inject constructor(
             .debounce(500)
             .distinctUntilChanged()
             .onEach { query ->
-                getTransactions(page = 0, query = query)
+                getTransactions(page = 0, query = query, isRefresh = true)
             }
             .launchIn(viewModelScope)
     }
@@ -106,12 +115,23 @@ class TransactionListViewModel @Inject constructor(
         getTransactions()
     }
 
+    private fun refresh() {
+        getTransactions(isRefresh = true)
+    }
+
     private fun getTransactions(
         page: Int = 0,
         pageSize: Int = TransactionListContract.DEFAULT_PAGE_SIZE,
         query: String? = mainState.value.query,
+        isRefresh: Boolean = false,
     ) = viewModelScope.launch {
-        _mainState.update { it.copy(isLoading = page == 0, isLoadingAdditionalPage = page != 0) }
+        _mainState.update {
+            it.copy(
+                isLoading = page == 0 && !isRefresh,
+                isRefreshing = isRefresh,
+                isLoadingAdditionalPage = page != 0,
+            )
+        }
         val params = GetTransactionListByPageUseCase.Params(
             page = page, pageSize = pageSize, query = query,
         )
@@ -119,6 +139,7 @@ class TransactionListViewModel @Inject constructor(
         _mainState.update {
             it.copy(
                 isLoading = false,
+                isRefreshing = false,
                 isLoadingAdditionalPage = false,
                 // clear list if on first page
                 items = if (page == 0) emptyList() else it.items,
